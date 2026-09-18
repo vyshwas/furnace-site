@@ -3,27 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>404 — Not Found &middot; Furnace Labs</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%23121211'/><text x='50%' y='68%' font-size='56' text-anchor='middle' fill='%23EA580C' font-family='serif' font-style='italic' font-weight='bold'>F</text></svg>">
+<title>404 — Surface Unverified &middot; FURNACE LABS</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230D0C0B'/><polygon points='50,15 85,85 15,85' fill='none' stroke='%23FF4400' stroke-width='8'/><circle cx='50' cy='62' r='10' fill='%23FF4400'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Newsreader:ital,wght@0,400;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:ital,wght@0,400;0,700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --paper: #F7F5F0;
-    --paper-card: #FFFFFF;
-    --ink: #111110;
-    --ink-muted: #5C5B56;
-    --line: #E0DDD4;
-    --flame: #C2410C;
-    --serif: "Newsreader", Georgia, serif;
-    --sans: "Plus Jakarta Sans", sans-serif;
+    --void: #090807;
+    --foundry-900: #171512;
+    --foundry-800: #282520;
+    --foundry-700: #3D3933;
+    --steel-500: #8E8980;
+    --steel-400: #B5B0A6;
+    --bone-100: #FAF7F0;
+    --ember: #FF4400;
+    --ember-bright: #FF6622;
+    --hazard-gold: #E5A000;
+    --serif: "Instrument Serif", Georgia, serif;
+    --sans: "Space Grotesk", sans-serif;
     --mono: "JetBrains Mono", monospace;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    background: var(--paper);
-    color: var(--ink);
+    background: var(--void);
+    color: var(--bone-100);
     font-family: var(--sans);
     min-height: 100vh;
     display: flex;
@@ -32,65 +36,111 @@
     align-items: center;
     padding: 24px;
     text-align: center;
+    position: relative;
   }
-  .card {
-    background: var(--paper-card);
-    border: 1px solid var(--line);
-    border-radius: 16px;
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: 
+      radial-gradient(circle at 50% 50%, rgba(255, 68, 0, 0.07), transparent 60%),
+      linear-gradient(to right, rgba(250, 247, 240, 0.02) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(250, 247, 240, 0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 48px 48px, 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .chamber-box {
+    background: var(--foundry-900);
+    border: 1px solid var(--foundry-700);
     padding: 48px 36px;
-    max-width: 520px;
-    box-shadow: 0 20px 40px -15px rgba(0,0,0,0.06);
+    max-width: 560px;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 24px 48px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,68,0,0.1) inset;
   }
-  .glyph {
+  .chamber-box::before, .chamber-box::after {
+    content: "⨁";
+    position: absolute;
+    font-size: 11px;
+    color: var(--foundry-700);
+    line-height: 1;
+  }
+  .chamber-box::before { top: 8px; left: 8px; }
+  .chamber-box::after { top: 8px; right: 8px; }
+
+  .status-tag {
     font-family: var(--mono);
-    font-size: 0.8rem;
-    letter-spacing: 0.14em;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--flame);
-    margin-bottom: 12px;
+    color: var(--hazard-gold);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
   }
   h1 {
-    font-family: var(--serif);
-    font-size: 3rem;
-    font-weight: 400;
+    font-family: var(--sans);
+    font-size: 2.6rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
     line-height: 1.1;
     margin-bottom: 16px;
+    color: var(--bone-100);
   }
   h1 em {
+    font-family: var(--serif);
     font-style: italic;
-    color: var(--flame);
+    font-weight: 400;
+    color: var(--ember-bright);
   }
   p {
-    color: var(--ink-muted);
-    font-size: 1.05rem;
+    color: var(--steel-400);
+    font-size: 0.98rem;
     line-height: 1.6;
     margin-bottom: 32px;
   }
-  a.btn {
+  .btn-return {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: var(--ink);
-    color: #fff;
+    background: var(--ember);
+    color: #FFFFFF;
     text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 600;
-    padding: 12px 28px;
-    border-radius: 999px;
-    transition: background 0.15s ease, transform 0.15s ease;
+    padding: 13px 24px;
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 0.88rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: all 0.15s ease;
+    box-shadow: 0 4px 16px rgba(255, 68, 0, 0.3);
   }
-  a.btn:hover {
-    background: var(--flame);
-    transform: translateY(-1px);
+  .btn-return:hover {
+    background: var(--ember-bright);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 68, 0, 0.5);
+  }
+  .btn-return:active {
+    transform: translateY(1px);
   }
 </style>
 </head>
 <body>
-  <div class="card">
-    <div class="glyph">Error State &middot; 404</div>
-    <h1>Missing <em>route</em>.</h1>
-    <p>The path you requested does not exist on this host. Furnace is local-first: this public site provides only the verified alpha installation apparatus and proving ledgers.</p>
-    <a href="./" class="btn">Return to Furnace Labs</a>
+  <div class="chamber-box">
+    <div class="status-tag">
+      <span>///</span>
+      <span>HTTP 404 &middot; UNVERIFIABLE SECTOR</span>
+    </div>
+    <h1>The requested path <em>cannot be proven</em>.</h1>
+    <p>
+      Like an unchecked authentication barrier or a hallucinated CSS property, this URI does not exist in the verified ledger. In accordance with Furnace doctrine, we refuse to guess.
+    </p>
+    <a href="./" class="btn-return">
+      &larr; Return to Foundry Index
+    </a>
   </div>
 </body>
 </html>
