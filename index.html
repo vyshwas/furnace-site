@@ -1,0 +1,233 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Furnace Labs: deterministic remediation factory. Ship AI-built software with evidence, not hope.">
+<title>Furnace Labs — Ship AI-built software with evidence, not hope</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23C2410C'/><text x='50%' y='68%' font-size='60' text-anchor='middle' fill='%23FAF9F7' font-family='monospace' font-weight='bold'>F</text></svg>">
+<meta property="og:title" content="Furnace Labs — Ship AI-built software with evidence, not hope">
+<meta property="og:description" content="Furnace checks your pages in a real browser, heals what it can prove, and hands you receipts. What it cannot prove, it marks unknown — never a pass.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Furnace Labs — Ship AI-built software with evidence, not hope">
+<meta name="twitter:description" content="Furnace checks your pages in a real browser, heals what it can prove, and hands you receipts.">
+<style>
+  :root {
+    --paper: #FAF9F7;
+    --ink: #1C1C1A;
+    --muted: #5F5F5C;
+    --line: #E5E3DE;
+    --panel: #1C1C1A;
+    --panel-ink: #FAF9F7;
+    --heat: #C2410C;
+    --heat-dark: #9A3412;
+    --sans: "Inter", "Geist Sans", -apple-system, "Segoe UI", sans-serif;
+    --mono: ui-monospace, "Geist Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--sans); font-size: 1.05rem; line-height: 1.65;
+  }
+  main { max-width: 72ch; margin: 0 auto; padding: 0 24px 96px; }
+  header.site { max-width: 72ch; margin: 0 auto; padding: 28px 24px 0;
+    display: flex; align-items: center; gap: 12px; }
+  .wordmark { font-family: var(--mono); font-weight: 700; letter-spacing: 0.08em; font-size: 0.9rem; }
+  .alpha-tag {
+    font-family: var(--mono); font-size: 0.72rem; color: var(--paper);
+    background: var(--ink); border-radius: 999px; padding: 2px 10px;
+  }
+  h1 { font-size: clamp(2rem, 5vw, 3.1rem); line-height: 1.12; letter-spacing: -0.015em; margin: 72px 0 16px; }
+  h2 { font-size: 1.35rem; letter-spacing: -0.01em; margin: 72px 0 8px; padding-top: 48px; border-top: 1px solid var(--line); }
+  .lede { color: var(--muted); font-size: 1.15rem; margin: 0 0 32px; max-width: 58ch; }
+  .install, .cmd {
+    background: var(--panel); color: var(--panel-ink); border-radius: 8px;
+    padding: 18px 18px 18px 22px; display: flex; gap: 12px; align-items: center;
+    margin: 20px 0 12px;
+  }
+  .install code, .cmd code {
+    flex: 1; font-family: var(--mono); font-size: 0.85rem;
+    overflow-x: auto; white-space: nowrap;
+  }
+  .install button, .cmd button {
+    flex: none; cursor: pointer; border: none; border-radius: 999px;
+    background: var(--heat); color: #fff; font-family: var(--sans);
+    font-weight: 600; font-size: 0.9rem; padding: 10px 22px;
+    transition: background 0.15s ease;
+  }
+  .install button:hover, .cmd button:hover { background: var(--heat-dark); }
+  .install button:focus-visible, .cmd button:focus-visible, a:focus-visible { outline: 2px solid var(--heat); outline-offset: 3px; }
+  .microcopy { font-size: 0.85rem; color: var(--muted); font-family: var(--mono); margin: 8px 0 18px; }
+  .reqs {
+    margin: 20px 0 32px; border: 1px solid var(--line); border-radius: 8px;
+    padding: 16px 20px; background: #F4F2EE; display: grid; gap: 10px; font-size: 0.88rem;
+  }
+  .req-item { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline; }
+  .req-label {
+    font-family: var(--mono); font-size: 0.76rem; text-transform: uppercase;
+    letter-spacing: 0.05em; color: var(--muted); min-width: 110px; flex-shrink: 0;
+  }
+  .req-val { color: var(--ink); }
+  .states { display: grid; gap: 12px; margin: 24px 0; }
+  @media (min-width: 640px) { .states { grid-template-columns: 1fr 1fr 1fr; } }
+  .state {
+    border: 1px solid var(--line); border-radius: 8px; padding: 16px;
+    background: var(--paper); font-size: 0.9rem;
+  }
+  .state.unknown { border-left: 4px solid var(--heat); }
+  .state h3 { margin: 0 0 6px; font-size: 0.95rem; font-family: var(--mono); }
+  .state p { margin: 0; color: var(--muted); font-size: 0.85rem; }
+  pre.receipt {
+    background: var(--panel); color: var(--panel-ink); border-radius: 8px;
+    padding: 18px 20px; overflow-x: auto;
+    font-family: var(--mono); font-size: 0.78rem; line-height: 1.6;
+  }
+  .steps { list-style: none; padding: 0; margin: 24px 0; counter-reset: step; }
+  .steps li {
+    counter-increment: step; position: relative; padding: 14px 0 14px 58px;
+    border-top: 1px solid var(--line);
+  }
+  .steps li:last-child { border-bottom: 1px solid var(--line); }
+  .steps li::before {
+    content: counter(step); position: absolute; left: 0; top: 14px;
+    width: 38px; height: 38px; border-radius: 50%;
+    border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 0.9rem;
+  }
+  code.inline { font-family: var(--mono); font-size: 0.86em; background: #EFEEEA; padding: 1px 7px; border-radius: 6px; }
+  .prove { list-style: none; padding: 0; }
+  .prove li { padding: 10px 0; border-top: 1px solid var(--line); font-size: 0.95rem; }
+  .prove li:last-child { border-bottom: 1px solid var(--line); }
+  .tag {
+    display: inline-block; font-family: var(--mono); font-size: 0.72rem;
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 1px 10px; margin-right: 8px; background: #EFEEEA;
+  }
+  .tag.heat { border-color: var(--heat); color: var(--heat); font-weight: 700; }
+  footer { margin-top: 72px; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--line); padding-top: 24px; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  @media (max-width: 560px) {
+    .install code, .cmd code { font-size: 0.72rem; }
+    .req-item { flex-direction: column; gap: 2px; }
+  }
+</style>
+</head>
+<body>
+<header class="site">
+  <span class="wordmark">FURNACE LABS</span>
+  <span class="alpha-tag">v0.1.0-alpha.1</span>
+</header>
+<main>
+  <h1>Ship AI-built software with evidence, not hope.</h1>
+  <p class="lede">Furnace checks your pages, heals what it can prove, and hands you receipts. What it cannot prove, it marks unknown — never a pass.</p>
+
+  <div class="install" role="group" aria-label="Install command">
+    <code id="install-cmd">mkdir furnace-alpha &amp;&amp; cd furnace-alpha &amp;&amp; curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.1.0-alpha.1/furnace-v0.1.0-alpha.1.tgz | tar xz &amp;&amp; ./install.sh</code>
+    <button data-copy="install-cmd" aria-label="Copy install command">Copy</button>
+  </div>
+  <p class="microcopy" aria-live="polite" id="copy-status">No sign-up. No backend. Node 24 required.</p>
+
+  <div class="reqs" aria-label="System requirements and data boundaries">
+    <div class="req-item">
+      <span class="req-label">Status</span>
+      <span class="req-val">Public alpha release (v0.1.0-alpha.1).</span>
+    </div>
+    <div class="req-item">
+      <span class="req-label">Runtime</span>
+      <span class="req-val">Node.js 24 or newer required. Stock Node + npm only.</span>
+    </div>
+    <div class="req-item">
+      <span class="req-label">Platforms</span>
+      <span class="req-val">Windows and Linux tested. macOS not yet verified.</span>
+    </div>
+    <div class="req-item">
+      <span class="req-label">Execution</span>
+      <span class="req-val">Furnace runs locally on your machine. No daemons, no cloud dependency.</span>
+    </div>
+    <div class="req-item">
+      <span class="req-label">Data egress</span>
+      <span class="req-val">Install: npm registry + Chromium download. Run: zero network calls except your configured target URLs. Feedback: saved to local disk. Zero analytics or telemetry.</span>
+    </div>
+  </div>
+
+  <h2>Unknown is a feature</h2>
+  <p>Three verdicts, no bluffing. A finding without evidence is <strong>unknown</strong>, and unknowns ship in the report — never silently dropped, never upgraded to a pass.</p>
+  <div class="states">
+    <div class="state"><h3>&#10003; PASS</h3><p>Original failure re-proven gone. No new findings. Merge-ready.</p></div>
+    <div class="state"><h3>&#10005; FAIL</h3><p>Patch incomplete or introduced a regression. Held for humans.</p></div>
+    <div class="state unknown"><h3>? UNKNOWN</h3><p>Cannot be proven either way. Listed, routed, never merged.</p></div>
+  </div>
+  <p>Real receipts from a pilot run on a third-party Next.js app (trimmed for display; full JSON ships in <code class="inline">receipts/</code>):</p>
+  <pre class="receipt">MERGE-READY · repair-src__app___components__intro.tsx
+route=auto-fix · verdict=pass
+checks: parses ok · changed ok · fixpoint ok · no-regressions ok
+
+UNKNOWN · repair-src__app___components__theme-switcher.tsx
+route=cannot-verify · verdict=unknown
+evidence: Cannot parse JSX/TSX (valid tsc, rejected scope)
+patch: none emitted · source untouched</pre>
+
+  <h2>From install to receipt in three commands</h2>
+  <ol class="steps">
+    <li><strong>Init inspects your repo.</strong> Framework, routes, and component dirs auto-detected; you answer only what cannot be known. Writes <code class="inline">furnace.json</code>.<br><code class="inline">node furnace/bin/furnace.js init --workspace=.</code></li>
+    <li><strong>Run checks and heals.</strong> Four engines sweep; the fixer proposes; an independent verifier disposes — in a clean copy, never your files.<br><code class="inline">node furnace/bin/furnace.js run --manifest=furnace.json --workspace=. --out=furnace-out</code></li>
+    <li><strong>Read the receipt.</strong> Staging report leads with proven-safe. Every repair carries intent, patch, verification, verdict.</li>
+  </ol>
+
+  <h2>What Furnace can prove today</h2>
+  <ul class="prove">
+    <li><span class="tag">real</span>UI checks in headless Chrome: computed styles plus the CDP accessibility tree.</li>
+    <li><span class="tag">bounded</span>Gradient contrast across parsed stops; mixed gradients stay incomplete.</li>
+    <li><span class="tag">static-only</span>aria-hidden and focus from DOM facts; JSX healing with file-level acceptance.</li>
+    <li><span class="tag">real</span>Auth gates over HTTP; console errors and failed requests from live loads.</li>
+    <li><span class="tag">noisy</span>Load timing against explicit budgets.</li>
+    <li><span class="tag">estimated</span>QA-waste figures: arithmetic from stated assumptions, never measurement.</li>
+    <li><span class="tag heat">not-built</span>LLM agents, auto-created PRs, tenant isolation proofs.</li>
+  </ul>
+  <div class="cmd" role="group" aria-label="Verification command">
+    <code id="run-cmd">node furnace/bin/furnace.js run --manifest=furnace.json --workspace=. --out=furnace-out</code>
+    <button data-copy="run-cmd" aria-label="Copy verification command">Copy</button>
+  </div>
+
+  <h2>After each run, one question</h2>
+  <pre class="receipt">Was this result useful? (y)es / (n)o / Enter to skip:
+Optional comment (Enter to skip):</pre>
+  <p>Stored locally next to your run: an id, a timestamp, your flag, your words, two counts. No code, no secrets, nothing leaves the machine. A report-this-run link prints when your manifest names a GitHub repo — a prefilled issue you review and submit yourself.</p>
+
+  <footer>Local-first. No sign-up before the first run. No backend, free or otherwise. Furnace v0.1.0-alpha.1.</footer>
+</main>
+<script>
+  (function () {
+    var status = document.getElementById("copy-status");
+    var original = status.textContent;
+    document.querySelectorAll("[data-copy]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        var targetId = button.getAttribute("data-copy");
+        var text = document.getElementById(targetId).textContent;
+        var done = function () {
+          var prev = button.textContent;
+          button.textContent = "Copied";
+          status.textContent = "Copied to clipboard.";
+          setTimeout(function () { button.textContent = prev; status.textContent = original; }, 1500);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done, function () { fallback(); });
+        } else { fallback(); }
+        function fallback() {
+          var range = document.createRange();
+          range.selectNodeContents(document.getElementById(targetId));
+          var selection = getSelection();
+          selection.removeAllRanges();
+          selection.addRange(range);
+          try { document.execCommand("copy"); done(); }
+          catch (e) { status.textContent = "Copy failed — select the command manually."; }
+        }
+      });
+    });
+  })();
+</script>
+</body>
+</html>
