@@ -432,118 +432,297 @@
   }
   .plug-icon:hover { opacity: 1; }
 
-  /* HERO CINEMATIC FILM (FABRICA / SUPERMEMORY STYLE) */
-  .hero-film-wrap {
-    margin: 36px 0 32px;
+  /* ============================================================
+     DIRECTION 3: THE INDUSTRIAL MOLTEN CRUCIBLE CONSOLE
+     ============================================================ */
+  .crucible-wrap {
+    margin: 36px 0 48px;
     width: 100%;
   }
 
-  .hero-film-bezel {
+  /* MACHINED DARK TITANIUM CONSOLE BEZEL */
+  .crucible-bezel {
     position: relative;
     width: 100%;
-    aspect-ratio: 16 / 9;
-    border-radius: var(--radius-md);
+    border-radius: 20px;
+    background: linear-gradient(145deg, #1C1C1F 0%, #09090B 50%, #18181B 100%);
+    padding: 10px;
+    box-shadow: 
+      0 0 0 1px #27272A,
+      0 1px 0 1px rgba(255, 255, 255, 0.08) inset,
+      0 20px 50px -10px rgba(0, 0, 0, 0.45),
+      0 0 45px -5px rgba(255, 85, 0, 0.20);
+    border: 1px solid #3F3F46;
     overflow: hidden;
-    background: #09090B;
-    border: 1px solid var(--line);
-    box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .hero-film-video {
+  .crucible-bezel:hover {
+    box-shadow: 
+      0 0 0 1px #52525B,
+      0 1px 0 1px rgba(255, 255, 255, 0.14) inset,
+      0 24px 60px -10px rgba(0, 0, 0, 0.60),
+      0 0 65px 0px rgba(255, 85, 0, 0.32);
+  }
+
+  /* AMBIENT HEAT GLOW RIM */
+  .crucible-rim {
+    position: absolute;
+    inset: 2px;
+    border-radius: 18px;
+    pointer-events: none;
+    box-shadow: inset 0 0 25px rgba(255, 102, 0, 0.25);
+    z-index: 3;
+  }
+
+  /* INNER CHAMBER */
+  .crucible-chamber {
+    position: relative;
+    width: 100%;
+    min-height: 380px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #09090B;
+    border: 1px solid rgba(255, 136, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* LIVING MOLTEN TUNGSTEN VIDEO LAYER */
+  .crucible-core-video {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-    filter: contrast(1.05) brightness(0.95);
-    background-color: #09090B;
+    filter: sepia(1) saturate(6) hue-rotate(-22deg) contrast(1.3) brightness(0.82);
+    opacity: 0.75;
+    mix-blend-mode: screen;
+    z-index: 1;
+    pointer-events: none;
   }
 
-  .hero-film-grain {
+  /* FROSTED SAPPHIRE GLASS & SCANLINE SHROUD */
+  .crucible-glass {
     position: absolute;
     inset: 0;
+    background: radial-gradient(circle at 85% 15%, rgba(255, 102, 0, 0.18) 0%, transparent 60%),
+                linear-gradient(180deg, rgba(9, 9, 11, 0.72) 0%, rgba(9, 9, 11, 0.90) 100%);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 2;
     pointer-events: none;
-    background: radial-gradient(circle at 50% 50%, transparent 60%, rgba(9, 9, 11, 0.35) 100%);
   }
 
-  .hero-film-hud {
-    position: absolute;
-    bottom: 14px;
-    left: 14px;
-    right: 14px;
+  /* CRUCIBLE HUD CONTENT (LAYER 3) */
+  .crucible-content {
+    position: relative;
+    z-index: 4;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: 100%;
+  }
+
+  .crucible-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    pointer-events: none;
-    z-index: 2;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 12px;
   }
 
-  .hero-film-badge {
-    pointer-events: auto;
+  .crucible-title-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .crucible-ember-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #FF5500;
+    box-shadow: 0 0 10px #FF5500, 0 0 20px #FF8800;
+    animation: emberPulse 2s infinite ease-in-out;
+  }
+
+  @keyframes emberPulse {
+    0%, 100% { transform: scale(1); opacity: 0.9; box-shadow: 0 0 8px #FF5500; }
+    50% { transform: scale(1.25); opacity: 1; box-shadow: 0 0 16px #FFAA00, 0 0 24px #FF5500; }
+  }
+
+  .crucible-title {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #FAFAFA;
+  }
+
+  .crucible-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .crucible-seal-tag {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    background: rgba(9, 9, 11, 0.75);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: var(--radius-full);
-    padding: 5px 12px;
+    gap: 6px;
+    background: rgba(255, 85, 0, 0.12);
+    border: 1px solid rgba(255, 85, 0, 0.35);
+    border-radius: 4px;
+    padding: 3px 8px;
     font-family: var(--font-mono);
-    font-size: 0.72rem;
-    font-weight: 500;
-    color: #FAFAFA;
-    letter-spacing: 0.04em;
+    font-size: 0.70rem;
+    font-weight: 600;
+    color: #FF8800;
+    text-transform: uppercase;
   }
 
-  .film-pulse {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--accent-emerald);
-    box-shadow: 0 0 8px var(--accent-emerald);
-    animation: pulse 2s infinite ease-out;
-  }
-
-  .film-toggle {
-    pointer-events: auto;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: rgba(9, 9, 11, 0.75);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    color: #FAFAFA;
+  .crucible-toggle {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #A1A1AA;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background 0.15s ease, transform 0.15s ease;
+    transition: all 0.15s ease;
   }
 
-  .film-toggle:hover {
-    background: rgba(39, 39, 42, 0.9);
-    transform: scale(1.05);
+  .crucible-toggle:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #FAFAFA;
   }
 
-  .hero-film-caption {
+  /* CRUCIBLE INTERACTIVE SWITCHER TABS */
+  .crucible-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .crucible-tab-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #A1A1AA;
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .crucible-tab-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .crucible-tab-btn.active {
+    background: rgba(255, 85, 0, 0.2);
+    border-color: #FF5500;
+    color: #FFFAED;
+    font-weight: 600;
+  }
+
+  /* CRUCIBLE DISPLAY BODY */
+  .crucible-body {
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 16px;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    line-height: 1.65;
+    color: #E4E4E7;
+    min-height: 160px;
+    overflow-x: auto;
+  }
+
+  .crucible-pane {
+    display: none;
+  }
+
+  .crucible-pane.active {
+    display: block;
+  }
+
+  .code-green { color: #34D399; }
+  .code-amber { color: #FBBF24; }
+  .code-cyan { color: #38BDF8; }
+  .code-dim { color: #71717A; }
+
+  /* CRUCIBLE FOOTER TELEMETRY */
+  .crucible-telemetry {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    font-family: var(--font-mono);
+    font-size: 0.70rem;
+  }
+
+  .crucible-metric {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .crucible-metric-label {
+    color: #71717A;
+    text-transform: uppercase;
+    font-size: 0.65rem;
+    letter-spacing: 0.04em;
+  }
+
+  .crucible-metric-val {
+    color: #FAFAFA;
+    font-weight: 600;
+  }
+
+  .crucible-caption {
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 0.78rem;
     color: var(--ink-muted);
-    margin-top: 10px;
+    margin-top: 12px;
     line-height: 1.5;
   }
 
-  .hero-film-caption code {
+  .crucible-caption code {
     font-family: var(--font-mono);
-    font-size: 0.74rem;
+    font-size: 0.72rem;
     background: var(--bg-muted);
     padding: 2px 6px;
     border-radius: 4px;
     border: 1px solid var(--line);
     color: var(--ink-secondary);
+  }
+
+  @media (max-width: 640px) {
+    .crucible-telemetry {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .crucible-caption {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+    }
   }
 
   /* THE FIGURE: ANIMATED SVG VERIFICATION LOOP */
@@ -1020,34 +1199,157 @@
         </ul>
       </div>
 
-      <!-- HERO CINEMATIC FILM (FABRICA / SUPERMEMORY REFERENCE) -->
-      <figure class="hero-film-wrap" aria-labelledby="hero-film-caption">
-        <div class="hero-film-bezel">
-          <video class="hero-film-video" id="hero-film-video" autoplay muted loop playsinline preload="auto" poster="media/hero-poster.jpg">
-            <source src="media/hero.mp4" type="video/mp4">
-            <source src="https://framerusercontent.com/assets/G0NwzP4bivPvK55b3ubxNslUs.mp4" type="video/mp4">
-          </video>
-          <div class="hero-film-grain" aria-hidden="true"></div>
+      <!-- DIRECTION 3: THE INDUSTRIAL MOLTEN CRUCIBLE CONSOLE -->
+      <figure class="crucible-wrap" aria-labelledby="crucible-caption">
+        <div class="crucible-bezel">
+          <div class="crucible-rim" aria-hidden="true"></div>
+          
+          <div class="crucible-chamber">
+            <!-- LIVING MOLTEN THERMAL CORE VIDEO (AMBER GRADED TUNGSTEN) -->
+            <video class="crucible-core-video" id="crucible-video" autoplay muted loop playsinline preload="auto" poster="media/hero-poster.jpg">
+              <source src="media/hero.mp4" type="video/mp4">
+              <source src="https://framerusercontent.com/assets/G0NwzP4bivPvK55b3ubxNslUs.mp4" type="video/mp4">
+            </video>
+            
+            <!-- FROSTED SAPPHIRE GLASS WITH AMBER VIGNETTE -->
+            <div class="crucible-glass" aria-hidden="true"></div>
 
-          <!-- HUD OVERLAY CONTROLS & TELEMETRY -->
-          <div class="hero-film-hud">
-            <div class="hero-film-badge">
-              <span class="film-pulse" aria-hidden="true"></span>
-              <span>RENDERED REALITY FEED &middot; 60 FPS</span>
+            <!-- INTERACTIVE CONSOLE CONTENT -->
+            <div class="crucible-content">
+              <div class="crucible-header">
+                <div class="crucible-title-group">
+                  <span class="crucible-ember-dot" aria-hidden="true"></span>
+                  <span class="crucible-title">CRUCIBLE CORE · 1,840°C · VERIFICATION ENGINE</span>
+                </div>
+                <div class="crucible-header-actions">
+                  <span class="crucible-seal-tag">MERGE-READY · SHA-256</span>
+                  <button type="button" class="crucible-toggle" id="crucible-toggle" aria-label="Toggle thermal core playback" title="Toggle thermal core">
+                    <svg id="crucible-icon-pause" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                    <svg id="crucible-icon-play" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- SWITCHER TABS -->
+              <div class="crucible-tabs" role="tablist" aria-label="Crucible inspection modes">
+                <button type="button" class="crucible-tab-btn active" role="tab" aria-selected="true" data-target="pane-proof">
+                  [1] Monotonic Fixpoint Proof
+                </button>
+                <button type="button" class="crucible-tab-btn" role="tab" aria-selected="false" data-target="pane-cdp">
+                  [2] Headless CDP Reality Tree
+                </button>
+                <button type="button" class="crucible-tab-btn" role="tab" aria-selected="false" data-target="pane-seal">
+                  [3] SHA-256 Sealed Ledger
+                </button>
+              </div>
+
+              <!-- DISPLAY BODY PANES -->
+              <div class="crucible-body">
+                <!-- PANE 1: FIXPOINT PROOF -->
+                <div class="crucible-pane active" id="pane-proof" role="tabpanel">
+                  <div class="crucible-math">
+                    <div class="crucible-math-row">
+                      <span class="math-label">FORMAL PROOF:</span>
+                      <span class="math-val">∀x ∈ AST, f(f(x)) ≡ f(x) <span class="code-green">[STABLE CONVERGENCE]</span></span>
+                    </div>
+                    <div class="crucible-math-row">
+                      <span class="math-label">CHECK 1:</span>
+                      <span class="math-val"><span class="code-cyan">AST PARSING</span> ➔ 0 syntax faults in <code>intro.tsx</code> <span class="code-green">✓ PASS</span></span>
+                    </div>
+                    <div class="crucible-math-row">
+                      <span class="math-label">CHECK 2:</span>
+                      <span class="math-val"><span class="code-amber">TARGET-SIZE</span> ➔ 32px touch target repaired to 44px <span class="code-green">✓ PASS</span></span>
+                    </div>
+                    <div class="crucible-math-row">
+                      <span class="math-label">CHECK 3:</span>
+                      <span class="math-val"><span class="code-cyan">TOKEN PURGE</span> ➔ Arbitrary class <code>'p-[13px]'</code> removed <span class="code-green">✓ PASS</span></span>
+                    </div>
+                    <div class="crucible-math-row">
+                      <span class="math-label">CHECK 4:</span>
+                      <span class="math-val"><span class="code-amber">MONOTONICITY</span> ➔ 0 regressions introduced across 65 invariants <span class="code-green">✓ SEALED</span></span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- PANE 2: HEADLESS CDP REALITY -->
+                <div class="crucible-pane" id="pane-cdp" role="tabpanel">
+                  <div class="crucible-math">
+                    <div class="crucible-math-row">
+                      <span class="math-label">ENGINE:</span>
+                      <span class="math-val">Native Chromium via Chrome DevTools Protocol (CDP Port 9222)</span>
+                    </div>
+                    <div class="crucible-math-row">
+                      <span class="math-label">AX-TREE:</span>
+                      <span class="math-val">Accessibility.getFullAXTree ➔ 1,482 rendered nodes mapped (145ms)</span>
+                    </div>
+                    <div class="crucible-math-row">
+                      <span class="math-label">BOX MODEL:</span>
+                      <span class="math-val">button#checkout-cta ➔ BoundingBox: { width: 180, height: 44 }</span>
+                    </div>
+                    <div class="crucible-math-row">
+                      <span class="math-label">CONTRAST:</span>
+                      <span class="math-val">Background: #FFFFFF · Foreground: #09090B ➔ Ratio: 8.24:1 <span class="code-green">✓ PASS</span></span>
+                    </div>
+                    <div class="crucible-math-row">
+                      <span class="math-label">PRIVACY:</span>
+                      <span class="math-val">Outbound Network Egress: <span class="code-green">0.00 KB</span> (Strictly Local Execution)</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- PANE 3: SHA-256 SEALED LEDGER -->
+                <div class="crucible-pane" id="pane-seal" role="tabpanel">
+                  <div class="crucible-math">
+                    <div class="crucible-math-row">
+                      <span class="math-label">RECEIPT ID:</span>
+                      <span class="math-val code-cyan">repair-src__app___components__intro.tsx</span>
+                    </div>
+                    <div class="crucible-math-row">
+                      <span class="math-label">SHA-256 SEAL:</span>
+                      <span class="math-val code-green">sha256=d3b07384d113edec49eaa6238ad5ff00c3b1a89c9e8210bf72c847d0...</span>
+                    </div>
+                    <div class="crucible-math-row">
+                      <span class="math-label">PROVENANCE:</span>
+                      <span class="math-val">Commit: <code>b9d3b31</code> · Engine: <code>@furnace/labs@0.1.0</code></span>
+                    </div>
+                    <div class="crucible-math-row">
+                      <span class="math-label">STATUS:</span>
+                      <span class="math-val code-amber">MERGE-READY · NO FALSE GREENS · UNKNOWN QUARANTINED</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- TELEMETRY FOOTER -->
+              <div class="crucible-telemetry">
+                <div class="crucible-metric">
+                  <span class="crucible-metric-label">Chromium Launch</span>
+                  <span class="crucible-metric-val">280ms</span>
+                </div>
+                <div class="crucible-metric">
+                  <span class="crucible-metric-label">AX-Tree Audit</span>
+                  <span class="crucible-metric-val">145ms</span>
+                </div>
+                <div class="crucible-metric">
+                  <span class="crucible-metric-label">Fixpoint Repair</span>
+                  <span class="crucible-metric-val">22ms</span>
+                </div>
+                <div class="crucible-metric">
+                  <span class="crucible-metric-label">Regression Leak</span>
+                  <span class="crucible-metric-val code-green">0.00%</span>
+                </div>
+              </div>
             </div>
-            <button type="button" class="film-toggle" id="film-toggle" aria-label="Pause background video" title="Toggle playback">
-              <svg id="film-icon-pause" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-              <svg id="film-icon-play" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            </button>
           </div>
         </div>
-        <figcaption class="hero-film-caption" id="hero-film-caption">
-          <span>Continuous visual reality capture. Raw DOM rendered against Chrome DevTools Protocol layout trees.</span>
-          <code>Chromium CDP Feed</code>
+        
+        <figcaption class="crucible-caption" id="crucible-caption">
+          <span>Figure 1. The Furnace Crucible: Rendered browser reality is inspected via headless CDP, healed with monotonic AST fixpoints, and signed with SHA-256 receipts.</span>
+          <code>Machined Titanium Console &middot; Direction 3</code>
         </figcaption>
       </figure>
 
-      <!-- ANIMATED CIRCUIT FIGURE (FIGURE 1) -->
+      <!-- ANIMATED CIRCUIT FIGURE (FIGURE 2) -->
       <figure class="loop" aria-labelledby="loop-caption">
         <svg class="loop-canvas" viewBox="0 0 680 180" fill="none">
           <!-- Connectors / Tracks -->
@@ -1406,24 +1708,44 @@ EXIT: 0 (MERGE-READY)
   window.addEventListener('scroll', updateToc, { passive: true });
   updateToc();
 
-  // 3. Hero video play / pause toggle
-  const filmVideo = document.getElementById('hero-film-video');
-  const filmToggle = document.getElementById('film-toggle');
-  const iconPause = document.getElementById('film-icon-pause');
-  const iconPlay = document.getElementById('film-icon-play');
+  // 3. Direction 3: Crucible Tabs and Thermal Core Video Controller
+  const crucibleVideo = document.getElementById('crucible-video');
+  const crucibleToggle = document.getElementById('crucible-toggle');
+  const iconPause = document.getElementById('crucible-icon-pause');
+  const iconPlay = document.getElementById('crucible-icon-play');
+  const tabBtns = document.querySelectorAll('.crucible-tab-btn');
+  const panes = document.querySelectorAll('.crucible-pane');
 
-  if (filmVideo && filmToggle) {
-    filmToggle.addEventListener('click', function() {
-      if (filmVideo.paused) {
-        filmVideo.play();
-        iconPause.style.display = 'block';
-        iconPlay.style.display = 'none';
-        filmToggle.setAttribute('aria-label', 'Pause background video');
+  if (tabBtns && panes) {
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-target');
+        tabBtns.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        panes.forEach(p => p.classList.remove('active'));
+
+        this.classList.add('active');
+        this.setAttribute('aria-selected', 'true');
+        const targetPane = document.getElementById(targetId);
+        if (targetPane) targetPane.classList.add('active');
+      });
+    });
+  }
+
+  if (crucibleVideo && crucibleToggle) {
+    crucibleToggle.addEventListener('click', function() {
+      if (crucibleVideo.paused) {
+        crucibleVideo.play();
+        if (iconPause) iconPause.style.display = 'block';
+        if (iconPlay) iconPlay.style.display = 'none';
+        crucibleToggle.setAttribute('aria-label', 'Pause thermal core playback');
       } else {
-        filmVideo.pause();
-        iconPause.style.display = 'none';
-        iconPlay.style.display = 'block';
-        filmToggle.setAttribute('aria-label', 'Play background video');
+        crucibleVideo.pause();
+        if (iconPause) iconPause.style.display = 'none';
+        if (iconPlay) iconPlay.style.display = 'block';
+        crucibleToggle.setAttribute('aria-label', 'Play thermal core playback');
       }
     });
   }
