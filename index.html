@@ -3,1179 +3,1161 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Furnace Labs: The Industrial Foundry for Software Integrity. Headless CDP verification, monotonic repair, and zero-drift cryptographic receipts for AI-generated code.">
-<title>FURNACE — The Industrial Foundry for AI Code Verification</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230D0C0B'/><polygon points='50,15 85,85 15,85' fill='none' stroke='%23FF4400' stroke-width='8'/><circle cx='50' cy='62' r='10' fill='%23FF4400'/></svg>">
-<meta property="og:title" content="FURNACE — The Industrial Foundry for AI Code Verification">
-<meta property="og:description" content="AI writes code in a dream state. Furnace is the cold bucket of water. Headless CDP verification, deterministic auto-remediation, and sealed receipts.">
+<title>Furnace — Verification and continual remediation for AI-built software</title>
+<meta name="description" content="AI builds fast. Furnace verifies reality. Continuous headless Chromium verification, AST repair, and cryptographically sealed receipts.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2309090B'/><path d='M30 70 L50 25 L70 70 Z' fill='none' stroke='%23FAFAFA' stroke-width='8' stroke-linejoin='round'/><circle cx='50' cy='56' r='6' fill='%23FAFAFA'/></svg>">
+<meta property="og:title" content="Furnace — Verification and continual remediation for AI-built software">
+<meta property="og:description" content="AI builds fast. Furnace verifies reality. Headless Chromium CDP audits, monotonic AST repair proofs, and sealed receipts.">
 <meta property="og:type" content="website">
 
-<!-- Editorial & Brutalist Fonts: Instrument Serif (sharp editorial italics), Space Grotesk (mechanical sans), JetBrains Mono (technical monospace) -->
+<!-- Geist & Geist Mono: Official Vercel typography (matching supermemory.ai) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
   :root {
-    --void: #090807;
-    --foundry-950: #0E0D0B;
-    --foundry-900: #171512;
-    --foundry-850: #1E1C18;
-    --foundry-800: #282520;
-    --foundry-700: #3D3933;
+    --bg: #FFFFFF;
+    --bg-subtle: #FAFAFA;
+    --bg-card: #FFFFFF;
+    --bg-muted: #F4F4F5;
     
-    --steel-600: #68635B;
-    --steel-500: #8E8980;
-    --steel-400: #B5B0A6;
-    --bone-100: #FAF7F0;
-    --bone-200: #EFECE3;
+    --ink: #09090B;
+    --ink-secondary: #52525B;
+    --ink-muted: #71717A;
+    --ink-faint: #A1A1AA;
     
-    --ember: #FF4400;
-    --ember-bright: #FF6622;
-    --ember-glow: rgba(255, 68, 0, 0.18);
-    --ember-subtle: rgba(255, 68, 0, 0.06);
+    --line: #E4E4E7;
+    --line-subtle: #F4F4F5;
+    --line-active: #09090B;
     
-    --hazard-gold: #E5A000;
-    --seal-green: #00E575;
-    --seal-green-bg: rgba(0, 229, 117, 0.08);
-    --stamp-crimson: #D9251B;
+    --accent: #09090B;
+    --accent-emerald: #10B981;
+    --accent-emerald-bg: rgba(16, 185, 129, 0.08);
+    --accent-blue: #2563EB;
     
-    --serif: "Instrument Serif", Georgia, serif;
-    --sans: "Space Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
-    --mono: "JetBrains Mono", monospace;
+    --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
     
-    --border-hairline: 1px solid var(--foundry-700);
-    --border-faint: 1px solid rgba(250, 247, 240, 0.07);
-    --border-metal: 1px solid #36322C;
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-full: 9999px;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; font-size: 16px; background-color: var(--foundry-950); }
+  html { scroll-behavior: smooth; font-size: 16px; background-color: var(--bg); }
   
   body {
-    background-color: var(--foundry-950);
-    color: var(--bone-100);
-    font-family: var(--sans);
+    background-color: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
-    position: relative;
   }
 
-  /* TACTILE SUBTLE FOUNDRY GRAIN & REGISTRATION CROSSES */
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background-image: 
-      radial-gradient(circle at 50% 0%, rgba(255, 68, 0, 0.08), transparent 45%),
-      linear-gradient(to right, rgba(250, 247, 240, 0.02) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(250, 247, 240, 0.02) 1px, transparent 1px);
-    background-size: 100% 100%, 64px 64px, 64px 64px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 28px;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* INDUSTRIAL RUNNING MARGIN LABELS */
-  .running-grid-mark {
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    color: var(--steel-600);
-    letter-spacing: 0.12em;
-    user-select: none;
-  }
-
-  /* TOP TELETYPE BROADCAST BAR */
-  .teletype-bar {
-    border-bottom: 1px solid var(--foundry-800);
-    background: var(--foundry-900);
-    padding: 8px 0;
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.06em;
-    color: var(--steel-400);
-  }
-
-  .teletype-inner {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .teletype-left {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .pilot-lamp {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    color: var(--bone-100);
-    font-weight: 500;
-  }
-
-  .lamp-filament {
-    width: 7px;
-    height: 7px;
-    background-color: var(--ember);
-    border-radius: 50%;
-    box-shadow: 0 0 8px var(--ember), 0 0 2px #fff;
-    animation: filament-burn 3s infinite alternate ease-in-out;
-  }
-
-  @keyframes filament-burn {
-    0%, 100% { opacity: 0.9; transform: scale(1); }
-    50% { opacity: 0.6; transform: scale(0.92); }
-    75% { opacity: 1; transform: scale(1.1); filter: drop-shadow(0 0 5px #ff5500); }
-  }
-
-  /* HERO MONUMENTAL MASTHEAD */
-  header.foundry-masthead {
-    border-bottom: 2px solid var(--foundry-800);
-    padding: 36px 0 28px;
-    position: relative;
-  }
-
-  .masthead-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 20px;
-    border-bottom: 1px dashed var(--foundry-700);
-    padding-bottom: 16px;
-  }
-
-  .foundry-logo {
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
+  /* SKIP LINK */
+  .skip {
+    position: absolute;
+    top: -100px;
+    left: 20px;
+    background: var(--ink);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    z-index: 1000;
     text-decoration: none;
-    color: var(--bone-100);
+    font-size: 0.82rem;
   }
+  .skip:focus { top: 20px; }
 
-  .foundry-mark {
-    font-family: var(--mono);
-    font-weight: 700;
-    font-size: 1.15rem;
-    letter-spacing: 0.18em;
-    color: var(--bone-100);
+  /* SUPERMEMORY-STYLE TWO-COLUMN PAGE LAYOUT */
+  .page {
     display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .foundry-mark .brand-sigil {
-    color: var(--ember);
-    display: inline-block;
-    font-size: 1.3rem;
-  }
-
-  .foundry-spec {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--steel-500);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  .stamp-edition {
-    border: 1px solid var(--ember);
-    padding: 3px 9px;
-    font-family: var(--mono);
-    font-size: 0.68rem;
-    color: var(--ember);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    background: var(--ember-subtle);
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  /* MONUMENTAL HERO COMPOSITION */
-  .hero-monument {
-    padding: 64px 0 80px;
-    border-bottom: 1px solid var(--foundry-800);
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 56px;
+    max-width: 1080px;
+    margin: 0 auto;
+    min-height: 100vh;
     position: relative;
+    padding: 0 24px;
   }
 
-  @media (min-width: 960px) {
-    .hero-monument {
-      grid-template-columns: 1.15fr 0.85fr;
-      align-items: start;
-    }
+  /* LEFT SIDEBAR RAIL (STICKY ON DESKTOP) */
+  aside.rail {
+    width: 210px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    padding: 44px 20px 44px 0;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.84rem;
+    z-index: 10;
   }
 
-  .manifesto-pre {
+  .brand {
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-    color: var(--hazard-gold);
-    margin-bottom: 22px;
-  }
-
-  .manifesto-pre::before {
-    content: "///";
-    color: var(--ember);
-    font-weight: 700;
-  }
-
-  h1.monument-title {
-    font-family: var(--sans);
-    font-size: clamp(2.4rem, 5.5vw, 4.3rem);
-    font-weight: 700;
-    line-height: 1.04;
-    letter-spacing: -0.04em;
-    color: var(--bone-100);
+    gap: 10px;
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: -0.02em;
     margin-bottom: 28px;
   }
 
-  h1.monument-title .serif-cut {
-    font-family: var(--serif);
-    font-weight: 400;
-    font-style: italic;
-    color: var(--ember-bright);
-    letter-spacing: -0.01em;
-    padding-right: 0.1em;
-  }
-
-  .monument-lede {
-    font-size: 1.18rem;
-    line-height: 1.6;
-    color: var(--steel-400);
-    max-width: 54ch;
-    margin-bottom: 36px;
-  }
-
-  .monument-lede strong {
-    color: var(--bone-100);
-    font-weight: 600;
-  }
-
-  /* INDUSTRIAL PHYSICAL CONSOLE (THE BURN CHAMBER IGNITION DECK) */
-  .chamber-deck {
-    background: var(--foundry-900);
-    border: 1px solid var(--foundry-700);
-    position: relative;
-    box-shadow: 
-      0 24px 48px -12px rgba(0, 0, 0, 0.8),
-      0 0 0 1px rgba(255, 68, 0, 0.12) inset;
-  }
-
-  /* Machined Screws in 4 Corners */
-  .chamber-deck::before, .chamber-deck::after {
-    content: "⨁";
-    position: absolute;
-    font-size: 11px;
-    color: var(--foundry-700);
-    line-height: 1;
-  }
-  .chamber-deck::before { top: 7px; left: 8px; }
-  .chamber-deck::after { top: 7px; right: 8px; }
-
-  .deck-bezel {
-    padding: 10px 18px 10px 24px;
-    background: var(--foundry-850);
-    border-bottom: 1px solid var(--foundry-700);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-family: var(--mono);
-    font-size: 0.68rem;
-    color: var(--steel-400);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  .deck-bezel-title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--bone-200);
-    font-weight: 600;
-  }
-
-  .deck-screen {
-    padding: 24px;
-    background: #080706;
-    position: relative;
-    overflow: hidden;
-  }
-
-  /* CRT Raster Scanline Overlay */
-  .deck-screen::before {
-    content: " ";
-    display: block;
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%);
-    background-size: 100% 4px;
-    z-index: 2;
-    pointer-events: none;
-    opacity: 0.7;
-  }
-
-  .cmd-meta {
-    font-family: var(--mono);
-    font-size: 0.68rem;
-    color: var(--steel-500);
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-    position: relative;
-    z-index: 3;
-  }
-
-  .cmd-payload {
-    font-family: var(--mono);
-    font-size: 0.86rem;
-    line-height: 1.6;
-    color: #00FF88;
-    background: rgba(0, 255, 136, 0.03);
-    border: 1px solid rgba(0, 255, 136, 0.15);
-    padding: 18px;
-    word-break: break-all;
-    position: relative;
-    z-index: 3;
-    margin-bottom: 20px;
-  }
-
-  .cmd-prompt {
-    color: var(--ember-bright);
-    margin-right: 6px;
-    user-select: none;
-  }
-
-  .deck-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    position: relative;
-    z-index: 3;
-  }
-
-  .btn-ignite {
-    background: var(--ember);
-    color: #FFFFFF;
-    border: none;
-    padding: 14px 22px;
-    font-family: var(--sans);
-    font-size: 0.94rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    cursor: pointer;
-    display: flex;
+  .brand-icon {
+    width: 22px;
+    height: 22px;
+    background: var(--ink);
+    color: #fff;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    transition: all 0.15s ease-out;
-    box-shadow: 0 4px 16px rgba(255, 68, 0, 0.35);
-    position: relative;
-  }
-
-  .btn-ignite:hover {
-    background: var(--ember-bright);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 22px rgba(255, 68, 0, 0.5);
-  }
-
-  .btn-ignite:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 8px rgba(255, 68, 0, 0.2);
-  }
-
-  .deck-footnote {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--steel-500);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 4px;
-  }
-
-  .deck-feedback {
-    color: var(--seal-green);
-    font-weight: 600;
-  }
-
-  /* HARDWARE SPECIFICATION PLATE */
-  .spec-plate {
-    margin-top: 24px;
-    border: 1px solid var(--foundry-700);
-    background: var(--foundry-900);
-    padding: 16px 20px;
-    font-family: var(--mono);
-    font-size: 0.74rem;
-  }
-
-  .spec-plate-title {
-    font-size: 0.65rem;
-    color: var(--hazard-gold);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-    border-bottom: 1px dashed var(--foundry-700);
-    padding-bottom: 6px;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .spec-table {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px 16px;
-  }
-
-  .spec-item {
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid rgba(250, 247, 240, 0.04);
-    padding-bottom: 4px;
-  }
-
-  .spec-k { color: var(--steel-500); }
-  .spec-v { color: var(--bone-200); font-weight: 500; }
-
-  /* SECTION ANATOMY */
-  section.foundry-section {
-    padding: 80px 0;
-    border-bottom: 1px solid var(--foundry-800);
-    position: relative;
-  }
-
-  .section-label {
-    font-family: var(--mono);
+    border-radius: 5px;
     font-size: 0.72rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--ember);
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .section-heading {
-    font-family: var(--sans);
-    font-size: clamp(2rem, 3.8vw, 3.1rem);
     font-weight: 700;
-    line-height: 1.1;
-    letter-spacing: -0.03em;
-    margin-bottom: 20px;
-    color: var(--bone-100);
   }
 
-  .section-heading em {
-    font-family: var(--serif);
-    font-style: italic;
-    font-weight: 400;
-    color: var(--ember-bright);
-  }
-
-  .section-intro {
-    font-size: 1.12rem;
-    line-height: 1.6;
-    color: var(--steel-400);
-    max-width: 62ch;
-    margin-bottom: 48px;
-  }
-
-  /* THE INTERACTIVE VERIFICATION PROVING GROUNDS (CHAMBER SIMULATION) */
-  .proving-simulator {
-    background: var(--foundry-900);
-    border: 1px solid var(--foundry-700);
-    margin-top: 36px;
-  }
-
-  .simulator-nav {
-    display: grid;
-    grid-template-columns: 1fr;
-    border-bottom: 1px solid var(--foundry-700);
-    background: var(--foundry-850);
-  }
-
-  @media (min-width: 768px) {
-    .simulator-nav {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-
-  .sim-tab-btn {
-    background: transparent;
-    border: none;
-    border-right: 1px solid var(--foundry-700);
-    padding: 16px 20px;
-    text-align: left;
-    cursor: pointer;
-    font-family: var(--mono);
-    color: var(--steel-400);
-    transition: all 0.15s ease;
+  /* THE DOORS: PRIMARY SITE NAVIGATION */
+  .nav-doors {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 7px;
   }
 
-  .sim-tab-btn:last-child {
-    border-right: none;
-  }
-
-  .sim-tab-btn:hover {
-    background: rgba(255, 68, 0, 0.05);
-    color: var(--bone-100);
-  }
-
-  .sim-tab-btn.active {
-    background: var(--foundry-900);
-    color: var(--bone-100);
-    box-shadow: 0 -2px 0 var(--ember) inset;
-  }
-
-  .sim-tab-btn .tab-badge {
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-  }
-
-  .badge-pass-text { color: var(--seal-green); }
-  .badge-fail-text { color: var(--stamp-crimson); }
-  .badge-unknown-text { color: var(--hazard-gold); }
-
-  .sim-tab-btn .tab-title {
-    font-family: var(--sans);
-    font-weight: 700;
-    font-size: 0.94rem;
-  }
-
-  .simulator-display {
-    padding: 28px;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 28px;
-  }
-
-  @media (min-width: 860px) {
-    .simulator-display {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-
-  .sim-narrative h4 {
-    font-family: var(--sans);
-    font-size: 1.35rem;
-    font-weight: 700;
-    margin-bottom: 12px;
-    color: var(--bone-100);
-  }
-
-  .sim-narrative p {
-    font-size: 0.95rem;
-    color: var(--steel-400);
-    line-height: 1.6;
-    margin-bottom: 20px;
-  }
-
-  .sim-terminal-output {
-    background: #060505;
-    border: 1px solid var(--foundry-700);
-    padding: 18px;
-    font-family: var(--mono);
-    font-size: 0.78rem;
-    line-height: 1.65;
-    color: var(--bone-200);
-    position: relative;
-    overflow-x: auto;
-  }
-
-  .sim-code-pass { color: var(--seal-green); }
-  .sim-code-fail { color: #FF6666; }
-  .sim-code-unknown { color: var(--hazard-gold); }
-  .sim-code-dim { color: var(--steel-600); }
-
-  /* THE EDITORIAL BROADSHEET: THE FIVE ILLUSIONS OF AI CODE */
-  .illusions-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1px;
-    background: var(--foundry-700);
-    border: 1px solid var(--foundry-700);
-    margin: 48px 0;
-  }
-
-  @media (min-width: 768px) {
-    .illusions-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .illusions-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-
-  .illusion-cell {
-    background: var(--foundry-950);
-    padding: 32px 28px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  .illusion-cell:hover {
-    background: var(--foundry-900);
-  }
-
-  .illusion-num {
-    font-family: var(--mono);
-    font-size: 0.74rem;
-    color: var(--ember);
-    letter-spacing: 0.14em;
-    margin-bottom: 16px;
-    display: block;
-  }
-
-  .illusion-title {
-    font-family: var(--sans);
-    font-size: 1.25rem;
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 12px;
-    color: var(--bone-100);
-  }
-
-  .illusion-desc {
-    font-size: 0.92rem;
-    color: var(--steel-400);
-    line-height: 1.6;
-    margin-bottom: 20px;
-  }
-
-  .illusion-remedy {
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    color: var(--hazard-gold);
-    border-top: 1px dashed var(--foundry-700);
-    padding-top: 14px;
-    line-height: 1.4;
-  }
-
-  /* PHYSICAL SPECIMEN RECEIPT (TEAR-OFF CARBON PERFORATION) */
-  .receipt-wrapper {
-    margin: 56px 0;
-    position: relative;
-  }
-
-  .receipt-specimen-card {
-    background: #11100E;
-    border: 2px solid #36332E;
-    position: relative;
-    padding: 36px 32px;
-    font-family: var(--mono);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
-  }
-
-  /* Jagged Tear Perforations Top & Bottom */
-  .receipt-tear-top, .receipt-tear-bottom {
-    height: 10px;
-    background-size: 20px 10px;
-    position: absolute;
-    left: 0;
-    right: 0;
-  }
-
-  .receipt-header-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    border-bottom: 1px dashed var(--foundry-700);
-    padding-bottom: 16px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-
-  .receipt-issuer {
-    font-size: 0.78rem;
-    color: var(--bone-100);
-    font-weight: 700;
-    letter-spacing: 0.08em;
-  }
-
-  .receipt-meta {
-    font-size: 0.68rem;
-    color: var(--steel-500);
-    text-align: right;
-  }
-
-  .receipt-body {
-    font-size: 0.82rem;
-    line-height: 1.7;
-    color: var(--bone-200);
-    overflow-x: auto;
-    white-space: pre;
-    padding: 12px 0;
-  }
-
-  /* PHYSICAL AUTHENTIC STAMP */
-  .physical-stamp {
-    position: absolute;
-    bottom: 24px;
-    right: 32px;
-    border: 3px solid var(--stamp-crimson);
-    border-radius: 6px;
-    padding: 8px 16px;
-    color: var(--stamp-crimson);
-    font-family: var(--mono);
-    font-weight: 700;
+  .nav-doors a {
+    color: var(--ink-muted);
+    text-decoration: none;
     font-size: 0.85rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    transform: rotate(-7deg);
-    pointer-events: none;
-    user-select: none;
-    opacity: 0.92;
-    background: rgba(217, 37, 27, 0.04);
-    box-shadow: 0 0 0 2px rgba(217, 37, 27, 0.15) inset;
+    font-weight: 450;
+    transition: color 0.15s ease;
   }
 
-  /* REALITY COMPARISON MATRIX */
-  .matrix-wrapper {
-    margin: 48px 0;
-    border: 1px solid var(--foundry-700);
-    background: var(--foundry-900);
-    overflow-x: auto;
+  .nav-doors a:hover {
+    color: var(--ink);
   }
 
-  .matrix-grid {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.9rem;
-    text-align: left;
-  }
-
-  .matrix-grid th {
-    background: var(--foundry-850);
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--steel-400);
-    padding: 16px 20px;
-    border-bottom: 2px solid var(--foundry-700);
-  }
-
-  .matrix-grid td {
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--foundry-800);
-    vertical-align: middle;
-  }
-
-  .matrix-grid tr:last-child td {
-    border-bottom: none;
-  }
-
-  .matrix-dimension {
+  .nav-doors a.active, .nav-doors a[aria-current="page"] {
+    color: var(--ink);
     font-weight: 600;
-    color: var(--bone-100);
-    width: 22%;
   }
 
-  .tag-status {
-    font-family: var(--mono);
-    font-size: 0.68rem;
-    font-weight: 700;
-    padding: 3px 8px;
+  .rail-rule {
+    border: none;
+    border-top: 1px solid var(--line);
+    margin: 24px 0;
+  }
+
+  /* IN-PAGE TABLE OF CONTENTS (THE HERE) */
+  .nav-here-title {
+    font-size: 0.72rem;
+    font-weight: 600;
     letter-spacing: 0.06em;
-    display: inline-block;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 12px;
   }
 
-  .tag-fail { color: var(--stamp-crimson); background: rgba(217, 37, 27, 0.1); border: 1px solid rgba(217, 37, 27, 0.3); }
-  .tag-pass { color: var(--seal-green); background: rgba(0, 229, 117, 0.1); border: 1px solid rgba(0, 229, 117, 0.3); }
-  .tag-warn { color: var(--hazard-gold); background: rgba(229, 160, 0, 0.1); border: 1px solid rgba(229, 160, 0, 0.3); }
-
-  /* ZERO-TELEMETRY ETHICS MANIFESTO CALLOUT */
-  .foundry-pledge {
-    margin: 64px 0;
-    padding: 36px 40px;
-    background: var(--foundry-900);
-    border-left: 4px solid var(--ember);
-    border-top: 1px solid var(--foundry-800);
-    border-right: 1px solid var(--foundry-800);
-    border-bottom: 1px solid var(--foundry-800);
+  .nav-here {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
     position: relative;
+    padding-left: 12px;
+    border-left: 1px solid var(--line);
   }
 
-  .pledge-quote {
-    font-family: var(--serif);
-    font-size: 1.55rem;
-    font-style: italic;
-    color: var(--bone-100);
+  .nav-here a {
+    color: var(--ink-muted);
+    text-decoration: none;
+    font-size: 0.82rem;
+    transition: color 0.15s ease;
     line-height: 1.4;
+  }
+
+  .nav-here a:hover {
+    color: var(--ink);
+  }
+
+  .nav-here a.active {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .nav-indicator {
+    position: absolute;
+    left: -1px;
+    top: 0;
+    width: 2px;
+    height: 16px;
+    background: var(--ink);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* MAIN CONTENT COLUMN */
+  main.col {
+    flex: 1;
+    max-width: 760px;
+    padding: 44px 0 120px 48px;
+    min-width: 0;
+  }
+
+  /* HERO COMPONENT */
+  .hero {
+    margin-bottom: 72px;
+  }
+
+  /* ANNOUNCEMENT PILL NOTE */
+  .note {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    background: var(--bg-muted);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-full);
+    font-size: 0.78rem;
+    color: var(--ink-secondary);
+    text-decoration: none;
+    margin-bottom: 24px;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+
+  .note:hover {
+    border-color: #D4D4D8;
+    background: #E4E4E7;
+  }
+
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+    70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+  }
+
+  .note-live {
+    width: 6px;
+    height: 6px;
+    background: var(--accent-emerald);
+    border-radius: 50%;
+    animation: pulse 2s infinite ease-out;
+  }
+
+  .note-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .note-cta .arrow {
+    font-size: 0.85rem;
+    transition: transform 0.15s ease;
+  }
+
+  .note:hover .note-cta .arrow {
+    transform: translate(1px, -1px);
+  }
+
+  /* MONUMENT STATEMENT HEADLINE */
+  h1.statement {
+    font-size: clamp(2.2rem, 4.5vw, 3.1rem);
+    font-weight: 500;
+    letter-spacing: -0.038em;
+    line-height: 1.14;
+    color: var(--ink);
     margin-bottom: 18px;
   }
 
-  .pledge-sub {
-    font-size: 0.95rem;
-    color: var(--steel-400);
-    line-height: 1.6;
+  p.dek {
+    font-size: 1.15rem;
+    line-height: 1.55;
+    color: var(--ink-muted);
+    font-weight: 400;
+    margin-bottom: 32px;
+    max-width: 58ch;
   }
 
-  /* COLOPHON & FOOTER */
-  footer.foundry-colophon {
-    border-top: 2px solid var(--foundry-800);
-    padding: 56px 0 72px;
-    background: var(--foundry-950);
-    font-size: 0.85rem;
-    color: var(--steel-500);
+  /* ACTIONS ROW & PROMPTBAR */
+  .ways {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 36px;
   }
 
-  .colophon-flex {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 40px;
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
   }
 
-  @media (min-width: 800px) {
-    .colophon-flex {
-      grid-template-columns: 1.6fr 1fr 1fr;
-    }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .colophon-brand-title {
-    font-family: var(--mono);
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--bone-100);
-    letter-spacing: 0.12em;
+  .btn-primary {
+    background: var(--ink);
+    color: #FFFFFF;
+    border: 1px solid var(--ink);
+  }
+
+  .btn-primary:hover {
+    background: #27272A;
+    border-color: #27272A;
+  }
+
+  .btn-secondary {
+    background: var(--bg);
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+
+  .btn-secondary:hover {
+    background: var(--bg-muted);
+    border-color: #D4D4D8;
+  }
+
+  /* QUICK PROMPTBAR / COMMAND INJECTOR (SUPERMEMORY STYLE) */
+  .promptbar {
+    display: flex;
+    align-items: center;
+    background: var(--bg-subtle);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    position: relative;
+    max-width: 100%;
+  }
+
+  .prompt-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 11px 16px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.81rem;
+    color: var(--ink-secondary);
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: background 0.15s ease;
+  }
+
+  .prompt-btn:hover {
+    background: var(--bg-muted);
+    color: var(--ink);
+  }
+
+  .prompt-cmd {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .prompt-cmd::before {
+    content: "$ ";
+    color: var(--ink-faint);
+    user-select: none;
+  }
+
+  .prompt-action-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.74rem;
+    color: var(--ink-muted);
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 3px 8px;
+    flex-shrink: 0;
+  }
+
+  /* INTEGRATION MARKS ROW ("WORKS WITH") */
+  .plugs {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line-subtle);
+  }
+
+  .plugs-text {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .plugs-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    list-style: none;
+  }
+
+  .plugs-row li {
+    display: flex;
+    align-items: center;
+  }
+
+  .plug-icon {
+    height: 18px;
+    opacity: 0.65;
+    transition: opacity 0.15s ease;
+  }
+  .plug-icon:hover { opacity: 1; }
+
+  /* THE FIGURE: ANIMATED SVG VERIFICATION LOOP */
+  figure.loop {
+    margin: 40px 0 64px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    overflow: hidden;
+  }
+
+  .loop-canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  figcaption.loop-caption {
+    font-size: 0.81rem;
+    color: var(--ink-muted);
+    margin-top: 14px;
+    line-height: 1.5;
+  }
+
+  /* EDITORIAL MEMO ARTICLE */
+  article.memo {
+    margin-bottom: 72px;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--ink-secondary);
+  }
+
+  article.memo p {
+    margin-bottom: 20px;
+  }
+
+  article.memo p strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  article.memo p.beat {
+    font-size: 1.32rem;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    margin: 32px 0 24px;
+    line-height: 1.35;
+  }
+
+  /* KEYBOARD & FOOTNOTE INLINE KEYS */
+  a.key {
+    color: var(--ink);
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: #D4D4D8;
+    transition: text-decoration-color 0.15s ease;
+  }
+  a.key:hover {
+    text-decoration-color: var(--ink);
+  }
+
+  /* SECTIONS */
+  section.section {
+    padding-top: 48px;
+    margin-bottom: 72px;
+    border-top: 1px solid var(--line);
+  }
+
+  .eyebrow {
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
     margin-bottom: 12px;
   }
 
-  .colophon-nav-title {
-    font-family: var(--mono);
-    font-size: 0.68rem;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: var(--hazard-gold);
-    margin-bottom: 14px;
+  h2.section-title {
+    font-size: 1.65rem;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: 24px;
   }
 
-  .colophon-links {
-    list-style: none;
+  /* WHAT WE DO ROWS */
+  .rows {
+    display: grid;
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .row-card {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 16px;
+    transition: border-color 0.15s ease;
+  }
+
+  .row-card:hover {
+    border-color: #A1A1AA;
+  }
+
+  .row-num {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--ink-faint);
+    padding-top: 2px;
+  }
+
+  .row-content h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+
+  .row-content p {
+    font-size: 0.92rem;
+    color: var(--ink-secondary);
+    line-height: 1.6;
+  }
+
+  /* IN PRODUCTION / BENCHMARKS */
+  .proof {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .stat-label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--ink-muted);
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .stat-label small {
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+  }
+
+  .stat-number {
+    font-size: 2.2rem;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .stat-sub {
+    font-size: 0.78rem;
+    color: var(--ink-muted);
+    margin-top: 8px;
+  }
+
+  /* LATENCY LEDGER TABLE */
+  table.ledger {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.84rem;
+    margin-top: 12px;
+  }
+
+  table.ledger th, table.ledger td {
+    padding: 8px 0;
+    text-align: left;
+    border-bottom: 1px solid var(--line-subtle);
+  }
+
+  table.ledger th {
+    color: var(--ink-faint);
+    font-weight: 500;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+  }
+
+  table.ledger td {
+    color: var(--ink);
+    font-family: var(--font-mono);
+  }
+
+  /* COMPLIANCE SIGNALS CARD */
+  .compliance-box {
+    background: var(--bg-subtle);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    margin-top: 24px;
+  }
+
+  .compliance-disclaimer {
+    font-size: 0.78rem;
+    color: var(--ink-muted);
+    line-height: 1.5;
+    background: var(--bg-card);
+    border-left: 3px solid var(--ink);
+    padding: 12px 14px;
+    margin-bottom: 20px;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+
+  .signal-list {
     display: grid;
     gap: 10px;
-    font-family: var(--mono);
-    font-size: 0.78rem;
+    font-size: 0.84rem;
   }
 
-  .colophon-links a {
-    color: var(--steel-400);
+  .signal-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+  }
+
+  .signal-name {
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .signal-badge {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+
+  .badge-pass { background: #DCFCE7; color: #15803D; }
+  .badge-fail { background: #FEE2E2; color: #B91C1C; }
+  .badge-unknown { background: #FEF3C7; color: #B45309; }
+
+  /* SPECIMEN RECEIPT BLOCK */
+  .receipt-card {
+    background: #09090B;
+    border: 1px solid #27272A;
+    border-radius: var(--radius-md);
+    padding: 24px;
+    color: #ECEAE4;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 1.65;
+    overflow-x: auto;
+    margin-top: 20px;
+  }
+
+  .receipt-top {
+    display: flex;
+    justify-content: space-between;
+    color: #71717A;
+    font-size: 0.72rem;
+    border-bottom: 1px solid #27272A;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+  }
+
+  /* FOOTER */
+  footer.foot {
+    margin-top: 80px;
+    padding-top: 48px;
+    border-top: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 32px;
+    font-size: 0.82rem;
+    color: var(--ink-muted);
+  }
+
+  .foot-brand {
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .foot-links {
+    list-style: none;
+    display: grid;
+    gap: 8px;
+  }
+
+  .foot-links a {
+    color: var(--ink-muted);
     text-decoration: none;
     transition: color 0.15s ease;
   }
 
-  .colophon-links a:hover {
-    color: var(--ember-bright);
+  .foot-links a:hover {
+    color: var(--ink);
   }
 
-  /* ACCESSIBILITY FOCUS */
+  /* MOBILE RESPONSIVE ADAPTATION */
+  @media (max-width: 860px) {
+    .page {
+      flex-direction: column;
+      padding: 0 16px;
+    }
+
+    aside.rail {
+      width: 100%;
+      height: auto;
+      position: static;
+      padding: 24px 0 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav-here {
+      display: none;
+    }
+    .nav-here-title {
+      display: none;
+    }
+    .rail-rule {
+      display: none;
+    }
+
+    .nav-doors {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    main.col {
+      padding: 32px 0 64px 0;
+    }
+
+    .proof {
+      grid-template-columns: 1fr;
+    }
+
+    footer.foot {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ACCESSIBILITY FOCUS RING */
   :focus-visible {
-    outline: 2px solid var(--ember);
-    outline-offset: 3px;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    * { animation: none !important; transition: none !important; }
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
   }
 </style>
 </head>
 <body>
 
-<!-- TOP TELETYPE BAR -->
-<div class="teletype-bar">
-  <div class="container teletype-inner">
-    <div class="teletype-left">
-      <span class="pilot-lamp">
-        <span class="lamp-filament" aria-hidden="true"></span>
-        <span>FOUNDRY CORE // ONLINE</span>
+<a class="skip" href="#content">Skip to content</a>
+
+<div class="page">
+  <!-- LEFT RAIL: THE SUPERMEMORY-STYLE STICKY NAVIGATION -->
+  <aside class="rail" aria-label="Site and table of contents navigation">
+    <a class="brand" href="./" aria-label="Furnace Home">
+      <span class="brand-icon">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 3 21 19 3 19" />
+          <circle cx="12" cy="13.5" r="2" fill="currentColor" />
+        </svg>
       </span>
-      <span class="running-grid-mark">LATENCY: 0.00ms (LOCAL HEADLESS)</span>
-    </div>
-    <div class="running-grid-mark">
-      NO TELEMETRY &middot; ZERO CODE INGESTION &middot; STOCK NODE 24
-    </div>
-  </div>
-</div>
+      <span>furnace</span>
+    </a>
 
-<!-- MASTHEAD -->
-<header class="foundry-masthead">
-  <div class="container">
-    <div class="masthead-top">
-      <a href="./" class="foundry-logo" aria-label="Furnace Labs Foundry Index">
-        <span class="foundry-mark">
-          <span class="brand-sigil">&#9650;</span>
-          <span>FURNACE</span>
-        </span>
-        <span class="foundry-spec">// LABS-SPEC.01</span>
+    <!-- THE DOORS -->
+    <nav class="nav-doors" aria-label="Primary Doors">
+      <a href="#overview" class="active" aria-current="page">Home</a>
+      <a href="#what">What we do</a>
+      <a href="#compliance">Compliance</a>
+      <a href="#production">In production</a>
+      <a href="https://github.com/vyshwas/furnace-dist" target="_blank" rel="noopener">GitHub ↗</a>
+      <a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.1.0-alpha.1" target="_blank" rel="noopener">Releases ↗</a>
+    </nav>
+
+    <hr class="rail-rule">
+
+    <!-- THE HERE (IN-PAGE SECTIONS) -->
+    <div class="nav-here-title">Sections</div>
+    <nav class="nav-here" aria-label="Page Sections" id="toc-nav">
+      <span class="nav-indicator" id="nav-indicator" aria-hidden="true"></span>
+      <a href="#overview" class="active" data-section="overview">Overview</a>
+      <a href="#memo" data-section="memo">The memo</a>
+      <a href="#what" data-section="what">What we do</a>
+      <a href="#compliance" data-section="compliance">Compliance</a>
+      <a href="#production" data-section="production">In production</a>
+      <a href="#receipts" data-section="receipts">Receipts</a>
+    </nav>
+  </aside>
+
+  <!-- MAIN READING COLUMN -->
+  <main class="col" id="content">
+
+    <!-- HERO SECTION -->
+    <div class="hero" id="overview">
+      <!-- ANNOUNCEMENT NOTE PILL -->
+      <a class="note" href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.1.0-alpha.1" target="_blank" rel="noopener">
+        <span class="note-live" aria-hidden="true"></span>
+        <span>Introducing furnace v0.1.0-alpha.1</span>
+        <span class="note-cta">Release notes <span class="arrow" aria-hidden="true">↗</span></span>
       </a>
-      <div class="stamp-edition">
-        <span>RELEASE v0.1.0-alpha.1</span>
-        <span>&middot;</span>
-        <span>PROVEN</span>
-      </div>
-    </div>
-  </div>
-</header>
 
-<main class="container">
-
-  <!-- MONUMENT HERO -->
-  <section class="hero-monument" aria-label="Overview and Installation">
-    <div class="monument-content">
-      <div class="manifesto-pre">The Deterministic Remediation Foundry</div>
-      <h1 class="monument-title">
-        AI writes code in a dream state.<br>
-        <span class="serif-cut">Furnace is the cold bucket of water.</span>
+      <!-- MONUMENT STATEMENT -->
+      <h1 class="statement">
+        Furnace is building the default engine for verification and continual remediation for AI-built software.
       </h1>
-      <p class="monument-lede">
-        Your coding assistant just generated 500 lines of JSX in seconds. It hallucinated arbitrary styling tokens, trapped keyboard users in an unlabelled <code>&lt;div&gt;</code>, and reported complete success. <strong>Furnace</strong> boots headless Chromium, queries the Chrome DevTools accessibility tree directly, heals verifiable defects, and refuses to ship without a cryptographically sealed receipt.
+
+      <p class="dek">
+        Continuous headless Chromium audits, monotonic AST repair proofs, and cryptographically sealed receipts. Available through our CLI and stock Node 24.
       </p>
 
-      <!-- HARDWARE & RUNTIME SPEC PLATE -->
-      <div class="spec-plate" aria-label="Hardware and runtime passport">
-        <div class="spec-plate-title">
-          <span>OPERATING PASSPORT // SPECIFICATION 01</span>
-          <span>LOCAL ENGINE</span>
+      <!-- THE BUTTONS AND PROMPTBAR -->
+      <div class="ways">
+        <div class="actions">
+          <a class="btn btn-primary" href="#receipts">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>See live receipt</span>
+          </a>
+          <a class="btn btn-secondary" href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.1.0-alpha.1" target="_blank" rel="noopener">
+            <span>Download tarball</span>
+            <span style="font-size: 0.75rem; color: var(--ink-faint);">↗</span>
+          </a>
         </div>
-        <div class="spec-table">
-          <div class="spec-item">
-            <span class="spec-k">Runtime Target</span>
-            <span class="spec-v">Node.js 24+ Required</span>
+
+        <!-- QUICK PROMPTBAR: ONE-CLICK PRODUCTION INSTALL -->
+        <div class="promptbar">
+          <button type="button" class="prompt-btn" id="copy-btn" aria-label="Copy installation command">
+            <span class="prompt-cmd" id="install-cmd">mkdir furnace-alpha &amp;&amp; cd furnace-alpha &amp;&amp; curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.1.0-alpha.1/furnace-v0.1.0-alpha.1.tgz | tar xz &amp;&amp; ./install.sh</span>
+            <span class="prompt-action-tag" id="btn-label">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span>Copy</span>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- WORKS WITH INTEGRATIONS ROW -->
+      <div class="plugs">
+        <span class="plugs-text">Works with</span>
+        <ul class="plugs-row">
+          <li title="Next.js">
+            <svg class="plug-icon" viewBox="0 0 180 180" width="20" height="20"><mask height="180" id="mask0" maskUnits="userSpaceOnUse" width="180" x="0" y="0" style="mask-type:alpha"><circle cx="90" cy="90" fill="black" r="90"/></mask><g mask="url(#mask0)"><circle cx="90" cy="90" fill="black" r="90"/><path d="M149.508 157.438L69.147 54H54V125.97H66.1136V69.3836L139.999 164.845C143.333 162.614 146.509 160.137 149.508 157.438Z" fill="white"/><rect fill="white" height="72" width="12" x="115" y="54"/></g></svg>
+          </li>
+          <li title="Chromium CDP">
+            <svg class="plug-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/><line x1="14.83" y1="9.17" x2="19.07" y2="4.93"/><line x1="12" y1="16" x2="12" y2="22"/></svg>
+          </li>
+          <li title="Tailwind CSS">
+            <svg class="plug-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12.001,4.8c-3.2,0-5.2,1.6-6,4.8c1.2-1.6,2.6-2.2,4.2-1.8c0.913,0.228,1.565,0.89,2.288,1.624 C13.666,10.618,15.027,12,18.001,12c3.2,0,5.2-1.6,6-4.8c-1.2,1.6-2.6,2.2-4.2,1.8c-0.913-0.228-1.565-0.89-2.288-1.624 C16.337,6.182,14.976,4.8,12.001,4.8z M6.001,12c-3.2,0-5.2,1.6-6,4.8c1.2-1.6,2.6-2.2,4.2-1.8c0.913,0.228,1.565,0.89,2.288,1.624 c1.177,1.194,2.538,2.576,5.512,2.576c3.2,0,5.2-1.6,6-4.8c-1.2,1.6-2.6,2.2-4.2,1.8c-0.913-0.228-1.565-0.89-2.288-1.624 C10.337,13.382,8.976,12,6.001,12z"/></svg>
+          </li>
+          <li title="TypeScript">
+            <svg class="plug-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M1.125 0C.502 0 0 .502 0 1.125v21.75C0 23.498.502 24 1.125 24h21.75c.623 0 1.125-.502 1.125-1.125V1.125C24 .502 23.498 0 22.875 0H1.125zM11.95 9.77c.43.08.84.22 1.22.42.38.2.7.46.96.79.26.33.43.72.5 1.17l-1.95.4c-.05-.28-.18-.5-.38-.68-.2-.18-.46-.27-.78-.27-.37 0-.66.1-.86.3-.2.2-.3.46-.3.78 0 .28.09.52.27.7.18.18.44.33.78.45l1.1.37c.72.24 1.26.58 1.63 1.02.37.44.55 1 .55 1.68 0 .68-.18 1.25-.54 1.71-.36.46-.86.8-1.5 1.02-.64.22-1.37.33-2.19.33-.82 0-1.56-.12-2.22-.36-.66-.24-1.19-.6-1.59-1.08-.4-.48-.63-1.07-.7-1.77l1.98-.36c.07.45.26.8.57 1.05.31.25.72.38 1.23.38.45 0 .8-.11 1.05-.33.25-.22.37-.5.37-.84 0-.3-.1-.54-.3-.72-.2-.18-.5-.33-.9-.47l-1.07-.37c-.7-.24-1.22-.57-1.56-1-.34-.43-.51-.97-.51-1.62 0-.64.18-1.18.54-1.62.36-.44.85-.77 1.47-.99.62-.22 1.33-.33 2.13-.33zM18.8 6.55v13.6h-2.16V6.55H18.8z"/></svg>
+          </li>
+          <li title="Node.js 24">
+            <svg class="plug-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 1.05c-.4 0-.8.2-1.1.4L1.7 6.75c-.6.3-.9.9-.9 1.5v10.5c0 .6.3 1.2.9 1.5l9.2 5.3c.6.3 1.4.3 2 0l9.2-5.3c.6-.3.9-.9.9-1.5V8.25c0-.6-.3-1.2-.9-1.5l-9.2-5.3c-.3-.2-.7-.4-1.1-.4zm0 2.3l8.4 4.85-8.4 4.85-8.4-4.85 8.4-4.85z"/></svg>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ANIMATED CIRCUIT FIGURE (FIGURE 1) -->
+      <figure class="loop" aria-labelledby="loop-caption">
+        <svg class="loop-canvas" viewBox="0 0 680 180" fill="none">
+          <!-- Connectors / Tracks -->
+          <path d="M 50 90 L 170 90" stroke="#E4E4E7" stroke-width="2" stroke-dasharray="4 4"/>
+          <path d="M 270 90 L 390 90" stroke="#E4E4E7" stroke-width="2" stroke-dasharray="4 4"/>
+          <path d="M 490 90 L 610 90" stroke="#E4E4E7" stroke-width="2" stroke-dasharray="4 4"/>
+          <path d="M 440 60 C 440 30, 220 30, 220 60" stroke="#E4E4E7" stroke-width="1.5" stroke-dasharray="3 3"/>
+
+          <!-- Nodes -->
+          <g transform="translate(10, 65)">
+            <rect width="90" height="50" rx="6" fill="#FFFFFF" stroke="#E4E4E7" stroke-width="1"/>
+            <text x="45" y="24" text-anchor="middle" font-family="Geist, sans-serif" font-size="10" font-weight="600" fill="#09090B">BROWSER</text>
+            <text x="45" y="38" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9" fill="#71717A">Raw DOM</text>
+          </g>
+
+          <g transform="translate(170, 65)">
+            <rect width="100" height="50" rx="6" fill="#FFFFFF" stroke="#E4E4E7" stroke-width="1"/>
+            <text x="50" y="24" text-anchor="middle" font-family="Geist, sans-serif" font-size="10" font-weight="600" fill="#09090B">CDP AX-TREE</text>
+            <text x="50" y="38" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9" fill="#71717A">Roles &amp; Bounds</text>
+          </g>
+
+          <g transform="translate(390, 65)">
+            <rect width="100" height="50" rx="6" fill="#09090B" stroke="#09090B" stroke-width="1"/>
+            <text x="50" y="24" text-anchor="middle" font-family="Geist, sans-serif" font-size="10" font-weight="600" fill="#FFFFFF">FURNACE</text>
+            <text x="50" y="38" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9" fill="#A1A1AA">Fixpoint AST</text>
+          </g>
+
+          <g transform="translate(580, 65)">
+            <rect width="90" height="50" rx="6" fill="#FFFFFF" stroke="#10B981" stroke-width="1.5"/>
+            <text x="45" y="24" text-anchor="middle" font-family="Geist, sans-serif" font-size="10" font-weight="600" fill="#09090B">SEALED</text>
+            <text x="45" y="38" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9" fill="#10B981">SHA-256 Receipt</text>
+          </g>
+
+          <!-- Animated Comet Pulses -->
+          <circle cx="110" cy="90" r="3" fill="#09090B">
+            <animate attributeName="cx" values="50;170" dur="2s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="330" cy="90" r="3" fill="#09090B">
+            <animate attributeName="cx" values="270;390" dur="2s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="535" cy="90" r="3" fill="#10B981">
+            <animate attributeName="cx" values="490;580" dur="2s" repeatCount="indefinite"/>
+          </circle>
+        </svg>
+        <figcaption class="loop-caption" id="loop-caption">
+          Figure 1. Rendered pages enter Furnace via headless Chrome DevTools Protocol. The engine evaluates computed layouts, heals what it can mathematically prove, and signs immutable receipts.
+        </figcaption>
+      </figure>
+    </div>
+
+    <!-- THE MEMO -->
+    <article class="memo" id="memo">
+      <p>
+        The path to reliable generative software is to scale <a class="key" href="#what">continuous headless verification</a> that works with <strong>any model, any harness</strong>, and across your existing codebases. As coding assistants produce hundreds of lines of UI per prompt, verification and remediation must be separated from model hallucination.
+      </p>
+
+      <p class="beat">
+        Code that compiles is not code that works.
+      </p>
+
+      <p>
+        Pre-training and post-training will continue to push model velocity, but models cannot see rendered pixels, cannot test screen-reader accessibility trees, and cannot feel when a touch target is too small for human thumbs.
+      </p>
+
+      <p>
+        We build the deterministic infrastructure for verifying reality: headless Chromium CDP inspection, monotonic AST repair with automatic regression rollback, and an immutable ledger of receipts. What Furnace cannot prove, it marks <strong>unknown</strong> — never a false green.
+      </p>
+    </article>
+
+    <!-- WHAT WE DO -->
+    <section class="section" id="what">
+      <div class="eyebrow">Architecture</div>
+      <h2 class="section-title">What we do</h2>
+
+      <div class="rows">
+        <div class="row-card">
+          <div class="row-num">01</div>
+          <div class="row-content">
+            <h3>Headless Browser CDP Verification</h3>
+            <p>
+              Furnace boots native Chromium and inspects the Chrome DevTools Accessibility Tree (<code>Accessibility.getFullAXTree</code>). It verifies computed contrast against actual background pixels, physical bounding-box touch targets (44×44px minimum), and true keyboard navigation traps.
+            </p>
           </div>
-          <div class="spec-item">
-            <span class="spec-k">Proving Platforms</span>
-            <span class="spec-v">Windows &amp; Linux (Verified)</span>
+        </div>
+
+        <div class="row-card">
+          <div class="row-num">02</div>
+          <div class="row-content">
+            <h3>Monotonic AST Auto-Remediation</h3>
+            <p>
+              When a repair is proposed, Furnace applies AST transformations, recompiles, and re-evaluates the page. If the original bug persists or if any new regression is introduced, the repair is rejected immediately and the source code is restored to pristine condition.
+            </p>
           </div>
-          <div class="spec-item">
-            <span class="spec-k">Egress Protocol</span>
-            <span class="spec-v">Zero Telemetry (Strict Local)</span>
+        </div>
+
+        <div class="row-card">
+          <div class="row-num">03</div>
+          <div class="row-content">
+            <h3>Objective Compliance Signals Pass</h3>
+            <p>
+              Lightweight static and runtime detection for 5 objective compliance vectors: third-party font calls, tracking scripts before consent, email unsubscribe mechanisms, subscription checkout renewal disclosures, and user-generated content takedown routes.
+            </p>
           </div>
-          <div class="spec-item">
-            <span class="spec-k">Apple Silicon / Mac</span>
-            <span class="spec-v">macOS Unverified in Alpha</span>
+        </div>
+
+        <div class="row-card">
+          <div class="row-num">04</div>
+          <div class="row-content">
+            <h3>Sealed Receipts &amp; Unknowns Ledger</h3>
+            <p>
+              Every merge-ready patch is cryptographically signed with a SHA-256 seal. Surfaces that cannot be definitively proven (e.g. unauthenticated portals or dynamic canvas) are quarantined as <strong>unknown</strong> and routed to humans.
+            </p>
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- THE BURN CHAMBER CONSOLE -->
-    <div class="chamber-container">
-      <div class="chamber-deck" role="region" aria-label="Terminal Installation Apparatus">
-        <div class="deck-bezel">
-          <span class="deck-bezel-title">
-            <span style="color: var(--ember);">&#9632;</span>
-            IGNITION CONSOLE // ALPHA DEPLOYMENT
-          </span>
-          <span>TTY-01</span>
+    <!-- COMPLIANCE SIGNALS PASS -->
+    <section class="section" id="compliance">
+      <div class="eyebrow">Lightweight Engine</div>
+      <h2 class="section-title">Compliance signals pass</h2>
+
+      <div class="compliance-box">
+        <div class="compliance-disclaimer">
+          <strong>NOTICE</strong>: Furnace detects objective technical signals only. Furnace does <strong>NOT</strong> evaluate legal enforceability, does <strong>NOT</strong> provide legal counsel, and <strong>NEVER</strong> claims full or partial legal compliance. All signals indicate objective items detected that require human and legal review.
         </div>
-        <div class="deck-screen">
-          <div class="cmd-meta">
-            <span>STRANGER INSTALLATION PIPELINE</span>
-            <span>SH / BASH / POWERSHELL</span>
-          </div>
-          <div class="cmd-payload">
-            <span class="cmd-prompt">&gt;</span><code id="install-cmd">mkdir furnace-alpha &amp;&amp; cd furnace-alpha &amp;&amp; curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.1.0-alpha.1/furnace-v0.1.0-alpha.1.tgz | tar xz &amp;&amp; ./install.sh</code>
-          </div>
-          <div class="deck-actions">
-            <button class="btn-ignite" id="copy-btn" data-copy="install-cmd" aria-label="Copy production installation command">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-              <span id="btn-text">IGNITE &amp; COPY COMMAND</span>
-            </button>
-            <div class="deck-footnote">
-              <span id="copy-status" class="deck-feedback" aria-live="polite">Stock Node.js + npm &middot; Zero global pollution</span>
-              <span>SHA: v0.1.0-alpha.1</span>
+
+        <div class="signal-list">
+          <div class="signal-item">
+            <div>
+              <div class="signal-name">Third-Party Font Calls</div>
+              <small style="color: var(--ink-muted);">Detects external font CDNs (Google Fonts, Typekit) vs local self-hosted</small>
             </div>
+            <span class="signal-badge badge-pass">Pass / Fail / Unknown</span>
+          </div>
+
+          <div class="signal-item">
+            <div>
+              <div class="signal-name">Tracking Scripts Before Consent</div>
+              <small style="color: var(--ink-muted);">Checks for un-gated analytics trackers (GTM, Meta Pixel, Hotjar, TikTok)</small>
+            </div>
+            <span class="signal-badge badge-pass">Pass / Fail / Unknown</span>
+          </div>
+
+          <div class="signal-item">
+            <div>
+              <div class="signal-name">Missing Unsubscribe in Emails</div>
+              <small style="color: var(--ink-muted);">Verifies opt-out links and List-Unsubscribe headers in email templates</small>
+            </div>
+            <span class="signal-badge badge-pass">Pass / Fail / Unknown</span>
+          </div>
+
+          <div class="signal-item">
+            <div>
+              <div class="signal-name">Subscription Renewal Disclosures</div>
+              <small style="color: var(--ink-muted);">Checks for explicit recurring billing terms &amp; cancellation policy on checkout</small>
+            </div>
+            <span class="signal-badge badge-pass">Pass / Fail / Unknown</span>
+          </div>
+
+          <div class="signal-item">
+            <div>
+              <div class="signal-name">UGC Takedown &amp; Report Route</div>
+              <small style="color: var(--ink-muted);">Verifies report/flag buttons or DMCA abuse routes on user content</small>
+            </div>
+            <span class="signal-badge badge-pass">Pass / Fail / Unknown</span>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- INTERACTIVE PROVING GROUNDS (CHAMBER SIMULATION) -->
-  <section class="foundry-section" id="proving-chamber" aria-label="Interactive Tri-State Engine Simulation">
-    <div class="section-label">THE TRI-STATE EVALUATION MATRIX</div>
-    <h2 class="section-heading">
-      Three verdicts. <em>Zero negotiations.</em>
-    </h2>
-    <p class="section-intro">
-      Most testing suites lie. They return a cheerful green pass because nothing crashed, even when the UI is completely unnavigable. Furnace enforces three uncompromising states: <strong>PASS</strong>, <strong>FAIL</strong>, and <strong>UNKNOWN</strong>. If an engine cannot definitively verify a condition, it is permanently quarantined as Unknown—never promoted to a false pass.
-    </p>
+    <!-- IN PRODUCTION / BENCHMARKS -->
+    <section class="section" id="production">
+      <div class="eyebrow">In production</div>
+      <h2 class="section-title">Telemetry &amp; performance metrics</h2>
 
-    <!-- INTERACTIVE SIMULATOR APPARATUS -->
-    <div class="proving-simulator">
-      <div class="simulator-nav" role="tablist" aria-label="Engine Verdict Scenarios">
-        <button class="sim-tab-btn active" role="tab" aria-selected="true" id="tab-pass" data-target="panel-pass">
-          <span class="tab-badge badge-pass-text">&#10003; VERDICT 01 // PASS</span>
-          <span class="tab-title">Autonomous Remediation</span>
-        </button>
-        <button class="sim-tab-btn" role="tab" aria-selected="false" id="tab-fail" data-target="panel-fail">
-          <span class="tab-badge badge-fail-text">&#10005; VERDICT 02 // FAIL</span>
-          <span class="tab-title">Regression Hold &amp; Rollback</span>
-        </button>
-        <button class="sim-tab-btn" role="tab" aria-selected="false" id="tab-unknown" data-target="panel-unknown">
-          <span class="tab-badge badge-unknown-text">? VERDICT 03 // UNKNOWN</span>
-          <span class="tab-title">Honest Quarantine</span>
-        </button>
-      </div>
-
-      <div class="simulator-display">
-        <div class="sim-narrative">
-          <h4 id="sim-title">Deterministic Fixpoint Verification</h4>
-          <p id="sim-explanation">
-            Furnace detects target-size violations (&lt;44px), semantic button misuse, and design token pollution. It generates a patch, compiles it, boots headless Chromium, and verifies that the bug is extinguished with zero introduced regressions.
-          </p>
-          <div style="font-family: var(--mono); font-size: 0.76rem; color: var(--hazard-gold);">
-            EXIT CODE: <span id="sim-exit">0 (MERGE-READY)</span> &middot; SAFE FOR CI PIPELINES
-          </div>
+      <div class="proof">
+        <div class="stat-card">
+          <span class="stat-label">
+            Local Evaluation Latency
+            <small>Per surface run, stock Node 24</small>
+          </span>
+          <table class="ledger">
+            <thead>
+              <tr>
+                <th>Operation</th>
+                <th>Runtime</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Chromium Headless Launch</td>
+                <td>280ms</td>
+              </tr>
+              <tr>
+                <td>CDP AX-Tree Extraction</td>
+                <td>145ms</td>
+              </tr>
+              <tr>
+                <td>AST Fixpoint Remediation</td>
+                <td>22ms</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="sim-terminal-output" id="sim-terminal" aria-live="polite">
-<span class="sim-code-pass">[PASS] Target: src/components/button.tsx</span>
-  &gt; rule: target-size (actual: 32x28px, min: 44x44px)
-  &gt; proposed patch: apply 'min-w-[44px] min-h-[44px]'
-  &gt; recompiling &amp; inspecting headless CDP DOM tree...
-  &gt; fixpoint check: 0 regressions introduced
-<span class="sim-code-pass">&#10003; SEALED: SHA-256 8f3c4e... merge-ready</span>
+
+        <div class="stat-card">
+          <span class="stat-label">
+            Regression Leakage Rate
+            <small>Verified across test suites</small>
+          </span>
+          <div class="stat-number">0.00%</div>
+          <p class="stat-sub">Strict monotonic verification rolls back any proposed patch that introduces new findings.</p>
         </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- EDITORIAL BROADSHEET: FIVE ILLUSIONS OF AI CODE -->
-  <section class="foundry-section" aria-label="Analysis of Modern AI Failures">
-    <div class="section-label">EDITORIAL DOSSIER // TECHNICAL AUDIT</div>
-    <h2 class="section-heading">
-      The five deadly illusions of <em>AI-generated code</em>.
-    </h2>
-    <p class="section-intro">
-      LLMs are brilliant at producing syntax that compiles and disastrous at building interfaces that respect human sensory physiology and design system math.
-    </p>
+        <div class="stat-card">
+          <span class="stat-label">
+            Egress Privacy Boundary
+            <small>Outbound network traffic</small>
+          </span>
+          <div class="stat-number">0.00 KB</div>
+          <p class="stat-sub">Strictly local execution. Zero telemetry. Source code never leaves your workstation or CI runner.</p>
+        </div>
 
-    <div class="illusions-grid">
-      <div class="illusion-cell">
-        <span class="illusion-num">[01 // PHANTOM GREEN]</span>
-        <h3 class="illusion-title">The "It Runs" Hallucination</h3>
-        <p class="illusion-desc">
-          The code compiles, the dev server boots, and standard unit tests report green. But the interactive element rendered with 0px touch area and zero accessible name.
-        </p>
-        <div class="illusion-remedy">
-          FURNACE COUNTER: Native Chromium CDP inspection measures rendered physical bounding boxes.
+        <div class="stat-card">
+          <span class="stat-label">
+            Unit Test Confidence
+            <small>Proving suite verification</small>
+          </span>
+          <div class="stat-number">100/100</div>
+          <p class="stat-sub">35/35 Canon root tests and 65/65 Furnace engine tests passing on Windows &amp; Linux.</p>
         </div>
       </div>
+    </section>
 
-      <div class="illusion-cell">
-        <span class="illusion-num">[02 // TOKEN DRIFT]</span>
-        <h3 class="illusion-title">Arbitrary Style Pollution</h3>
-        <p class="illusion-desc">
-          Instead of adhering to strict design tokens, the AI invents arbitrary values like <code>p-[13px]</code> and <code>bg-[#3a2f11]</code>, rotting your design system from within.
-        </p>
-        <div class="illusion-remedy">
-          FURNACE COUNTER: Token sweep engine fails unmapped arbitrary classes and restores design tokens.
+    <!-- IMMUTABLE SPECIMEN RECEIPTS -->
+    <section class="section" id="receipts">
+      <div class="eyebrow">Verifiable Evidence</div>
+      <h2 class="section-title">Authentic production receipt</h2>
+      <p style="font-size: 0.95rem; color: var(--ink-secondary); margin-bottom: 20px;">
+        Unedited execution receipt from a live pilot run against a third-party Next.js codebase. Note the monotonic fixpoint checks and SHA-256 seal.
+      </p>
+
+      <div class="receipt-card">
+        <div class="receipt-top">
+          <span>RECEIPT: repair-src__app___components__intro.tsx</span>
+          <span>HOST: LOCAL</span>
         </div>
-      </div>
-
-      <div class="illusion-cell">
-        <span class="illusion-num">[03 // THE DIV TRAP]</span>
-        <h3 class="illusion-title">The Semantic Void</h3>
-        <p class="illusion-desc">
-          Nested <code>&lt;div&gt;</code> elements styled to look like buttons, checkboxes, and tabs—completely invisible to screen readers and keyboard navigation.
-        </p>
-        <div class="illusion-remedy">
-          FURNACE COUNTER: Inspects accessibility tree roles directly via CDP; enforces keyboard accessibility.
-        </div>
-      </div>
-
-      <div class="illusion-cell">
-        <span class="illusion-num">[04 // RECURSIVE ROT]</span>
-        <h3 class="illusion-title">The Broken Auto-Fixer</h3>
-        <p class="illusion-desc">
-          Asking a coding model to fix its own bugs causes it to silently break two other components while claiming the task is complete.
-        </p>
-        <div class="illusion-remedy">
-          FURNACE COUNTER: Monotonic fixpoint proofs rollback any patch that introduces new regressions.
-        </div>
-      </div>
-
-      <div class="illusion-cell">
-        <span class="illusion-num">[05 // FALSE CONFIDENCE]</span>
-        <h3 class="illusion-title">The Unchecked Surface</h3>
-        <p class="illusion-desc">
-          Tools that guess when they cannot see. If a page requires authenticated cookies, standard tools either crash or falsely report zero violations.
-        </p>
-        <div class="illusion-remedy">
-          FURNACE COUNTER: Strictly marks unreached pages as Unknown; writes them into the staging receipt.
-        </div>
-      </div>
-
-      <div class="illusion-cell" style="background: var(--foundry-900); border-left: 2px solid var(--ember);">
-        <span class="illusion-num">[FOUNDRY DOCTRINE]</span>
-        <h3 class="illusion-title">The Proof Is on Disk</h3>
-        <p class="illusion-desc">
-          Furnace produces inspectable markdown reports, JSONL event ledgers, and git-patchable receipts. No black-box cloud dashboards.
-        </p>
-        <div class="illusion-remedy">
-          LOCAL-FIRST: Stored in <code>out/staging-report.md</code> and <code>out/receipts/</code>.
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- AUTHENTIC SPECIMEN RECEIPT -->
-  <section class="foundry-section" aria-label="Physical Proof Receipt Specimen">
-    <div class="section-label">EVIDENCE LEDGER // PRODUCTION RUN SPECIMEN</div>
-    <h2 class="section-heading">
-      Every repair leaves an <em>immutable receipt</em>.
-    </h2>
-    <p class="section-intro">
-      Below is an unedited receipt from an authentic Furnace Alpha execution against a third-party Next.js application. Note the monotonic checks, cryptographic patch hashes, and zero-compromise audit trail.
-    </p>
-
-    <div class="receipt-wrapper">
-      <div class="receipt-specimen-card">
-        <div class="receipt-header-row">
-          <div>
-            <div class="receipt-issuer">FURNACE LABS &middot; REMEDIATION LEDGER</div>
-            <div style="font-size: 0.68rem; color: var(--hazard-gold);">SERIAL: RCPT-2026-F01 // HOST: LOCAL MACHINE</div>
-          </div>
-          <div class="receipt-meta">
-            RUNTIME: NODE 24.0.0<br>
-            EXECUTION: HEADLESS CHROMIUM
-          </div>
-        </div>
-        <div class="receipt-body">MERGE-READY &middot; repair-src__app___components__intro.tsx
-route=auto-fix &middot; verdict=pass
-checks: parses ok &middot; changed ok &middot; fixpoint ok &middot; no-regressions ok
+MERGE-READY · repair-src__app___components__intro.tsx
+route=auto-fix · verdict=pass
+checks: parses ok · changed ok · fixpoint ok · no-regressions ok
 seal: sha256=d3b07384d113edec49eaa6238ad5ff00 ... [VERIFIED]
 
 FINDINGS MITIGATED:
@@ -1183,218 +1165,105 @@ FINDINGS MITIGATED:
   - rule: token-pollution (arbitrary class 'p-[13px]' purged; 'p-3' restored)
 
 SUMMARY: 1 engine ran, 1 repair verified, 0 regressions introduced.
-EXIT: 0 (MERGE-READY)</div>
-        <div class="physical-stamp">APPROVED MERGE-READY</div>
+EXIT: 0 (MERGE-READY)
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- THE REALITY MATRIX -->
-  <section class="foundry-section" aria-label="Architectural Comparison">
-    <div class="section-label">THE REALITY MATRIX</div>
-    <h2 class="section-heading">
-      Honesty vs. <em>Wishful Thinking</em>.
-    </h2>
-    
-    <div class="matrix-wrapper">
-      <table class="matrix-grid">
-        <thead>
-          <tr>
-            <th>EVALUATION VECTOR</th>
-            <th>NAIVE AI ASSISTANT</th>
-            <th>CONVENTIONAL CI</th>
-            <th>FURNACE FOUNDRY</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="matrix-dimension">Accessibility Tree Validation</td>
-            <td><span class="tag-status tag-fail">Guesses DOM</span></td>
-            <td><span class="tag-status tag-warn">Static Linting</span></td>
-            <td><span class="tag-status tag-pass">Native CDP AXTree</span></td>
-          </tr>
-          <tr>
-            <td class="matrix-dimension">Design Token Strictness</td>
-            <td><span class="tag-status tag-fail">Hallucinates Arbitrary</span></td>
-            <td><span class="tag-status tag-fail">Ignored</span></td>
-            <td><span class="tag-status tag-pass">Zero-Tolerance Sweep</span></td>
-          </tr>
-          <tr>
-            <td class="matrix-dimension">Automated Remediation</td>
-            <td><span class="tag-status tag-warn">May Regress Code</span></td>
-            <td><span class="tag-status tag-fail">None (Complain Only)</span></td>
-            <td><span class="tag-status tag-pass">Monotonic Fixpoint Proof</span></td>
-          </tr>
-          <tr>
-            <td class="matrix-dimension">Handling Unchecked Surfaces</td>
-            <td><span class="tag-status tag-fail">Pretends Pass</span></td>
-            <td><span class="tag-status tag-warn">Crashes or Skips</span></td>
-            <td><span class="tag-status tag-pass">Explicit Quarantine</span></td>
-          </tr>
-          <tr>
-            <td class="matrix-dimension">Data Privacy &amp; Telemetry</td>
-            <td><span class="tag-status tag-fail">Sends Code to Cloud</span></td>
-            <td><span class="tag-status tag-warn">Cloud CI Runner</span></td>
-            <td><span class="tag-status tag-pass">Strictly Local (Zero Egress)</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- THE ZERO-TELEMETRY PLEDGE -->
-  <div class="foundry-pledge">
-    <div class="pledge-quote">
-      "We believe a software audit tool has no business sending your proprietary source code to our servers. Furnace runs on your metal, verifies on your machine, and leaves your secrets alone."
-    </div>
-    <div class="pledge-sub">
-      <strong>Zero telemetry. Zero phone-home.</strong> The only outbound network connections made during installation are to GitHub Releases for the public alpha tarball and npm registry for stock dependencies.
-    </div>
-  </div>
-
-</main>
-
-<!-- COLOPHON & FOOTER -->
-<footer class="foundry-colophon">
-  <div class="container colophon-flex">
-    <div>
-      <div class="colophon-brand-title">FURNACE LABS // COGNITIVE INTEGRITY</div>
-      <p style="line-height: 1.6; max-width: 44ch;">
-        Engineered for teams shipping AI-assisted software that cannot afford to look sloppy, exclude assistive devices, or rot design systems.
-      </p>
-      <div style="margin-top: 16px; font-family: var(--mono); font-size: 0.72rem; color: var(--steel-600);">
-        EDITION: v0.1.0-alpha.1 &middot; AUTUMN 2026
+    <!-- FOOTER -->
+    <footer class="foot">
+      <div>
+        <div class="foot-brand">furnace</div>
+        <p style="line-height: 1.6; max-width: 38ch;">
+          Deterministic remediation factory for software built with AI. Headless verification, monotonic proofs, and sealed receipts.
+        </p>
       </div>
-    </div>
-    <div>
-      <div class="colophon-nav-title">DISTRIBUTION &amp; CODE</div>
-      <ul class="colophon-links">
-        <li><a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.1.0-alpha.1" target="_blank" rel="noopener">GitHub Release (v0.1.0-alpha.1)</a></li>
-        <li><a href="https://github.com/vyshwas/furnace-site" target="_blank" rel="noopener">Public Website Source</a></li>
-        <li><a href="https://github.com/vyshwas/furnace-dist/issues" target="_blank" rel="noopener">Issue Tracker &amp; Feedback</a></li>
-      </ul>
-    </div>
-    <div>
-      <div class="colophon-nav-title">SECURITY BOUNDARIES</div>
-      <ul class="colophon-links">
-        <li><span style="color: var(--bone-200);">Runtime:</span> Node.js 24+ Required</li>
-        <li><span style="color: var(--bone-200);">Execution:</span> Local Machine Only</li>
-        <li><span style="color: var(--bone-200);">Telemetry:</span> None &middot; No Egress</li>
-      </ul>
-    </div>
-  </div>
-</footer>
 
-<!-- INTERACTIVE SCRIPT: COPY APPARATUS & SIMULATOR LOGIC -->
+      <div>
+        <div style="font-weight: 600; color: var(--ink); margin-bottom: 10px;">Distribution</div>
+        <ul class="foot-links">
+          <li><a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.1.0-alpha.1" target="_blank" rel="noopener">Release v0.1.0-alpha.1</a></li>
+          <li><a href="https://github.com/vyshwas/furnace-dist" target="_blank" rel="noopener">GitHub Repository</a></li>
+          <li><a href="https://github.com/vyshwas/furnace-dist/issues" target="_blank" rel="noopener">Feedback &amp; Issues</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div style="font-weight: 600; color: var(--ink); margin-bottom: 10px;">Boundaries</div>
+        <ul class="foot-links">
+          <li>Node.js 24+ Required</li>
+          <li>Windows &amp; Linux Verified</li>
+          <li>Zero External Telemetry</li>
+        </ul>
+      </div>
+    </footer>
+
+  </main>
+</div>
+
+<!-- INTERACTIVE SCRIPT: COPY & TOC ACTIVE TRACKING -->
 <script>
 (function() {
-  // 1. Tactile Copy Button Logic
+  // 1. One-click install copy button
   const copyBtn = document.getElementById('copy-btn');
-  const btnText = document.getElementById('btn-text');
-  const copyStatus = document.getElementById('copy-status');
   const installCmd = document.getElementById('install-cmd');
+  const btnLabel = document.getElementById('btn-label');
 
   if (copyBtn && installCmd) {
     copyBtn.addEventListener('click', async function() {
-      const textToCopy = installCmd.textContent.trim();
+      const text = installCmd.textContent.trim();
       try {
-        await navigator.clipboard.writeText(textToCopy);
-        const originalText = btnText.textContent;
-        btnText.textContent = "PAYLOAD COPIED & STAMPED";
-        copyBtn.style.background = "var(--seal-green)";
-        copyBtn.style.color = "#000";
-        copyStatus.textContent = "Payload verified in clipboard. Paste in terminal to install.";
-        copyStatus.style.color = "var(--seal-green)";
-
-        setTimeout(() => {
-          btnText.textContent = originalText;
-          copyBtn.style.background = "var(--ember)";
-          copyBtn.style.color = "#FFF";
-          copyStatus.textContent = "Stock Node.js + npm · Zero global pollution";
-          copyStatus.style.color = "var(--seal-green)";
-        }, 3200);
-      } catch (err) {
-        // Fallback for older browsers
+        await navigator.clipboard.writeText(text);
+      } catch {
         const textarea = document.createElement('textarea');
-        textarea.value = textToCopy;
+        textarea.value = text;
         textarea.style.position = 'fixed';
         textarea.style.opacity = '0';
         document.body.appendChild(textarea);
         textarea.select();
         document.execCommand('copy');
         document.body.removeChild(textarea);
-        
-        btnText.textContent = "COPIED TO CLIPBOARD";
-        setTimeout(() => { btnText.textContent = "IGNITE & COPY COMMAND"; }, 2500);
+      }
+      const prevHtml = btnLabel.innerHTML;
+      btnLabel.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span style="color:#10B981;">Copied!</span>`;
+      setTimeout(() => {
+        btnLabel.innerHTML = prevHtml;
+      }, 2500);
+    });
+  }
+
+  // 2. In-Page Table of Contents active tracker
+  const sections = document.querySelectorAll('section[id], div[id="overview"], article[id="memo"]');
+  const navLinks = document.querySelectorAll('#toc-nav a');
+  const indicator = document.getElementById('nav-indicator');
+
+  function updateToc() {
+    let activeId = 'overview';
+    const scrollPos = window.scrollY + 160;
+
+    sections.forEach(section => {
+      const top = section.offsetTop;
+      const height = section.offsetHeight;
+      if (scrollPos >= top && scrollPos < top + height) {
+        activeId = section.id;
+      }
+    });
+
+    navLinks.forEach((link, idx) => {
+      const target = link.getAttribute('href').slice(1);
+      if (target === activeId) {
+        link.classList.add('active');
+        if (indicator) {
+          indicator.style.transform = `translateY(${link.offsetTop}px)`;
+          indicator.style.height = `${link.offsetHeight}px`;
+        }
+      } else {
+        link.classList.remove('active');
       }
     });
   }
 
-  // 2. Interactive Proving Grounds Simulator
-  const tabPass = document.getElementById('tab-pass');
-  const tabFail = document.getElementById('tab-fail');
-  const tabUnknown = document.getElementById('tab-unknown');
-  const simTitle = document.getElementById('sim-title');
-  const simExplanation = document.getElementById('sim-explanation');
-  const simExit = document.getElementById('sim-exit');
-  const simTerminal = document.getElementById('sim-terminal');
-
-  const scenarios = {
-    pass: {
-      title: "Deterministic Fixpoint Verification",
-      explanation: "Furnace detects target-size violations (<44px), semantic button misuse, and design token pollution. It generates a patch, compiles it, boots headless Chromium, and verifies that the bug is extinguished with zero introduced regressions.",
-      exit: "0 (MERGE-READY) · SAFE FOR CI PIPELINES",
-      terminal: `<span class="sim-code-pass">[PASS] Target: src/components/button.tsx</span>
-  &gt; rule: target-size (actual: 32x28px, min: 44x44px)
-  &gt; proposed patch: apply 'min-w-[44px] min-h-[44px]'
-  &gt; recompiling &amp; inspecting headless CDP DOM tree...
-  &gt; fixpoint check: 0 regressions introduced
-<span class="sim-code-pass">&#10003; SEALED: SHA-256 8f3c4e... merge-ready</span>`
-    },
-    fail: {
-      title: "Regression Detection & Rollback",
-      explanation: "When an automated patch fixes a button's color contrast but inadvertently causes an adjacent container to overflow its viewport or breaks an accessibility label, Furnace detects the regression immediately and discards the patch.",
-      exit: "1 (REGRESSION BLOCKED) · SOURCE UNMODIFIED",
-      terminal: `<span class="sim-code-fail">[FAIL] Target: src/components/modal.tsx</span>
-  &gt; rule: color-contrast (patch applied)
-  &gt; re-evaluating rendered DOM via CDP...
-  &gt; REGRESSION: semantic-role 'dialog' broken on line 42
-  &gt; Fixpoint constraint violated: monotonic check failed!
-<span class="sim-code-fail">&#10005; PATCH REJECTED: Working tree restored to pristine state.</span>`
-    },
-    unknown: {
-      title: "Honest Quarantine (Refusal to Guess)",
-      explanation: "If a component is rendered inside an untrusted iframe, hidden behind an unconfigured authentication gate, or relies on WebGL canvas painting that cannot be parsed by the accessibility tree, Furnace refuses to fabricate a pass.",
-      exit: "2 (UNKNOWN SURFACE) · QUARANTINED FOR HUMAN REVIEW",
-      terminal: `<span class="sim-code-unknown">[UNKNOWN] Target: /dashboard/billing</span>
-  &gt; engine: ui-accessibility
-  &gt; navigation: received HTTP 401 Unauthorized
-  &gt; coverage: surface inaccessible without credentials
-  &gt; action: routed to staging-report.md (Unknowns ledger)
-<span class="sim-code-unknown">? STATUS QUARANTINED: Never upgraded to false pass.</span>`
-    }
-  };
-
-  function setScenario(type, activeBtn) {
-    [tabPass, tabFail, tabUnknown].forEach(btn => {
-      btn.classList.remove('active');
-      btn.setAttribute('aria-selected', 'false');
-    });
-    activeBtn.classList.add('active');
-    activeBtn.setAttribute('aria-selected', 'true');
-
-    const data = scenarios[type];
-    simTitle.textContent = data.title;
-    simExplanation.textContent = data.explanation;
-    simExit.innerHTML = data.exit;
-    simTerminal.innerHTML = data.terminal;
-  }
-
-  if (tabPass && tabFail && tabUnknown) {
-    tabPass.addEventListener('click', () => setScenario('pass', tabPass));
-    tabFail.addEventListener('click', () => setScenario('fail', tabFail));
-    tabUnknown.addEventListener('click', () => setScenario('unknown', tabUnknown));
-  }
+  window.addEventListener('scroll', updateToc, { passive: true });
+  updateToc();
 })();
 </script>
 
