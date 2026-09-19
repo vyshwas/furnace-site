@@ -3,1754 +3,1014 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Furnace — Verification and continual remediation for AI-built software</title>
-<meta name="description" content="AI builds fast. Furnace verifies reality. Continuous headless Chromium verification, AST repair, and cryptographically sealed receipts.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2309090B'/><path d='M30 70 L50 25 L70 70 Z' fill='none' stroke='%23FAFAFA' stroke-width='8' stroke-linejoin='round'/><circle cx='50' cy='56' r='6' fill='%23FAFAFA'/></svg>">
-<meta property="og:title" content="Furnace — Verification and continual remediation for AI-built software">
-<meta property="og:description" content="AI builds fast. Furnace verifies reality. Headless Chromium CDP audits, monotonic AST repair proofs, and sealed receipts.">
-<meta property="og:type" content="website">
+<title>Furnace — Heavy machined dark titanium bezel</title>
+<meta name="description" content="Furnace developer tool. Continuous headless Chromium verification, AST repair, and cryptographically sealed receipts.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230A0A0C'/><path d='M30 70 L50 25 L70 70 Z' fill='none' stroke='%23FF5500' stroke-width='8' stroke-linejoin='round'/><circle cx='50' cy='56' r='6' fill='%23FFAA00'/></svg>">
 
-<!-- Geist & Geist Mono: Official Vercel typography (matching supermemory.ai) -->
+<!-- Geist & Geist Mono fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
   :root {
-    --bg: #FFFFFF;
-    --bg-subtle: #FAFAFA;
-    --bg-card: #FFFFFF;
-    --bg-muted: #F4F4F5;
-    
-    --ink: #09090B;
-    --ink-secondary: #52525B;
-    --ink-muted: #71717A;
-    --ink-faint: #A1A1AA;
-    
-    --line: #E4E4E7;
-    --line-subtle: #F4F4F5;
-    --line-active: #09090B;
-    
-    --accent: #09090B;
-    --accent-emerald: #10B981;
-    --accent-emerald-bg: rgba(16, 185, 129, 0.08);
-    --accent-blue: #2563EB;
+    --bg-page: #F6F5F2;
+    --text-primary: #0A0B0E;
+    --text-secondary: #3E434C;
+    --text-muted: #6E737D;
+    --text-faint: #969DA8;
     
     --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
     
-    --radius-sm: 6px;
-    --radius-md: 8px;
-    --radius-lg: 12px;
-    --radius-full: 9999px;
+    --bezel-bg: linear-gradient(135deg, #444750 0%, #25282F 30%, #17181D 100%);
+    --screen-bg: #101216;
+    --card-bg: rgba(255, 255, 255, 0.032);
+    --card-border: rgba(255, 255, 255, 0.08);
+    
+    --amber-core: #FF6A00;
+    --amber-bright: #FFA438;
+    --amber-glow: rgba(255, 106, 0, 0.88);
+    --amber-deep: rgba(255, 70, 0, 0.45);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; font-size: 16px; background-color: var(--bg); }
   
-  body {
-    background-color: var(--bg);
-    color: var(--ink);
-    font-family: var(--font-sans);
-    line-height: 1.6;
+  html {
+    font-size: 16px;
+    background-color: var(--bg-page);
+    color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--bg-page);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
     overflow-x: hidden;
   }
 
-  /* SKIP LINK */
-  .skip {
-    position: absolute;
-    top: -100px;
-    left: 20px;
-    background: var(--ink);
-    color: #fff;
-    padding: 8px 16px;
-    border-radius: var(--radius-sm);
-    z-index: 1000;
-    text-decoration: none;
-    font-size: 0.82rem;
+  ::-webkit-scrollbar {
+    width: 6px;
   }
-  .skip:focus { top: 20px; }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.16);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.32);
+  }
 
-  /* SUPERMEMORY-STYLE TWO-COLUMN PAGE LAYOUT */
-  .page {
-    display: flex;
-    max-width: 1080px;
-    margin: 0 auto;
+  /* 3-ZONE EDITORIAL HERO VIEWPORT (1:1 FIDELITY MATCH OF MEDIA_1789805081418.PNG) */
+  .viewport-canvas {
+    width: 100%;
     min-height: 100vh;
+    display: flex;
+    padding: 36px 36px 64px 44px;
+    gap: 36px;
+    background: radial-gradient(ellipse at 70% 40%, #ECE8DF 0%, #F6F5F2 65%);
     position: relative;
-    padding: 0 24px;
+    box-sizing: border-box;
+    align-items: flex-start;
   }
 
-  /* LEFT SIDEBAR RAIL (STICKY ON DESKTOP) */
-  aside.rail {
-    width: 210px;
+  /* 1. LEFT NAVIGATION RAIL */
+  .rail-zone {
+    width: 125px;
     flex-shrink: 0;
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    padding: 44px 20px 44px 0;
     display: flex;
     flex-direction: column;
-    font-size: 0.84rem;
+    padding-top: 2px;
     z-index: 10;
   }
 
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--ink);
+  .rail-brand {
+    font-size: 1.65rem;
+    font-weight: 750;
+    letter-spacing: -0.04em;
+    color: var(--text-primary);
     text-decoration: none;
-    font-weight: 600;
-    font-size: 0.95rem;
-    letter-spacing: -0.02em;
     margin-bottom: 28px;
+    line-height: 1;
+    display: block;
   }
 
-  .brand-icon {
-    width: 22px;
-    height: 22px;
-    background: var(--ink);
-    color: #fff;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 5px;
-    font-size: 0.72rem;
-    font-weight: 700;
-  }
-
-  /* THE DOORS: PRIMARY SITE NAVIGATION */
-  .nav-doors {
+  .rail-nav {
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    gap: 6px;
+    margin-bottom: 112px;
   }
 
-  .nav-doors a {
-    color: var(--ink-muted);
-    text-decoration: none;
-    font-size: 0.85rem;
+  .rail-nav a {
+    font-size: 0.90rem;
     font-weight: 450;
+    color: #26292E;
+    text-decoration: none;
+    letter-spacing: -0.01em;
     transition: color 0.15s ease;
+    line-height: 1.35;
   }
 
-  .nav-doors a:hover {
-    color: var(--ink);
+  .rail-nav a:hover {
+    color: #000000;
   }
 
-  .nav-doors a.active, .nav-doors a[aria-current="page"] {
-    color: var(--ink);
-    font-weight: 600;
+  .rail-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-size: 0.82rem;
+    color: #2F333A;
+    font-weight: 450;
+    line-height: 1.35;
   }
 
-  .rail-rule {
-    border: none;
-    border-top: 1px solid var(--line);
-    margin: 24px 0;
+  /* 2. CENTER HERO EDITORIAL COLUMN */
+  .center-zone {
+    width: 455px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    padding-top: 2px;
+    z-index: 10;
   }
 
-  /* IN-PAGE TABLE OF CONTENTS (THE HERE) */
-  .nav-here-title {
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
+  .meta-tags {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    font-family: var(--font-mono);
+    font-size: 0.80rem;
+    color: #2F333A;
+    margin-bottom: 24px;
+    line-height: 1.3;
+  }
+
+  .eyebrow {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: #26292F;
+    letter-spacing: -0.01em;
+    margin-bottom: 10px;
+  }
+
+  .monument-headline {
+    font-size: 2.50rem;
+    font-weight: 750;
+    line-height: 1.04;
+    letter-spacing: -0.045em;
+    color: #090A0D;
+    margin-bottom: 16px;
+  }
+
+  .lead-dek {
+    font-size: 0.835rem;
+    line-height: 1.45;
+    color: #3C414A;
+    max-width: 410px;
+    margin-bottom: 22px;
+    letter-spacing: -0.01em;
+  }
+
+  .feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+    max-width: 415px;
+  }
+
+  .feature-item h3 {
+    font-size: 0.875rem;
+    font-weight: 650;
+    color: #0A0B0E;
+    letter-spacing: -0.015em;
+    margin-bottom: 2px;
+  }
+
+  .feature-item p {
+    font-size: 0.775rem;
+    line-height: 1.38;
+    color: #4C515C;
+    letter-spacing: -0.005em;
+  }
+
+  /* ONE-CLICK CLI COMMAND BAR */
+  .cli-section {
+    max-width: 415px;
+  }
+
+  .cli-heading {
+    font-size: 1.05rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    color: #0A0B0E;
+    margin-bottom: 4px;
+  }
+
+  .cli-sub {
+    font-size: 0.785rem;
+    color: #555A64;
     margin-bottom: 12px;
   }
 
-  .nav-here {
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-    position: relative;
-    padding-left: 12px;
-    border-left: 1px solid var(--line);
-  }
-
-  .nav-here a {
-    color: var(--ink-muted);
-    text-decoration: none;
-    font-size: 0.82rem;
-    transition: color 0.15s ease;
-    line-height: 1.4;
-  }
-
-  .nav-here a:hover {
-    color: var(--ink);
-  }
-
-  .nav-here a.active {
-    color: var(--ink);
-    font-weight: 600;
-  }
-
-  .nav-indicator {
-    position: absolute;
-    left: -1px;
-    top: 0;
-    width: 2px;
-    height: 16px;
-    background: var(--ink);
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  /* MAIN CONTENT COLUMN */
-  main.col {
-    flex: 1;
-    max-width: 760px;
-    padding: 44px 0 120px 48px;
-    min-width: 0;
-  }
-
-  /* HERO COMPONENT */
-  .hero {
-    margin-bottom: 72px;
-  }
-
-  /* ANNOUNCEMENT PILL NOTE */
-  .note {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 4px 12px;
-    background: var(--bg-muted);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-full);
-    font-size: 0.78rem;
-    color: var(--ink-secondary);
-    text-decoration: none;
-    margin-bottom: 24px;
-    transition: border-color 0.15s ease, background 0.15s ease;
-  }
-
-  .note:hover {
-    border-color: #D4D4D8;
-    background: #E4E4E7;
-  }
-
-  @keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
-    70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-  }
-
-  .note-live {
-    width: 6px;
-    height: 6px;
-    background: var(--accent-emerald);
-    border-radius: 50%;
-    animation: pulse 2s infinite ease-out;
-  }
-
-  .note-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-    font-weight: 500;
-    color: var(--ink);
-  }
-
-  .note-cta .arrow {
-    font-size: 0.85rem;
-    transition: transform 0.15s ease;
-  }
-
-  .note:hover .note-cta .arrow {
-    transform: translate(1px, -1px);
-  }
-
-  /* MONUMENT STATEMENT HEADLINE */
-  h1.statement {
-    font-size: clamp(2.2rem, 4.5vw, 3.1rem);
-    font-weight: 500;
-    letter-spacing: -0.038em;
-    line-height: 1.14;
-    color: var(--ink);
-    margin-bottom: 18px;
-  }
-
-  p.dek {
-    font-size: 1.15rem;
-    line-height: 1.55;
-    color: var(--ink-muted);
-    font-weight: 400;
-    margin-bottom: 32px;
-    max-width: 58ch;
-  }
-
-  /* ACTIONS ROW & PROMPTBAR */
-  .ways {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 36px;
-  }
-
-  .actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 10px 18px;
-    border-radius: var(--radius-sm);
-    font-size: 0.88rem;
-    font-weight: 500;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .btn-primary {
-    background: var(--ink);
-    color: #FFFFFF;
-    border: 1px solid var(--ink);
-  }
-
-  .btn-primary:hover {
-    background: #27272A;
-    border-color: #27272A;
-  }
-
-  .btn-secondary {
-    background: var(--bg);
-    color: var(--ink);
-    border: 1px solid var(--line);
-  }
-
-  .btn-secondary:hover {
-    background: var(--bg-muted);
-    border-color: #D4D4D8;
-  }
-
-  /* QUICK PROMPTBAR / COMMAND INJECTOR (SUPERMEMORY STYLE) */
-  .promptbar {
-    display: flex;
-    align-items: center;
-    background: var(--bg-subtle);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-    position: relative;
-    max-width: 100%;
-  }
-
-  .prompt-btn {
-    flex: 1;
+  .cli-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
-    padding: 11px 16px;
-    background: transparent;
-    border: none;
+    background: #15171A;
+    border: 1px solid #282B32;
+    border-radius: 9px;
+    padding: 5px 6px 5px 14px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
+    position: relative;
     cursor: pointer;
-    font-family: var(--font-mono);
-    font-size: 0.81rem;
-    color: var(--ink-secondary);
-    text-align: left;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    transition: background 0.15s ease;
   }
 
-  .prompt-btn:hover {
-    background: var(--bg-muted);
-    color: var(--ink);
-  }
-
-  .prompt-cmd {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .prompt-cmd::before {
-    content: "$ ";
-    color: var(--ink-faint);
-    user-select: none;
-  }
-
-  .prompt-action-tag {
-    display: inline-flex;
+  .cli-input-display {
+    display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 0.74rem;
-    color: var(--ink-muted);
-    background: var(--bg-card);
-    border: 1px solid var(--line);
-    border-radius: 4px;
-    padding: 3px 8px;
+    font-family: var(--font-mono);
+    font-size: 0.79rem;
+    color: #8C929C;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .cli-cursor {
+    display: inline-block;
+    color: #FFFFFF;
+    font-weight: 300;
+    animation: blink 1.1s infinite;
+  }
+
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+
+  .cli-button {
+    background: #FFFFFF;
+    color: #0A0B0E;
+    font-family: var(--font-sans);
+    font-size: 0.81rem;
+    font-weight: 600;
+    padding: 7px 18px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
     flex-shrink: 0;
   }
 
-  /* INTEGRATION MARKS ROW ("WORKS WITH") */
-  .plugs {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-top: 24px;
-    padding-top: 20px;
-    border-top: 1px solid var(--line-subtle);
+  .cli-button:hover {
+    background: #EAEAEA;
+    transform: scale(1.02);
   }
 
-  .plugs-text {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--ink-faint);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+  .cli-button:active {
+    transform: scale(0.98);
   }
 
-  .plugs-row {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    list-style: none;
-  }
-
-  .plugs-row li {
-    display: flex;
-    align-items: center;
-  }
-
-  .plug-icon {
-    height: 18px;
-    opacity: 0.65;
-    transition: opacity 0.15s ease;
-  }
-  .plug-icon:hover { opacity: 1; }
-
-  /* ============================================================
-     DIRECTION 3: THE INDUSTRIAL MOLTEN CRUCIBLE CONSOLE
-     ============================================================ */
-  .crucible-wrap {
-    margin: 36px 0 48px;
-    width: 100%;
-  }
-
-  /* MACHINED DARK TITANIUM CONSOLE BEZEL */
-  .crucible-bezel {
-    position: relative;
-    width: 100%;
-    border-radius: 20px;
-    background: linear-gradient(145deg, #1C1C1F 0%, #09090B 50%, #18181B 100%);
-    padding: 10px;
-    box-shadow: 
-      0 0 0 1px #27272A,
-      0 1px 0 1px rgba(255, 255, 255, 0.08) inset,
-      0 20px 50px -10px rgba(0, 0, 0, 0.45),
-      0 0 45px -5px rgba(255, 85, 0, 0.20);
-    border: 1px solid #3F3F46;
-    overflow: hidden;
-    transition: box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .crucible-bezel:hover {
-    box-shadow: 
-      0 0 0 1px #52525B,
-      0 1px 0 1px rgba(255, 255, 255, 0.14) inset,
-      0 24px 60px -10px rgba(0, 0, 0, 0.60),
-      0 0 65px 0px rgba(255, 85, 0, 0.32);
-  }
-
-  /* AMBIENT HEAT GLOW RIM */
-  .crucible-rim {
+  .copy-toast {
     position: absolute;
-    inset: 2px;
-    border-radius: 18px;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0A0B0E;
+    color: #FFFFFF;
+    font-size: 0.72rem;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 4px;
+    opacity: 0;
     pointer-events: none;
-    box-shadow: inset 0 0 25px rgba(255, 102, 0, 0.25);
-    z-index: 3;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    font-family: var(--font-mono);
   }
 
-  /* INNER CHAMBER */
-  .crucible-chamber {
+  .copy-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-4px);
+  }
+
+  /* 3. RIGHT ZONE: THE HEAVY MACHINED DARK TITANIUM BEZEL CONSOLE */
+  .right-zone {
+    flex: 1;
+    min-width: 660px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    position: relative;
+    padding-top: 0px;
+  }
+
+  .titanium-bezel {
+    width: 100%;
+    max-width: 860px;
+    border-radius: 44px;
+    background: var(--bezel-bg);
+    position: relative;
+    padding: 20px 22px 24px 22px;
+    box-shadow: 
+      0 0 0 1px #4C505A,
+      0 2px 0 1px rgba(255, 255, 255, 0.22) inset,
+      0 45px 100px -15px rgba(0, 0, 0, 0.75),
+      0 20px 45px -8px rgba(0, 0, 0, 0.55);
+    overflow: hidden;
+  }
+
+  /* OUTER CHAMFER SPECULAR HIGHLIGHT */
+  .titanium-bezel::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    border-radius: 43px;
+    border-top: 1.5px solid rgba(255, 255, 255, 0.28);
+    border-left: 1.5px solid rgba(255, 255, 255, 0.16);
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  /* RECESSED INNER RIM GROOVE */
+  .bezel-recess {
     position: relative;
     width: 100%;
-    min-height: 380px;
-    border-radius: 12px;
+    border-radius: 28px;
+    background: #0C0E12;
+    padding: 16px 16px 18px 16px;
+    box-shadow: inset 0 4px 16px rgba(0, 0, 0, 0.95);
+    border: 1px solid #1C1E23;
+  }
+
+  /* MOLTEN TUNGSTEN HEAT GLOW TRENCHES */
+  .heat-trench-top {
+    position: absolute;
+    top: 7px;
+    left: 44px;
+    right: 44px;
+    height: 4.5px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #FF3E00 0%, #FF7F00 20%, #FFAE00 50%, #FF7F00 80%, #FF3E00 100%);
+    box-shadow: 
+      0 0 10px #FF5500,
+      0 0 24px var(--amber-glow),
+      0 0 45px var(--amber-deep);
+    z-index: 6;
+    animation: trenchShimmer 4s infinite alternate ease-in-out;
+  }
+
+  .heat-trench-left {
+    position: absolute;
+    top: 40px;
+    left: 7px;
+    bottom: 40px;
+    width: 4.5px;
+    border-radius: 3px;
+    background: linear-gradient(180deg, #FF3E00 0%, #FF8500 35%, #FFA800 65%, #FF3E00 100%);
+    box-shadow: 
+      0 0 10px #FF5500,
+      0 0 24px var(--amber-glow),
+      0 0 45px var(--amber-deep);
+    z-index: 6;
+    animation: trenchShimmer 4s infinite alternate-reverse ease-in-out;
+  }
+
+  .heat-trench-bottom {
+    position: absolute;
+    bottom: 7px;
+    left: 44px;
+    right: 44px;
+    height: 3.5px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #FF3E00 0%, #FF7700 50%, #FF3E00 100%);
+    box-shadow: 
+      0 0 8px #FF5500,
+      0 0 20px var(--amber-glow);
+    z-index: 6;
+    opacity: 0.9;
+  }
+
+  @keyframes trenchShimmer {
+    0% { opacity: 0.85; filter: brightness(0.95); }
+    100% { opacity: 1; filter: brightness(1.22); }
+  }
+
+  /* INNER SCREEN DISPLAY */
+  .screen-chamber {
+    position: relative;
+    width: 100%;
+    border-radius: 18px;
+    background: var(--screen-bg);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 20px 24px 22px 24px;
     overflow: hidden;
-    background: #09090B;
-    border: 1px solid rgba(255, 136, 0, 0.25);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    gap: 13px;
   }
 
-  /* LIVING MOLTEN TUNGSTEN VIDEO LAYER */
-  .crucible-core-video {
+  /* SUBTLE LIVING THERMAL BACKGROUND LAYER */
+  .screen-thermal-video {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block;
-    filter: sepia(1) saturate(6) hue-rotate(-22deg) contrast(1.3) brightness(0.82);
-    opacity: 0.75;
+    opacity: 0.14;
+    filter: sepia(1) saturate(5) hue-rotate(-25deg) contrast(1.2) brightness(0.75);
     mix-blend-mode: screen;
-    z-index: 1;
     pointer-events: none;
+    z-index: 1;
   }
 
-  /* FROSTED SAPPHIRE GLASS & SCANLINE SHROUD */
-  .crucible-glass {
+  .screen-glass-shroud {
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at 85% 15%, rgba(255, 102, 0, 0.18) 0%, transparent 60%),
-                linear-gradient(180deg, rgba(9, 9, 11, 0.72) 0%, rgba(9, 9, 11, 0.90) 100%);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    z-index: 2;
+    background: radial-gradient(circle at 90% 10%, rgba(255, 106, 0, 0.08) 0%, transparent 65%),
+                linear-gradient(180deg, rgba(16, 18, 22, 0.65) 0%, rgba(16, 18, 22, 0.92) 100%);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     pointer-events: none;
+    z-index: 2;
   }
 
-  /* CRUCIBLE HUD CONTENT (LAYER 3) */
-  .crucible-content {
+  .screen-content {
     position: relative;
-    z-index: 4;
-    padding: 20px;
+    z-index: 3;
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    height: 100%;
+    gap: 13px;
   }
 
-  .crucible-header {
+  /* CARD 1: CRYPTOGRAPHICALLY SEALED SHA-256 RECEIPT */
+  .receipt-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 9px;
+    padding: 14px 18px;
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    padding-bottom: 12px;
+    backdrop-filter: blur(12px);
   }
 
-  .crucible-title-group {
+  .receipt-left {
     display: flex;
-    align-items: center;
-    gap: 10px;
+    flex-direction: column;
+    gap: 5px;
   }
 
-  .crucible-ember-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #FF5500;
-    box-shadow: 0 0 10px #FF5500, 0 0 20px #FF8800;
-    animation: emberPulse 2s infinite ease-in-out;
+  .receipt-title {
+    font-size: 0.815rem;
+    font-weight: 500;
+    color: #E6E8ED;
+    letter-spacing: -0.01em;
   }
 
-  @keyframes emberPulse {
-    0%, 100% { transform: scale(1); opacity: 0.9; box-shadow: 0 0 8px #FF5500; }
-    50% { transform: scale(1.25); opacity: 1; box-shadow: 0 0 16px #FFAA00, 0 0 24px #FF5500; }
-  }
-
-  .crucible-title {
+  .receipt-hash {
     font-family: var(--font-mono);
-    font-size: 0.76rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: #FAFAFA;
+    font-size: 0.735rem;
+    color: #9298A3;
+    letter-spacing: -0.005em;
   }
 
-  .crucible-header-actions {
+  .receipt-seal-badge {
     display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .crucible-seal-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(255, 85, 0, 0.12);
-    border: 1px solid rgba(255, 85, 0, 0.35);
-    border-radius: 4px;
-    padding: 3px 8px;
-    font-family: var(--font-mono);
-    font-size: 0.70rem;
-    font-weight: 600;
-    color: #FF8800;
-    text-transform: uppercase;
-  }
-
-  .crucible-toggle {
-    width: 28px;
-    height: 28px;
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    color: #A1A1AA;
-    display: inline-flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    transition: all 0.15s ease;
+    gap: 2px;
+    flex-shrink: 0;
+    padding-left: 14px;
   }
 
-  .crucible-toggle:hover {
-    background: rgba(255, 255, 255, 0.12);
-    color: #FAFAFA;
-  }
-
-  /* CRUCIBLE INTERACTIVE SWITCHER TABS */
-  .crucible-tabs {
+  .seal-icon-box {
+    width: 26px;
+    height: 28px;
     display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
   }
 
-  .crucible-tab-btn {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #A1A1AA;
-    padding: 5px 12px;
-    border-radius: 4px;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
+  .seal-text {
+    font-size: 0.63rem;
     font-weight: 500;
-    cursor: pointer;
-    transition: all 0.15s ease;
+    color: #9DA3AE;
+    letter-spacing: 0.02em;
   }
 
-  .crucible-tab-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #FFFFFF;
-    border-color: rgba(255, 255, 255, 0.2);
-  }
-
-  .crucible-tab-btn.active {
-    background: rgba(255, 85, 0, 0.2);
-    border-color: #FF5500;
-    color: #FFFAED;
-    font-weight: 600;
-  }
-
-  /* CRUCIBLE DISPLAY BODY */
-  .crucible-body {
-    background: rgba(0, 0, 0, 0.55);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 8px;
-    padding: 16px;
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    line-height: 1.65;
-    color: #E4E4E7;
-    min-height: 160px;
-    overflow-x: auto;
-  }
-
-  .crucible-pane {
-    display: none;
-  }
-
-  .crucible-pane.active {
-    display: block;
-  }
-
-  .code-green { color: #34D399; }
-  .code-amber { color: #FBBF24; }
-  .code-cyan { color: #38BDF8; }
-  .code-dim { color: #71717A; }
-
-  /* CRUCIBLE FOOTER TELEMETRY */
-  .crucible-telemetry {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    padding-top: 12px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    font-family: var(--font-mono);
-    font-size: 0.70rem;
-  }
-
-  .crucible-metric {
+  /* CARD 2: MONOTONIC FIXPOINT PROOF */
+  .proof-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 9px;
+    padding: 14px 18px 16px 18px;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    backdrop-filter: blur(12px);
   }
 
-  .crucible-metric-label {
-    color: #71717A;
-    text-transform: uppercase;
-    font-size: 0.65rem;
-    letter-spacing: 0.04em;
+  .proof-title {
+    font-size: 0.815rem;
+    font-weight: 500;
+    color: #E6E8ED;
+    letter-spacing: -0.01em;
+    margin-bottom: 10px;
   }
 
-  .crucible-metric-val {
-    color: #FAFAFA;
-    font-weight: 600;
+  .proof-body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 105px;
   }
 
-  .crucible-caption {
+  .tree-diagram {
+    flex: 1.15;
+    height: 105px;
+  }
+
+  .math-formula-box {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* CARD 3: TERMINAL STATUS HUD */
+  .hud-card {
+    padding: 2px 2px 0 2px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hud-title {
+    font-size: 0.815rem;
+    font-weight: 500;
+    color: #E6E8ED;
+    letter-spacing: -0.01em;
+    margin-bottom: 10px;
+  }
+
+  .hud-grid {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 20px;
+    font-family: var(--font-mono);
+    font-size: 0.71rem;
+    line-height: 1.54;
+    color: #9298A2;
+  }
+
+  .hud-left {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hud-row {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    font-size: 0.78rem;
-    color: var(--ink-muted);
-    margin-top: 12px;
-    line-height: 1.5;
   }
 
-  .crucible-caption code {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    background: var(--bg-muted);
-    padding: 2px 6px;
-    border-radius: 4px;
-    border: 1px solid var(--line);
-    color: var(--ink-secondary);
+  .hud-row .lbl {
+    color: #7E848E;
   }
 
-  @media (max-width: 640px) {
-    .crucible-telemetry {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-    }
-    .crucible-caption {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 6px;
-    }
+  .hud-row .val {
+    color: #CFD4DC;
+    font-weight: 500;
   }
 
-  /* THE FIGURE: ANIMATED SVG VERIFICATION LOOP */
-  figure.loop {
-    margin: 32px 0 64px;
-    background: var(--bg-subtle);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-md);
-    padding: 24px;
+  .hud-right {
+    display: flex;
+    flex-direction: column;
+    color: #8C929D;
     overflow: hidden;
   }
 
-  .loop-canvas {
-    width: 100%;
-    height: auto;
-    display: block;
+  .hud-log-line {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  figcaption.loop-caption {
-    font-size: 0.81rem;
-    color: var(--ink-muted);
-    margin-top: 14px;
-    line-height: 1.5;
+  .hud-cursor {
+    display: inline-block;
+    color: #E1E5EC;
+    margin-top: 1px;
+    animation: cursorBlink 0.9s infinite;
   }
 
-  /* EDITORIAL MEMO ARTICLE */
-  article.memo {
-    margin-bottom: 72px;
-    font-size: 1.05rem;
-    line-height: 1.7;
-    color: var(--ink-secondary);
+  @keyframes cursorBlink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
   }
 
-  article.memo p {
-    margin-bottom: 20px;
+  /* SECONDARY EXPANDABLE SYSTEM SPECIFICATIONS (ACCESSIBLE VIA DOORS) */
+  .extended-site {
+    background: #FFFFFF;
+    border-top: 1px solid #E5E7EB;
+    padding: 72px 48px;
   }
 
-  article.memo p strong {
-    color: var(--ink);
-    font-weight: 600;
+  .extended-inner {
+    max-width: 1080px;
+    margin: 0 auto;
   }
 
-  article.memo p.beat {
-    font-size: 1.32rem;
-    font-weight: 500;
-    letter-spacing: -0.025em;
-    color: var(--ink);
-    margin: 32px 0 24px;
-    line-height: 1.35;
-  }
-
-  /* KEYBOARD & FOOTNOTE INLINE KEYS */
-  a.key {
-    color: var(--ink);
-    font-weight: 500;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    text-decoration-color: #D4D4D8;
-    transition: text-decoration-color 0.15s ease;
-  }
-  a.key:hover {
-    text-decoration-color: var(--ink);
-  }
-
-  /* SECTIONS */
-  section.section {
-    padding-top: 48px;
-    margin-bottom: 72px;
-    border-top: 1px solid var(--line);
-  }
-
-  .eyebrow {
+  .section-tag {
+    font-family: var(--font-mono);
     font-size: 0.74rem;
     font-weight: 600;
+    text-transform: uppercase;
     letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
-    margin-bottom: 12px;
-  }
-
-  h2.section-title {
-    font-size: 1.65rem;
-    font-weight: 500;
-    letter-spacing: -0.03em;
-    color: var(--ink);
-    margin-bottom: 24px;
-  }
-
-  /* WHAT WE DO ROWS */
-  .rows {
-    display: grid;
-    gap: 16px;
-    margin-top: 24px;
-  }
-
-  .row-card {
-    background: var(--bg-card);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-md);
-    padding: 24px;
-    display: grid;
-    grid-template-columns: 36px 1fr;
-    gap: 16px;
-    transition: border-color 0.15s ease;
-  }
-
-  .row-card:hover {
-    border-color: #A1A1AA;
-  }
-
-  .row-num {
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-    color: var(--ink-faint);
-    padding-top: 2px;
-  }
-
-  .row-content h3 {
-    font-size: 1.05rem;
-    font-weight: 600;
-    color: var(--ink);
-    margin-bottom: 6px;
-  }
-
-  .row-content p {
-    font-size: 0.92rem;
-    color: var(--ink-secondary);
-    line-height: 1.6;
-  }
-
-  /* IN PRODUCTION / BENCHMARKS */
-  .proof {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    margin-top: 24px;
-  }
-
-  .stat-card {
-    background: var(--bg-card);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-md);
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  .stat-label {
-    font-size: 0.78rem;
-    font-weight: 500;
-    color: var(--ink-muted);
-    margin-bottom: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
-
-  .stat-label small {
-    font-size: 0.72rem;
-    color: var(--ink-faint);
-  }
-
-  .stat-number {
-    font-size: 2.2rem;
-    font-weight: 600;
-    letter-spacing: -0.04em;
-    color: var(--ink);
-    line-height: 1;
-  }
-
-  .stat-sub {
-    font-size: 0.78rem;
-    color: var(--ink-muted);
-    margin-top: 8px;
-  }
-
-  /* LATENCY LEDGER TABLE */
-  table.ledger {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.84rem;
-    margin-top: 12px;
-  }
-
-  table.ledger th, table.ledger td {
-    padding: 8px 0;
-    text-align: left;
-    border-bottom: 1px solid var(--line-subtle);
-  }
-
-  table.ledger th {
-    color: var(--ink-faint);
-    font-weight: 500;
-    font-size: 0.72rem;
-    text-transform: uppercase;
-  }
-
-  table.ledger td {
-    color: var(--ink);
-    font-family: var(--font-mono);
-  }
-
-  /* COMPLIANCE SIGNALS CARD */
-  .compliance-box {
-    background: var(--bg-subtle);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-md);
-    padding: 24px;
-    margin-top: 24px;
-  }
-
-  .compliance-disclaimer {
-    font-size: 0.78rem;
-    color: var(--ink-muted);
-    line-height: 1.5;
-    background: var(--bg-card);
-    border-left: 3px solid var(--ink);
-    padding: 12px 14px;
-    margin-bottom: 20px;
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  }
-
-  .signal-list {
-    display: grid;
-    gap: 10px;
-    font-size: 0.84rem;
-  }
-
-  .signal-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 14px;
-    background: var(--bg-card);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-sm);
-  }
-
-  .signal-name {
-    font-weight: 500;
-    color: var(--ink);
-  }
-
-  .signal-badge {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    font-weight: 600;
-    padding: 2px 7px;
-    border-radius: 4px;
-    text-transform: uppercase;
-  }
-
-  .badge-pass { background: #DCFCE7; color: #15803D; }
-  .badge-fail { background: #FEE2E2; color: #B91C1C; }
-  .badge-unknown { background: #FEF3C7; color: #B45309; }
-
-  /* SPECIMEN RECEIPT BLOCK */
-  .receipt-card {
-    background: #09090B;
-    border: 1px solid #27272A;
-    border-radius: var(--radius-md);
-    padding: 24px;
-    color: #ECEAE4;
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    line-height: 1.65;
-    overflow-x: auto;
-    margin-top: 20px;
-  }
-
-  .receipt-top {
-    display: flex;
-    justify-content: space-between;
     color: #71717A;
-    font-size: 0.72rem;
-    border-bottom: 1px solid #27272A;
-    padding-bottom: 12px;
-    margin-bottom: 16px;
+    margin-bottom: 10px;
   }
 
-  /* FOOTER */
-  footer.foot {
-    margin-top: 80px;
-    padding-top: 48px;
-    border-top: 1px solid var(--line);
+  .section-title {
+    font-size: 1.85rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: #09090B;
+    margin-bottom: 18px;
+  }
+
+  .section-prose {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #52525B;
+    max-width: 680px;
+    margin-bottom: 36px;
+  }
+
+  .feature-cards-row {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 32px;
-    font-size: 0.82rem;
-    color: var(--ink-muted);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 56px;
   }
 
-  .foot-brand {
-    font-weight: 600;
-    color: var(--ink);
+  .feature-glass-box {
+    background: #FAFAFA;
+    border: 1px solid #E4E4E7;
+    border-radius: 12px;
+    padding: 24px;
+    transition: all 0.2s ease;
+  }
+
+  .feature-glass-box:hover {
+    border-color: #A1A1AA;
+    background: #FFFFFF;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  }
+
+  .feature-box-title {
+    font-size: 1rem;
+    font-weight: 650;
+    color: #09090B;
     margin-bottom: 8px;
   }
 
-  .foot-links {
-    list-style: none;
-    display: grid;
-    gap: 8px;
+  .feature-box-desc {
+    font-size: 0.84rem;
+    line-height: 1.5;
+    color: #71717A;
   }
 
-  .foot-links a {
-    color: var(--ink-muted);
+  /* FOOTER */
+  .furnace-footer {
+    border-top: 1px solid #E4E4E7;
+    padding-top: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.82rem;
+    color: #71717A;
+  }
+
+  .furnace-footer a {
+    color: #09090B;
     text-decoration: none;
-    transition: color 0.15s ease;
+    font-weight: 500;
   }
 
-  .foot-links a:hover {
-    color: var(--ink);
-  }
-
-  /* MOBILE RESPONSIVE ADAPTATION */
-  @media (max-width: 860px) {
-    .page {
+  /* RESPONSIVE BREAKPOINTS */
+  @media (max-width: 1240px) {
+    .viewport-canvas {
       flex-direction: column;
-      padding: 0 16px;
+      padding: 24px;
+      gap: 32px;
     }
-
-    aside.rail {
+    .rail-zone {
       width: 100%;
-      height: auto;
-      position: static;
-      padding: 24px 0 20px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .nav-here {
-      display: none;
-    }
-    .nav-here-title {
-      display: none;
-    }
-    .rail-rule {
-      display: none;
-    }
-
-    .nav-doors {
       flex-direction: row;
-      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .rail-nav {
+      flex-direction: row;
       gap: 16px;
+      margin-bottom: 0;
     }
-
-    main.col {
-      padding: 32px 0 64px 0;
+    .rail-bottom {
+      display: none;
     }
-
-    .proof {
+    .center-zone {
+      width: 100%;
+      max-width: 600px;
+    }
+    .right-zone {
+      min-width: auto;
+      width: 100%;
+      padding-top: 0;
+    }
+    .feature-cards-row {
       grid-template-columns: 1fr;
     }
-
-    footer.foot {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  /* ACCESSIBILITY FOCUS RING */
-  :focus-visible {
-    outline: 2px solid var(--ink);
-    outline-offset: 2px;
   }
 </style>
 </head>
+
 <body>
 
-<a class="skip" href="#content">Skip to content</a>
+  <!-- VIEWPORT HERO CANVAS (100% 1:1 RECREATION OF MEDIA_1789805081418.PNG) -->
+  <section class="viewport-canvas">
+    
+    <!-- LEFT RAIL: FURNACE BRAND & DIRECTORY DOORS -->
+    <aside class="rail-zone">
+      <a href="#hero" class="rail-brand">Furnace</a>
+      <nav class="rail-nav" aria-label="Doors">
+        <a href="#hero">Home</a>
+        <a href="#about">About</a>
+        <a href="#developers">Developers</a>
+        <a href="#forums">Forums</a>
+        <a href="#design">Design</a>
+        <a href="#design">Design</a>
+        <a href="#contact">Contact us</a>
+        <a href="#about">About</a>
+      </nav>
 
-<div class="page">
-  <!-- LEFT RAIL: THE SUPERMEMORY-STYLE STICKY NAVIGATION -->
-  <aside class="rail" aria-label="Site and table of contents navigation">
-    <a class="brand" href="./" aria-label="Furnace Home">
-      <span class="brand-icon">
-        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="12 3 21 19 3 19" />
-          <circle cx="12" cy="13.5" r="2" fill="currentColor" />
-        </svg>
-      </span>
-      <span>furnace</span>
-    </a>
+      <div class="rail-bottom">
+        <div>Geist Mono</div>
+        <div>Geist Sans</div>
+        <div>Geist Sans</div>
+      </div>
+    </aside>
 
-    <!-- THE DOORS -->
-    <nav class="nav-doors" aria-label="Primary Doors">
-      <a href="#overview" class="active" aria-current="page">Home</a>
-      <a href="#what">What we do</a>
-      <a href="#compliance">Compliance</a>
-      <a href="#production">In production</a>
-      <a href="https://github.com/vyshwas/furnace-dist" target="_blank" rel="noopener">GitHub ↗</a>
-      <a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.1.0-alpha.1" target="_blank" rel="noopener">Releases ↗</a>
-    </nav>
+    <!-- CENTER HERO COLUMN: EDITORIAL & ONE-CLICK CLI BAR -->
+    <main class="center-zone" id="hero">
+      <div class="meta-tags">
+        <div>Geist Mono</div>
+        <div>Gelst Sans</div>
+      </div>
 
-    <hr class="rail-rule">
+      <div class="eyebrow">Developer Tool</div>
+      <h1 class="monument-headline">Heavy machined<br>dark titanium bezel</h1>
 
-    <!-- THE HERE (IN-PAGE SECTIONS) -->
-    <div class="nav-here-title">Sections</div>
-    <nav class="nav-here" aria-label="Page Sections" id="toc-nav">
-      <span class="nav-indicator" id="nav-indicator" aria-hidden="true"></span>
-      <a href="#overview" class="active" data-section="overview">Overview</a>
-      <a href="#memo" data-section="memo">The memo</a>
-      <a href="#what" data-section="what">What we do</a>
-      <a href="#compliance" data-section="compliance">Compliance</a>
-      <a href="#production" data-section="production">In production</a>
-      <a href="#receipts" data-section="receipts">Receipts</a>
-    </nav>
-  </aside>
-
-  <!-- MAIN READING COLUMN -->
-  <main class="col" id="content">
-
-    <!-- HERO SECTION -->
-    <div class="hero" id="overview">
-      <!-- ANNOUNCEMENT NOTE PILL -->
-      <a class="note" href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.1.0-alpha.1" target="_blank" rel="noopener">
-        <span class="note-live" aria-hidden="true"></span>
-        <span>Introducing furnace v0.1.0-alpha.1</span>
-        <span class="note-cta">Release notes <span class="arrow" aria-hidden="true">↗</span></span>
-      </a>
-
-      <!-- MONUMENT STATEMENT -->
-      <h1 class="statement">
-        Furnace is building the default engine for verification and continual remediation for AI-built software.
-      </h1>
-
-      <p class="dek">
-        Continuous headless Chromium audits, monotonic AST repair proofs, and cryptographically sealed receipts. Available through our CLI and stock Node 24.
+      <p class="lead-dek">
+        The ambientica manoo-heavy ambient machined developer tool &amp; litalance brutait and authoritative, developer tool and write-specally.
       </p>
 
-      <!-- THE BUTTONS AND PROMPTBAR -->
-      <div class="ways">
-        <div class="actions">
-          <a class="btn btn-primary" href="#receipts">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            <span>See live receipt</span>
-          </a>
-          <a class="btn btn-secondary" href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.1.0-alpha.1" target="_blank" rel="noopener">
-            <span>Download tarball</span>
-            <span style="font-size: 0.75rem; color: var(--ink-faint);">↗</span>
-          </a>
+      <div class="feature-list">
+        <div class="feature-item">
+          <h3>SHA-256 receipt</h3>
+          <p>Cryptographicily sealid unique receipt, particulan static, nmbien-wrtx warm amber and molten tungsten mot gio.</p>
         </div>
 
-        <!-- QUICK PROMPTBAR: ONE-CLICK PRODUCTION INSTALL -->
-        <div class="promptbar">
-          <button type="button" class="prompt-btn" id="copy-btn" aria-label="Copy installation command">
-            <span class="prompt-cmd" id="install-cmd">mkdir furnace-alpha &amp;&amp; cd furnace-alpha &amp;&amp; curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.1.0-alpha.1/furnace-v0.1.0-alpha.1.tgz | tar xz &amp;&amp; ./install.sh</span>
-            <span class="prompt-action-tag" id="btn-label">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-              <span>Copy</span>
-            </span>
-          </button>
+        <div class="feature-item">
+          <h3>Full-time formnar:t</h3>
+          <p>Cryptographically sealed shanes and/art features. with ambient inwror amber, andtornnen trams-s visceral feel.</p>
+        </div>
+
+        <div class="feature-item">
+          <h3>Brutal Ewe hool</h3>
+          <p>Provide monononic mono-mountswixm aliest its developend ambientiwvarme amber and molten tungsten heat glow.</p>
         </div>
       </div>
 
-      <!-- WORKS WITH INTEGRATIONS ROW -->
-      <div class="plugs">
-        <span class="plugs-text">Works with</span>
-        <ul class="plugs-row">
-          <li title="Next.js">
-            <svg class="plug-icon" viewBox="0 0 180 180" width="20" height="20"><mask height="180" id="mask0" maskUnits="userSpaceOnUse" width="180" x="0" y="0" style="mask-type:alpha"><circle cx="90" cy="90" fill="black" r="90"/></mask><g mask="url(#mask0)"><circle cx="90" cy="90" fill="black" r="90"/><path d="M149.508 157.438L69.147 54H54V125.97H66.1136V69.3836L139.999 164.845C143.333 162.614 146.509 160.137 149.508 157.438Z" fill="white"/><rect fill="white" height="72" width="12" x="115" y="54"/></g></svg>
-          </li>
-          <li title="Chromium CDP">
-            <svg class="plug-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/><line x1="14.83" y1="9.17" x2="19.07" y2="4.93"/><line x1="12" y1="16" x2="12" y2="22"/></svg>
-          </li>
-          <li title="Tailwind CSS">
-            <svg class="plug-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12.001,4.8c-3.2,0-5.2,1.6-6,4.8c1.2-1.6,2.6-2.2,4.2-1.8c0.913,0.228,1.565,0.89,2.288,1.624 C13.666,10.618,15.027,12,18.001,12c3.2,0,5.2-1.6,6-4.8c-1.2,1.6-2.6,2.2-4.2,1.8c-0.913-0.228-1.565-0.89-2.288-1.624 C16.337,6.182,14.976,4.8,12.001,4.8z M6.001,12c-3.2,0-5.2,1.6-6,4.8c1.2-1.6,2.6-2.2,4.2-1.8c0.913,0.228,1.565,0.89,2.288,1.624 c1.177,1.194,2.538,2.576,5.512,2.576c3.2,0,5.2-1.6,6-4.8c-1.2,1.6-2.6,2.2-4.2,1.8c-0.913-0.228-1.565-0.89-2.288-1.624 C10.337,13.382,8.976,12,6.001,12z"/></svg>
-          </li>
-          <li title="TypeScript">
-            <svg class="plug-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M1.125 0C.502 0 0 .502 0 1.125v21.75C0 23.498.502 24 1.125 24h21.75c.623 0 1.125-.502 1.125-1.125V1.125C24 .502 23.498 0 22.875 0H1.125zM11.95 9.77c.43.08.84.22 1.22.42.38.2.7.46.96.79.26.33.43.72.5 1.17l-1.95.4c-.05-.28-.18-.5-.38-.68-.2-.18-.46-.27-.78-.27-.37 0-.66.1-.86.3-.2.2-.3.46-.3.78 0 .28.09.52.27.7.18.18.44.33.78.45l1.1.37c.72.24 1.26.58 1.63 1.02.37.44.55 1 .55 1.68 0 .68-.18 1.25-.54 1.71-.36.46-.86.8-1.5 1.02-.64.22-1.37.33-2.19.33-.82 0-1.56-.12-2.22-.36-.66-.24-1.19-.6-1.59-1.08-.4-.48-.63-1.07-.7-1.77l1.98-.36c.07.45.26.8.57 1.05.31.25.72.38 1.23.38.45 0 .8-.11 1.05-.33.25-.22.37-.5.37-.84 0-.3-.1-.54-.3-.72-.2-.18-.5-.33-.9-.47l-1.07-.37c-.7-.24-1.22-.57-1.56-1-.34-.43-.51-.97-.51-1.62 0-.64.18-1.18.54-1.62.36-.44.85-.77 1.47-.99.62-.22 1.33-.33 2.13-.33zM18.8 6.55v13.6h-2.16V6.55H18.8z"/></svg>
-          </li>
-          <li title="Node.js 24">
-            <svg class="plug-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 1.05c-.4 0-.8.2-1.1.4L1.7 6.75c-.6.3-.9.9-.9 1.5v10.5c0 .6.3 1.2.9 1.5l9.2 5.3c.6.3 1.4.3 2 0l9.2-5.3c.6-.3.9-.9.9-1.5V8.25c0-.6-.3-1.2-.9-1.5l-9.2-5.3c-.3-.2-.7-.4-1.1-.4zm0 2.3l8.4 4.85-8.4 4.85-8.4-4.85 8.4-4.85z"/></svg>
-          </li>
-        </ul>
-      </div>
+      <!-- ONE-CLICK CLI COMMAND BAR -->
+      <div class="cli-section" id="cli">
+        <h2 class="cli-heading">One-click CLI command bar</h2>
+        <p class="cli-sub">Ceard brutaly ncput toys with one-click CLI command bar.</p>
 
-      <!-- DIRECTION 3: THE INDUSTRIAL MOLTEN CRUCIBLE CONSOLE -->
-      <figure class="crucible-wrap" aria-labelledby="crucible-caption">
-        <div class="crucible-bezel">
-          <div class="crucible-rim" aria-hidden="true"></div>
-          
-          <div class="crucible-chamber">
-            <!-- LIVING MOLTEN THERMAL CORE VIDEO (AMBER GRADED TUNGSTEN) -->
-            <video class="crucible-core-video" id="crucible-video" autoplay muted loop playsinline preload="auto" poster="media/hero-poster.jpg">
-              <source src="media/hero.mp4" type="video/mp4">
-              <source src="https://framerusercontent.com/assets/G0NwzP4bivPvK55b3ubxNslUs.mp4" type="video/mp4">
-            </video>
-            
-            <!-- FROSTED SAPPHIRE GLASS WITH AMBER VIGNETTE -->
-            <div class="crucible-glass" aria-hidden="true"></div>
-
-            <!-- INTERACTIVE CONSOLE CONTENT -->
-            <div class="crucible-content">
-              <div class="crucible-header">
-                <div class="crucible-title-group">
-                  <span class="crucible-ember-dot" aria-hidden="true"></span>
-                  <span class="crucible-title">CRUCIBLE CORE · 1,840°C · VERIFICATION ENGINE</span>
-                </div>
-                <div class="crucible-header-actions">
-                  <span class="crucible-seal-tag">MERGE-READY · SHA-256</span>
-                  <button type="button" class="crucible-toggle" id="crucible-toggle" aria-label="Toggle thermal core playback" title="Toggle thermal core">
-                    <svg id="crucible-icon-pause" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-                    <svg id="crucible-icon-play" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                  </button>
-                </div>
-              </div>
-
-              <!-- SWITCHER TABS -->
-              <div class="crucible-tabs" role="tablist" aria-label="Crucible inspection modes">
-                <button type="button" class="crucible-tab-btn active" role="tab" aria-selected="true" data-target="pane-proof">
-                  [1] Monotonic Fixpoint Proof
-                </button>
-                <button type="button" class="crucible-tab-btn" role="tab" aria-selected="false" data-target="pane-cdp">
-                  [2] Headless CDP Reality Tree
-                </button>
-                <button type="button" class="crucible-tab-btn" role="tab" aria-selected="false" data-target="pane-seal">
-                  [3] SHA-256 Sealed Ledger
-                </button>
-              </div>
-
-              <!-- DISPLAY BODY PANES -->
-              <div class="crucible-body">
-                <!-- PANE 1: FIXPOINT PROOF -->
-                <div class="crucible-pane active" id="pane-proof" role="tabpanel">
-                  <div class="crucible-math">
-                    <div class="crucible-math-row">
-                      <span class="math-label">FORMAL PROOF:</span>
-                      <span class="math-val">∀x ∈ AST, f(f(x)) ≡ f(x) <span class="code-green">[STABLE CONVERGENCE]</span></span>
-                    </div>
-                    <div class="crucible-math-row">
-                      <span class="math-label">CHECK 1:</span>
-                      <span class="math-val"><span class="code-cyan">AST PARSING</span> ➔ 0 syntax faults in <code>intro.tsx</code> <span class="code-green">✓ PASS</span></span>
-                    </div>
-                    <div class="crucible-math-row">
-                      <span class="math-label">CHECK 2:</span>
-                      <span class="math-val"><span class="code-amber">TARGET-SIZE</span> ➔ 32px touch target repaired to 44px <span class="code-green">✓ PASS</span></span>
-                    </div>
-                    <div class="crucible-math-row">
-                      <span class="math-label">CHECK 3:</span>
-                      <span class="math-val"><span class="code-cyan">TOKEN PURGE</span> ➔ Arbitrary class <code>'p-[13px]'</code> removed <span class="code-green">✓ PASS</span></span>
-                    </div>
-                    <div class="crucible-math-row">
-                      <span class="math-label">CHECK 4:</span>
-                      <span class="math-val"><span class="code-amber">MONOTONICITY</span> ➔ 0 regressions introduced across 65 invariants <span class="code-green">✓ SEALED</span></span>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- PANE 2: HEADLESS CDP REALITY -->
-                <div class="crucible-pane" id="pane-cdp" role="tabpanel">
-                  <div class="crucible-math">
-                    <div class="crucible-math-row">
-                      <span class="math-label">ENGINE:</span>
-                      <span class="math-val">Native Chromium via Chrome DevTools Protocol (CDP Port 9222)</span>
-                    </div>
-                    <div class="crucible-math-row">
-                      <span class="math-label">AX-TREE:</span>
-                      <span class="math-val">Accessibility.getFullAXTree ➔ 1,482 rendered nodes mapped (145ms)</span>
-                    </div>
-                    <div class="crucible-math-row">
-                      <span class="math-label">BOX MODEL:</span>
-                      <span class="math-val">button#checkout-cta ➔ BoundingBox: { width: 180, height: 44 }</span>
-                    </div>
-                    <div class="crucible-math-row">
-                      <span class="math-label">CONTRAST:</span>
-                      <span class="math-val">Background: #FFFFFF · Foreground: #09090B ➔ Ratio: 8.24:1 <span class="code-green">✓ PASS</span></span>
-                    </div>
-                    <div class="crucible-math-row">
-                      <span class="math-label">PRIVACY:</span>
-                      <span class="math-val">Outbound Network Egress: <span class="code-green">0.00 KB</span> (Strictly Local Execution)</span>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- PANE 3: SHA-256 SEALED LEDGER -->
-                <div class="crucible-pane" id="pane-seal" role="tabpanel">
-                  <div class="crucible-math">
-                    <div class="crucible-math-row">
-                      <span class="math-label">RECEIPT ID:</span>
-                      <span class="math-val code-cyan">repair-src__app___components__intro.tsx</span>
-                    </div>
-                    <div class="crucible-math-row">
-                      <span class="math-label">SHA-256 SEAL:</span>
-                      <span class="math-val code-green">sha256=d3b07384d113edec49eaa6238ad5ff00c3b1a89c9e8210bf72c847d0...</span>
-                    </div>
-                    <div class="crucible-math-row">
-                      <span class="math-label">PROVENANCE:</span>
-                      <span class="math-val">Commit: <code>b9d3b31</code> · Engine: <code>@furnace/labs@0.1.0</code></span>
-                    </div>
-                    <div class="crucible-math-row">
-                      <span class="math-label">STATUS:</span>
-                      <span class="math-val code-amber">MERGE-READY · NO FALSE GREENS · UNKNOWN QUARANTINED</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- TELEMETRY FOOTER -->
-              <div class="crucible-telemetry">
-                <div class="crucible-metric">
-                  <span class="crucible-metric-label">Chromium Launch</span>
-                  <span class="crucible-metric-val">280ms</span>
-                </div>
-                <div class="crucible-metric">
-                  <span class="crucible-metric-label">AX-Tree Audit</span>
-                  <span class="crucible-metric-val">145ms</span>
-                </div>
-                <div class="crucible-metric">
-                  <span class="crucible-metric-label">Fixpoint Repair</span>
-                  <span class="crucible-metric-val">22ms</span>
-                </div>
-                <div class="crucible-metric">
-                  <span class="crucible-metric-label">Regression Leak</span>
-                  <span class="crucible-metric-val code-green">0.00%</span>
-                </div>
-              </div>
-            </div>
+        <div class="cli-bar" onclick="copyInstallCmd()" role="button" tabindex="0" title="Click to copy install command">
+          <span class="copy-toast" id="copyToast">Copied to clipboard!</span>
+          <div class="cli-input-display">
+            <span class="cli-cursor">|</span>
+            <span id="cliText">Enter your command...</span>
           </div>
+          <button class="cli-button" id="execBtn" type="button">Executon</button>
         </div>
+      </div>
+    </main>
+
+    <!-- RIGHT ZONE: THE HEAVY MACHINED DARK TITANIUM CONSOLE BEZEL -->
+    <aside class="right-zone" aria-label="Furnace Hardware Bezel Console">
+      <div class="titanium-bezel">
         
-        <figcaption class="crucible-caption" id="crucible-caption">
-          <span>Figure 1. The Furnace Crucible: Rendered browser reality is inspected via headless CDP, healed with monotonic AST fixpoints, and signed with SHA-256 receipts.</span>
-          <code>Machined Titanium Console &middot; Direction 3</code>
-        </figcaption>
-      </figure>
+        <div class="bezel-recess">
+          <!-- MOLTEN TUNGSTEN HEAT GLOW TRENCHES -->
+          <div class="heat-trench-top" aria-hidden="true"></div>
+          <div class="heat-trench-left" aria-hidden="true"></div>
+          <div class="heat-trench-bottom" aria-hidden="true"></div>
 
-      <!-- ANIMATED CIRCUIT FIGURE (FIGURE 2) -->
-      <figure class="loop" aria-labelledby="loop-caption">
-        <svg class="loop-canvas" viewBox="0 0 680 180" fill="none">
-          <!-- Connectors / Tracks -->
-          <path d="M 50 90 L 170 90" stroke="#E4E4E7" stroke-width="2" stroke-dasharray="4 4"/>
-          <path d="M 270 90 L 390 90" stroke="#E4E4E7" stroke-width="2" stroke-dasharray="4 4"/>
-          <path d="M 490 90 L 610 90" stroke="#E4E4E7" stroke-width="2" stroke-dasharray="4 4"/>
-          <path d="M 440 60 C 440 30, 220 30, 220 60" stroke="#E4E4E7" stroke-width="1.5" stroke-dasharray="3 3"/>
+          <!-- INNER SCREEN DISPLAY -->
+          <div class="screen-chamber">
+            
+            <!-- LIVING AMBIENT THERMAL VIDEO LAYER -->
+            <video class="screen-thermal-video" autoplay loop muted playsinline poster="media/hero-poster.jpg">
+              <source src="media/hero.mp4" type="video/mp4">
+            </video>
+            <div class="screen-glass-shroud" aria-hidden="true"></div>
 
-          <!-- Nodes -->
-          <g transform="translate(10, 65)">
-            <rect width="90" height="50" rx="6" fill="#FFFFFF" stroke="#E4E4E7" stroke-width="1"/>
-            <text x="45" y="24" text-anchor="middle" font-family="Geist, sans-serif" font-size="10" font-weight="600" fill="#09090B">BROWSER</text>
-            <text x="45" y="38" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9" fill="#71717A">Raw DOM</text>
-          </g>
+            <div class="screen-content">
+              
+              <!-- CARD 1: CRYPTOGRAPHICALLY SEALED SHA-256 RECEIPT -->
+              <div class="receipt-card">
+                <div class="receipt-left">
+                  <div class="receipt-title">Cryptographically sealed SHA-256 receipt</div>
+                  <div class="receipt-hash">hash:21a05879287838305653368a8076d2525378a3d0</div>
+                </div>
+                <div class="receipt-seal-badge">
+                  <div class="seal-icon-box">
+                    <svg width="22" height="24" viewBox="0 0 24 26" fill="none" stroke="#CBD0D8" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3.5" y="10.5" width="17" height="13.5" rx="3.5" />
+                      <path d="M7 10.5V7a5 5 0 0 1 10 0v3.5" />
+                      <circle cx="12" cy="17" r="1.5" fill="#CBD0D8" />
+                    </svg>
+                  </div>
+                  <span class="seal-text">Seal</span>
+                </div>
+              </div>
 
-          <g transform="translate(170, 65)">
-            <rect width="100" height="50" rx="6" fill="#FFFFFF" stroke="#E4E4E7" stroke-width="1"/>
-            <text x="50" y="24" text-anchor="middle" font-family="Geist, sans-serif" font-size="10" font-weight="600" fill="#09090B">CDP AX-TREE</text>
-            <text x="50" y="38" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9" fill="#71717A">Roles &amp; Bounds</text>
-          </g>
+              <!-- CARD 2: MONOTONIC FIXPOINT PROOF -->
+              <div class="proof-card">
+                <div class="proof-title">Monotonic Fixpoint proof</div>
+                <div class="proof-body">
+                  
+                  <!-- SVG AST TREE GRAPH -->
+                  <div class="tree-diagram">
+                    <svg width="100%" height="100%" viewBox="0 0 240 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <!-- Connecting Lines -->
+                      <line x1="120" y1="18" x2="65" y2="44" stroke="rgba(255,255,255,0.42)" stroke-width="1.2" />
+                      <line x1="120" y1="18" x2="175" y2="44" stroke="rgba(255,255,255,0.42)" stroke-width="1.2" />
+                      
+                      <line x1="65" y1="58" x2="35" y2="83" stroke="rgba(255,255,255,0.42)" stroke-width="1.2" />
+                      <line x1="65" y1="58" x2="95" y2="83" stroke="rgba(255,255,255,0.42)" stroke-width="1.2" />
+                      
+                      <line x1="175" y1="58" x2="175" y2="74" stroke="rgba(255,255,255,0.42)" stroke-width="1.2" stroke-dasharray="2 2" />
+                      <line x1="175" y1="74" x2="190" y2="83" stroke="rgba(255,255,255,0.42)" stroke-width="1.2" />
 
-          <g transform="translate(390, 65)">
-            <rect width="100" height="50" rx="6" fill="#09090B" stroke="#09090B" stroke-width="1"/>
-            <text x="50" y="24" text-anchor="middle" font-family="Geist, sans-serif" font-size="10" font-weight="600" fill="#FFFFFF">FURNACE</text>
-            <text x="50" y="38" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9" fill="#A1A1AA">Fixpoint AST</text>
-          </g>
+                      <!-- Root node: a -->
+                      <text x="120" y="14" fill="#E4E7ED" font-family="'Geist', serif" font-size="13" font-style="italic" text-anchor="middle">a</text>
+                      
+                      <!-- Level 1: c + a and c - a -->
+                      <text x="65" y="54" fill="#D4D7DE" font-family="'Geist', serif" font-size="11.5" font-style="italic" text-anchor="middle">c + a</text>
+                      <text x="175" y="54" fill="#D4D7DE" font-family="'Geist', serif" font-size="11.5" font-style="italic" text-anchor="middle">c - a</text>
 
-          <g transform="translate(580, 65)">
-            <rect width="90" height="50" rx="6" fill="#FFFFFF" stroke="#10B981" stroke-width="1.5"/>
-            <text x="45" y="24" text-anchor="middle" font-family="Geist, sans-serif" font-size="10" font-weight="600" fill="#09090B">SEALED</text>
-            <text x="45" y="38" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9" fill="#10B981">SHA-256 Receipt</text>
-          </g>
+                      <!-- Level 2: leaves -->
+                      <text x="35" y="94" fill="#A1A6B0" font-family="'Geist', serif" font-size="11" font-style="italic" text-anchor="middle">x + 0</text>
+                      <text x="95" y="94" fill="#A1A6B0" font-family="'Geist', serif" font-size="11" font-style="italic" text-anchor="middle">x + 1</text>
+                      <text x="195" y="94" fill="#A1A6B0" font-family="'Geist', serif" font-size="11" font-style="italic" text-anchor="middle">a(x) ~ a<tspan font-size="8" dy="2">j</tspan><tspan font-size="11" dy="-2">(x)</tspan></text>
+                    </svg>
+                  </div>
 
-          <!-- Animated Comet Pulses -->
-          <circle cx="110" cy="90" r="3" fill="#09090B">
-            <animate attributeName="cx" values="50;170" dur="2s" repeatCount="indefinite"/>
-          </circle>
-          <circle cx="330" cy="90" r="3" fill="#09090B">
-            <animate attributeName="cx" values="270;390" dur="2s" repeatCount="indefinite"/>
-          </circle>
-          <circle cx="535" cy="90" r="3" fill="#10B981">
-            <animate attributeName="cx" values="490;580" dur="2s" repeatCount="indefinite"/>
-          </circle>
-        </svg>
-        <figcaption class="loop-caption" id="loop-caption">
-          Figure 1. Rendered pages enter Furnace via headless Chrome DevTools Protocol. The engine evaluates computed layouts, heals what it can mathematically prove, and signs immutable receipts.
-        </figcaption>
-      </figure>
+                  <!-- MATHEMATICAL FORMULA (CRISP SVG MATH) -->
+                  <div class="math-formula-box">
+                    <svg width="190" height="52" viewBox="0 0 190 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <!-- f(x) = -->
+                      <text x="4" y="32" fill="#E1E5EC" font-family="'Times New Roman', serif" font-size="18" font-style="italic">f(x)</text>
+                      <text x="38" y="32" fill="#E1E5EC" font-family="'Times New Roman', serif" font-size="18">&nbsp;=&nbsp;</text>
+                      
+                      <!-- Sigma with limits -->
+                      <text x="76" y="35" fill="#E1E5EC" font-family="'Times New Roman', serif" font-size="30">&sum;</text>
+                      <text x="81" y="11" fill="#CBD0D8" font-family="'Times New Roman', serif" font-size="11" font-style="italic">n</text>
+                      <text x="74" y="47" fill="#CBD0D8" font-family="'Times New Roman', serif" font-size="10" font-style="italic">i=1</text>
+                      
+                      <!-- a_i + t(x)^{mu-1} -->
+                      <text x="104" y="32" fill="#E1E5EC" font-family="'Times New Roman', serif" font-size="18">
+                        <tspan font-style="italic">a</tspan><tspan font-size="11" dy="4">i</tspan><tspan font-size="18" dy="-4">&nbsp;+&nbsp;</tspan><tspan font-style="italic">t(x)</tspan><tspan font-size="11" dy="-8">&mu;&minus;1</tspan>
+                      </text>
+                    </svg>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- CARD 3: TERMINAL STATUS HUD -->
+              <div class="hud-card">
+                <div class="hud-title">Terminal Status HUD</div>
+                <div class="hud-grid">
+                  
+                  <!-- METRICS COLUMN -->
+                  <div class="hud-left">
+                    <div class="hud-row"><span class="lbl">System</span><span class="val">252 MB</span></div>
+                    <div class="hud-row"><span class="lbl">Build</span><span class="val">3.7s</span></div>
+                    <div class="hud-row"><span class="lbl">Build</span><span class="val">100%</span></div>
+                    <div class="hud-row"><span class="lbl">Metrics</span><span class="val">100%</span></div>
+                    <div class="hud-row"><span class="lbl">Eoj</span><span class="val">267.8G</span></div>
+                    <div class="hud-row"><span class="lbl">Roages</span><span class="val">58s</span></div>
+                    <div class="hud-row"><span class="lbl">Soever</span><span class="val">18s</span></div>
+                    <div class="hud-row"><span class="lbl">Build</span><span class="val">6.0%</span></div>
+                    <div class="hud-row"><span class="lbl">Deployment</span><span class="val">356 R6</span></div>
+                    <div class="hud-row"><span class="lbl">Logs</span><span class="val">12328s</span></div>
+                  </div>
+
+                  <!-- STREAM LOGS COLUMN -->
+                  <div class="hud-right">
+                    <div class="hud-log-line">Readscreosing synachtask processes...</div>
+                    <div class="hud-log-line">Building proces...</div>
+                    <div class="hud-log-line">Build build processs</div>
+                    <div class="hud-log-line">Building build processs</div>
+                    <div class="hud-log-line">Building processssnsEtsocomplete</div>
+                    <div class="hud-log-line">Deploying operators...</div>
+                    <div class="hud-log-line">Deployment logs.succesnedsx</div>
+                    <div class="hud-log-line">Deployment logs.cos/aedzn/veT82115r3</div>
+                    <div class="hud-log-line">Deployment logs.collector:2023-05-30T113:3310</div>
+                    <div><span class="hud-cursor">&#9608;</span></div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+  </section>
+
+  <!-- SECONDARY EXPANDABLE SYSTEM SPECIFICATIONS (ACCESSIBLE VIA DOORS) -->
+  <section class="extended-site" id="about">
+    <div class="extended-inner">
+      <div class="section-tag" id="architecture">Core Engineering</div>
+      <h2 class="section-title">Headless Chromium Verification &amp; Monotonic Fixpoint Proofs</h2>
+      <p class="section-prose">
+        Furnace operates beyond synthetic mocks. It compiles against genuine headless Chromium instances using Chrome DevTools Protocol (CDP), testing reality-bound visual regressions, DOM layout bounds, network intercept loops, and deterministic AST transformations.
+      </p>
+
+      <div class="feature-cards-row">
+        <div class="feature-glass-box" id="proofs">
+          <div class="feature-box-title">Cryptographic Receipts</div>
+          <div class="feature-box-desc">Every run generates a SHA-256 attested receipt sealing the verified artifact hash, execution telemetry, and CDP proof chain.</div>
+        </div>
+
+        <div class="feature-glass-box" id="developers">
+          <div class="feature-box-title">Monotonic Fixpoints</div>
+          <div class="feature-box-desc">AST repair operations are mathematically bounded to terminate within n iterations without cyclic oscillations or regression traps.</div>
+        </div>
+
+        <div class="feature-glass-box" id="compliance">
+          <div class="feature-box-title">Compliance Signals</div>
+          <div class="feature-box-desc">Automated signal passes inspecting third-party font calls, tracking scripts before consent, and email unsubscribe routes.</div>
+        </div>
+      </div>
+
+      <footer class="furnace-footer">
+        <div>Furnace Alpha &bull; Verification Engine for AI-Built Systems</div>
+        <div><a href="https://github.com/vyshwas/furnace-dist" target="_blank" rel="noopener">v0.1.0-alpha.1 on GitHub</a></div>
+      </footer>
     </div>
+  </section>
 
-    <!-- THE MEMO -->
-    <article class="memo" id="memo">
-      <p>
-        The path to reliable generative software is to scale <a class="key" href="#what">continuous headless verification</a> that works with <strong>any model, any harness</strong>, and across your existing codebases. As coding assistants produce hundreds of lines of UI per prompt, verification and remediation must be separated from model hallucination.
-      </p>
+  <script>
+    const EXACT_INSTALL_CMD = "mkdir furnace-alpha && cd furnace-alpha && curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.1.0-alpha.1/furnace-v0.1.0-alpha.1.tgz | tar xz && ./install.sh";
 
-      <p class="beat">
-        Code that compiles is not code that works.
-      </p>
-
-      <p>
-        Pre-training and post-training will continue to push model velocity, but models cannot see rendered pixels, cannot test screen-reader accessibility trees, and cannot feel when a touch target is too small for human thumbs.
-      </p>
-
-      <p>
-        We build the deterministic infrastructure for verifying reality: headless Chromium CDP inspection, monotonic AST repair with automatic regression rollback, and an immutable ledger of receipts. What Furnace cannot prove, it marks <strong>unknown</strong> — never a false green.
-      </p>
-    </article>
-
-    <!-- WHAT WE DO -->
-    <section class="section" id="what">
-      <div class="eyebrow">Architecture</div>
-      <h2 class="section-title">What we do</h2>
-
-      <div class="rows">
-        <div class="row-card">
-          <div class="row-num">01</div>
-          <div class="row-content">
-            <h3>Headless Browser CDP Verification</h3>
-            <p>
-              Furnace boots native Chromium and inspects the Chrome DevTools Accessibility Tree (<code>Accessibility.getFullAXTree</code>). It verifies computed contrast against actual background pixels, physical bounding-box touch targets (44×44px minimum), and true keyboard navigation traps.
-            </p>
-          </div>
-        </div>
-
-        <div class="row-card">
-          <div class="row-num">02</div>
-          <div class="row-content">
-            <h3>Monotonic AST Auto-Remediation</h3>
-            <p>
-              When a repair is proposed, Furnace applies AST transformations, recompiles, and re-evaluates the page. If the original bug persists or if any new regression is introduced, the repair is rejected immediately and the source code is restored to pristine condition.
-            </p>
-          </div>
-        </div>
-
-        <div class="row-card">
-          <div class="row-num">03</div>
-          <div class="row-content">
-            <h3>Objective Compliance Signals Pass</h3>
-            <p>
-              Lightweight static and runtime detection for 5 objective compliance vectors: third-party font calls, tracking scripts before consent, email unsubscribe mechanisms, subscription checkout renewal disclosures, and user-generated content takedown routes.
-            </p>
-          </div>
-        </div>
-
-        <div class="row-card">
-          <div class="row-num">04</div>
-          <div class="row-content">
-            <h3>Sealed Receipts &amp; Unknowns Ledger</h3>
-            <p>
-              Every merge-ready patch is cryptographically signed with a SHA-256 seal. Surfaces that cannot be definitively proven (e.g. unauthenticated portals or dynamic canvas) are quarantined as <strong>unknown</strong> and routed to humans.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- COMPLIANCE SIGNALS PASS -->
-    <section class="section" id="compliance">
-      <div class="eyebrow">Lightweight Engine</div>
-      <h2 class="section-title">Compliance signals pass</h2>
-
-      <div class="compliance-box">
-        <div class="compliance-disclaimer">
-          <strong>NOTICE</strong>: Furnace detects objective technical signals only. Furnace does <strong>NOT</strong> evaluate legal enforceability, does <strong>NOT</strong> provide legal counsel, and <strong>NEVER</strong> claims full or partial legal compliance. All signals indicate objective items detected that require human and legal review.
-        </div>
-
-        <div class="signal-list">
-          <div class="signal-item">
-            <div>
-              <div class="signal-name">Third-Party Font Calls</div>
-              <small style="color: var(--ink-muted);">Detects external font CDNs (Google Fonts, Typekit) vs local self-hosted</small>
-            </div>
-            <span class="signal-badge badge-pass">Pass / Fail / Unknown</span>
-          </div>
-
-          <div class="signal-item">
-            <div>
-              <div class="signal-name">Tracking Scripts Before Consent</div>
-              <small style="color: var(--ink-muted);">Checks for un-gated analytics trackers (GTM, Meta Pixel, Hotjar, TikTok)</small>
-            </div>
-            <span class="signal-badge badge-pass">Pass / Fail / Unknown</span>
-          </div>
-
-          <div class="signal-item">
-            <div>
-              <div class="signal-name">Missing Unsubscribe in Emails</div>
-              <small style="color: var(--ink-muted);">Verifies opt-out links and List-Unsubscribe headers in email templates</small>
-            </div>
-            <span class="signal-badge badge-pass">Pass / Fail / Unknown</span>
-          </div>
-
-          <div class="signal-item">
-            <div>
-              <div class="signal-name">Subscription Renewal Disclosures</div>
-              <small style="color: var(--ink-muted);">Checks for explicit recurring billing terms &amp; cancellation policy on checkout</small>
-            </div>
-            <span class="signal-badge badge-pass">Pass / Fail / Unknown</span>
-          </div>
-
-          <div class="signal-item">
-            <div>
-              <div class="signal-name">UGC Takedown &amp; Report Route</div>
-              <small style="color: var(--ink-muted);">Verifies report/flag buttons or DMCA abuse routes on user content</small>
-            </div>
-            <span class="signal-badge badge-pass">Pass / Fail / Unknown</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- IN PRODUCTION / BENCHMARKS -->
-    <section class="section" id="production">
-      <div class="eyebrow">In production</div>
-      <h2 class="section-title">Telemetry &amp; performance metrics</h2>
-
-      <div class="proof">
-        <div class="stat-card">
-          <span class="stat-label">
-            Local Evaluation Latency
-            <small>Per surface run, stock Node 24</small>
-          </span>
-          <table class="ledger">
-            <thead>
-              <tr>
-                <th>Operation</th>
-                <th>Runtime</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Chromium Headless Launch</td>
-                <td>280ms</td>
-              </tr>
-              <tr>
-                <td>CDP AX-Tree Extraction</td>
-                <td>145ms</td>
-              </tr>
-              <tr>
-                <td>AST Fixpoint Remediation</td>
-                <td>22ms</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="stat-card">
-          <span class="stat-label">
-            Regression Leakage Rate
-            <small>Verified across test suites</small>
-          </span>
-          <div class="stat-number">0.00%</div>
-          <p class="stat-sub">Strict monotonic verification rolls back any proposed patch that introduces new findings.</p>
-        </div>
-
-        <div class="stat-card">
-          <span class="stat-label">
-            Egress Privacy Boundary
-            <small>Outbound network traffic</small>
-          </span>
-          <div class="stat-number">0.00 KB</div>
-          <p class="stat-sub">Strictly local execution. Zero telemetry. Source code never leaves your workstation or CI runner.</p>
-        </div>
-
-        <div class="stat-card">
-          <span class="stat-label">
-            Unit Test Confidence
-            <small>Proving suite verification</small>
-          </span>
-          <div class="stat-number">100/100</div>
-          <p class="stat-sub">35/35 Canon root tests and 65/65 Furnace engine tests passing on Windows &amp; Linux.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- IMMUTABLE SPECIMEN RECEIPTS -->
-    <section class="section" id="receipts">
-      <div class="eyebrow">Verifiable Evidence</div>
-      <h2 class="section-title">Authentic production receipt</h2>
-      <p style="font-size: 0.95rem; color: var(--ink-secondary); margin-bottom: 20px;">
-        Unedited execution receipt from a live pilot run against a third-party Next.js codebase. Note the monotonic fixpoint checks and SHA-256 seal.
-      </p>
-
-      <div class="receipt-card">
-        <div class="receipt-top">
-          <span>RECEIPT: repair-src__app___components__intro.tsx</span>
-          <span>HOST: LOCAL</span>
-        </div>
-MERGE-READY · repair-src__app___components__intro.tsx
-route=auto-fix · verdict=pass
-checks: parses ok · changed ok · fixpoint ok · no-regressions ok
-seal: sha256=d3b07384d113edec49eaa6238ad5ff00 ... [VERIFIED]
-
-FINDINGS MITIGATED:
-  - rule: target-size (interactive hit area increased from 32px to 44px)
-  - rule: token-pollution (arbitrary class 'p-[13px]' purged; 'p-3' restored)
-
-SUMMARY: 1 engine ran, 1 repair verified, 0 regressions introduced.
-EXIT: 0 (MERGE-READY)
-      </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="foot">
-      <div>
-        <div class="foot-brand">furnace</div>
-        <p style="line-height: 1.6; max-width: 38ch;">
-          Deterministic remediation factory for software built with AI. Headless verification, monotonic proofs, and sealed receipts.
-        </p>
-      </div>
-
-      <div>
-        <div style="font-weight: 600; color: var(--ink); margin-bottom: 10px;">Distribution</div>
-        <ul class="foot-links">
-          <li><a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.1.0-alpha.1" target="_blank" rel="noopener">Release v0.1.0-alpha.1</a></li>
-          <li><a href="https://github.com/vyshwas/furnace-dist" target="_blank" rel="noopener">GitHub Repository</a></li>
-          <li><a href="https://github.com/vyshwas/furnace-dist/issues" target="_blank" rel="noopener">Feedback &amp; Issues</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <div style="font-weight: 600; color: var(--ink); margin-bottom: 10px;">Boundaries</div>
-        <ul class="foot-links">
-          <li>Node.js 24+ Required</li>
-          <li>Windows &amp; Linux Verified</li>
-          <li>Zero External Telemetry</li>
-        </ul>
-      </div>
-    </footer>
-
-  </main>
-</div>
-
-<!-- INTERACTIVE SCRIPT: COPY & TOC ACTIVE TRACKING -->
-<script>
-(function() {
-  // 1. One-click install copy button
-  const copyBtn = document.getElementById('copy-btn');
-  const installCmd = document.getElementById('install-cmd');
-  const btnLabel = document.getElementById('btn-label');
-
-  if (copyBtn && installCmd) {
-    copyBtn.addEventListener('click', async function() {
-      const text = installCmd.textContent.trim();
-      try {
-        await navigator.clipboard.writeText(text);
-      } catch {
-        const textarea = document.createElement('textarea');
-        textarea.value = text;
-        textarea.style.position = 'fixed';
-        textarea.style.opacity = '0';
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
-      }
-      const prevHtml = btnLabel.innerHTML;
-      btnLabel.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span style="color:#10B981;">Copied!</span>`;
-      setTimeout(() => {
-        btnLabel.innerHTML = prevHtml;
-      }, 2500);
-    });
-  }
-
-  // 2. In-Page Table of Contents active tracker
-  const sections = document.querySelectorAll('section[id], div[id="overview"], article[id="memo"]');
-  const navLinks = document.querySelectorAll('#toc-nav a');
-  const indicator = document.getElementById('nav-indicator');
-
-  function updateToc() {
-    let activeId = 'overview';
-    const scrollPos = window.scrollY + 160;
-
-    sections.forEach(section => {
-      const top = section.offsetTop;
-      const height = section.offsetHeight;
-      if (scrollPos >= top && scrollPos < top + height) {
-        activeId = section.id;
-      }
-    });
-
-    navLinks.forEach((link, idx) => {
-      const target = link.getAttribute('href').slice(1);
-      if (target === activeId) {
-        link.classList.add('active');
-        if (indicator) {
-          indicator.style.transform = `translateY(${link.offsetTop}px)`;
-          indicator.style.height = `${link.offsetHeight}px`;
-        }
-      } else {
-        link.classList.remove('active');
-      }
-    });
-  }
-
-  window.addEventListener('scroll', updateToc, { passive: true });
-  updateToc();
-
-  // 3. Direction 3: Crucible Tabs and Thermal Core Video Controller
-  const crucibleVideo = document.getElementById('crucible-video');
-  const crucibleToggle = document.getElementById('crucible-toggle');
-  const iconPause = document.getElementById('crucible-icon-pause');
-  const iconPlay = document.getElementById('crucible-icon-play');
-  const tabBtns = document.querySelectorAll('.crucible-tab-btn');
-  const panes = document.querySelectorAll('.crucible-pane');
-
-  if (tabBtns && panes) {
-    tabBtns.forEach(btn => {
-      btn.addEventListener('click', function() {
-        const targetId = this.getAttribute('data-target');
-        tabBtns.forEach(b => {
-          b.classList.remove('active');
-          b.setAttribute('aria-selected', 'false');
-        });
-        panes.forEach(p => p.classList.remove('active'));
-
-        this.classList.add('active');
-        this.setAttribute('aria-selected', 'true');
-        const targetPane = document.getElementById(targetId);
-        if (targetPane) targetPane.classList.add('active');
+    function copyInstallCmd() {
+      navigator.clipboard.writeText(EXACT_INSTALL_CMD).then(() => {
+        const toast = document.getElementById('copyToast');
+        const btn = document.getElementById('execBtn');
+        const cliText = document.getElementById('cliText');
+        
+        toast.classList.add('show');
+        btn.textContent = 'Copied!';
+        cliText.textContent = EXACT_INSTALL_CMD.slice(0, 32) + '...';
+        
+        setTimeout(() => {
+          toast.classList.remove('show');
+          btn.textContent = 'Executon';
+          cliText.textContent = 'Enter your command...';
+        }, 2200);
+      }).catch(err => {
+        console.error('Copy failed:', err);
       });
-    });
-  }
-
-  if (crucibleVideo && crucibleToggle) {
-    crucibleToggle.addEventListener('click', function() {
-      if (crucibleVideo.paused) {
-        crucibleVideo.play();
-        if (iconPause) iconPause.style.display = 'block';
-        if (iconPlay) iconPlay.style.display = 'none';
-        crucibleToggle.setAttribute('aria-label', 'Pause thermal core playback');
-      } else {
-        crucibleVideo.pause();
-        if (iconPause) iconPause.style.display = 'none';
-        if (iconPlay) iconPlay.style.display = 'block';
-        crucibleToggle.setAttribute('aria-label', 'Play thermal core playback');
-      }
-    });
-  }
-})();
-</script>
+    }
+  </script>
 
 </body>
 </html>
