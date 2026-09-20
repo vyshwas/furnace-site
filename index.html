@@ -1269,7 +1269,7 @@
         <div class="cli-header-bar">
           <div>
             <h2 class="cli-heading">One-click install &amp; run</h2>
-            <p class="cli-sub">Zero configuration · Instant verification in terminal or AI agent</p>
+            <p class="cli-sub">Guided setup · Verification in terminal or AI agent</p>
           </div>
           <div class="cli-tabs" role="tablist" aria-label="Command mode">
             <button class="cli-tab-btn active" id="tabTerminal" onclick="setCliMode('terminal')" role="tab" aria-selected="true" aria-controls="cliText">Terminal</button>
@@ -1296,7 +1296,9 @@
           <span>·</span>
           <span>Windows &amp; Linux</span>
           <span>·</span>
-          <span>Zero external telemetry</span>
+          <span>POSIX shell (Git Bash on Windows)</span>
+          <span>·</span>
+          <span>Zero telemetry in runs</span>
           <span>·</span>
           <a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.1.0-alpha.1" target="_blank" rel="noopener" style="color: #FF6A00; text-decoration: none; font-weight: 500;">v0.1.0-alpha.1 ↗</a>
         </div>
@@ -1306,17 +1308,17 @@
       <div class="feature-list">
         <div class="feature-item">
           <h3>Cryptographic SHA-256 Receipts</h3>
-          <p>Every merge-ready patch is cryptographically signed with a SHA-256 seal. Surfaces that cannot be definitively proven are quarantined as unknown — never a false green.</p>
+          <p>Every merge-ready patch is sealed with a SHA-256 hash. Surfaces that cannot be definitively proven are quarantined as unknown — nothing unverified is reported as passing.</p>
         </div>
 
         <div class="feature-item">
           <h3>Monotonic Fixpoint Proofs</h3>
-          <p>When a repair is proposed, AST transformations recompile and re-evaluate the page. Guaranteed to converge without cyclic oscillations or introducing regressions.</p>
+          <p>When a repair is proposed, AST transformations recompile and re-evaluate the page. Repairs are verified to converge or refused: anything that still fails or introduces a regression is rejected and the source is left untouched.</p>
         </div>
 
         <div class="feature-item">
           <h3>Headless Chromium CDP Auditing</h3>
-          <p>Furnace boots native Chromium to inspect computed contrast, accessibility trees, physical 44×44px touch targets, and true keyboard navigation traps.</p>
+          <p>Furnace boots native Chromium to inspect computed contrast, accessibility trees, bounding-box touch targets against the WCAG floor, and keyboard trap patterns in dialog markup.</p>
         </div>
       </div>
 
@@ -1567,7 +1569,7 @@
           </p>
 
           <p>
-            We build the deterministic infrastructure for verifying reality: headless Chromium CDP inspection, monotonic AST repair with automatic regression rollback, and an immutable ledger of receipts. What Furnace cannot prove, it marks <strong>unknown</strong> — never a false green.
+            We build the deterministic infrastructure for verifying reality: headless Chromium CDP inspection, monotonic AST repair with automatic regression rollback, and an immutable ledger of receipts. What Furnace cannot prove, it marks <strong>unknown</strong> rather than passing it.
           </p>
         </article>
 
@@ -1582,7 +1584,7 @@
               <div class="row-content">
                 <h3>Headless Browser CDP Verification</h3>
                 <p>
-                  Furnace boots native Chromium and inspects the Chrome DevTools Accessibility Tree (<code>Accessibility.getFullAXTree</code>). It verifies computed contrast against actual background pixels, physical bounding-box touch targets (44×44px minimum), and true keyboard navigation traps.
+                  Furnace boots native Chromium and inspects the Chrome DevTools Accessibility Tree (<code>Accessibility.getFullAXTree</code>). It verifies computed contrast against resolvable background colors, physical bounding-box touch targets, and keyboard exit controls in dialog markup. Gradients, unresolvable backgrounds, and live trap behavior are reported unknown.
                 </p>
               </div>
             </div>
@@ -1612,7 +1614,7 @@
               <div class="row-content">
                 <h3>Sealed Receipts &amp; Unknowns Ledger</h3>
                 <p>
-                  Every merge-ready patch is cryptographically signed with a SHA-256 seal. Surfaces that cannot be definitively proven (e.g. unauthenticated portals or dynamic canvas) are quarantined as <strong>unknown</strong> and routed to humans.
+                  Every merge-ready patch is sealed with a SHA-256 hash. Surfaces that cannot be definitively proven (e.g. unauthenticated portals or dynamic canvas) are quarantined as <strong>unknown</strong> and routed to humans.
                 </p>
               </div>
             </div>
@@ -1735,8 +1737,8 @@
                 Unit Test Confidence
                 <small>Proving suite verification</small>
               </span>
-              <div class="stat-number">100/100</div>
-              <p class="stat-sub">35/35 Canon root tests and 65/65 Furnace engine tests passing on Windows &amp; Linux.</p>
+              <div class="stat-number">106/108</div>
+              <p class="stat-sub">35/35 Canon root tests and 71/73 Furnace engine tests passing on Windows &amp; Linux (2 environment-dependent skips: shell and symlink privileges).</p>
             </div>
           </div>
         </section>
@@ -1791,7 +1793,7 @@ EXIT: 0 (MERGE-READY)
             <ul class="foot-links">
               <li>Node.js 24+ Required</li>
               <li>Windows &amp; Linux Verified</li>
-              <li>Zero External Telemetry</li>
+              <li>Zero Telemetry In Runs</li>
             </ul>
           </div>
         </footer>
