@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Furnace — Verification and continual remediation for AI-built software</title>
-<meta name="description" content="AI builds fast. Furnace verifies reality. Continuous headless Chromium audits, monotonic AST repair proofs, and cryptographically sealed receipts.">
+<title>Furnace — The verification layer after the agent</title>
+<meta name="description" content="Not another AI coding agent. Furnace checks what could break, repairs what it safely can, verifies the result, and tells you what still needs a human.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230A0B0E'/><path d='M30 70 L50 25 L70 70 Z' fill='none' stroke='%23FF5500' stroke-width='8' stroke-linejoin='round'/><circle cx='50' cy='56' r='6' fill='%23FFAA00'/></svg>">
-<meta property="og:title" content="Furnace — Verification and continual remediation for AI-built software">
-<meta property="og:description" content="AI builds fast. Furnace verifies reality. Headless Chromium CDP audits, monotonic AST repair proofs, and sealed receipts.">
+<meta property="og:title" content="Furnace — The verification layer after the agent">
+<meta property="og:description" content="AI builds fast. Furnace checks what could break, repairs what it safely can, verifies the result, and tells you what still needs a human.">
 <meta property="og:type" content="website">
 
 <!-- Geist & Geist Mono fonts -->
@@ -21,26 +21,26 @@
     --bg-card: #FFFFFF;
     --bg-subtle: #FAFAFA;
     --bg-muted: #F4F4F5;
-    
+
     --ink: #0A0B0E;
     --ink-secondary: #3E434C;
     --ink-muted: #6E737D;
     --ink-faint: #969DA8;
-    
+
     --line: #E4E4E7;
     --line-subtle: #F4F4F5;
-    
+
     --accent-emerald: #10B981;
     --accent-emerald-bg: rgba(16, 185, 129, 0.08);
-    
+
     --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-    
+
     --bezel-bg: linear-gradient(135deg, #444750 0%, #25282F 30%, #17181D 100%);
     --screen-bg: #101216;
     --screen-card: rgba(255, 255, 255, 0.032);
     --screen-border: rgba(255, 255, 255, 0.08);
-    
+
     --amber-core: #FF6A00;
     --amber-bright: #FFA438;
     --amber-glow: rgba(255, 106, 0, 0.88);
@@ -53,7 +53,7 @@
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  
+
   html {
     font-size: 16px;
     background-color: var(--bg-page);
@@ -524,7 +524,7 @@
     background: var(--bezel-bg);
     position: relative;
     padding: 20px 22px 24px 22px;
-    box-shadow: 
+    box-shadow:
       0 0 0 1px #4C505A,
       0 2px 0 1px rgba(255, 255, 255, 0.22) inset,
       0 45px 100px -15px rgba(0, 0, 0, 0.75),
@@ -1131,6 +1131,65 @@
     font-size: 0.72rem;
   }
 
+  /* COPY-HIERARCHY PASS: positioning strip, solo hero, plain prose, final CTA */
+  .viewport-canvas.solo .center-zone {
+    width: 640px;
+    max-width: 100%;
+  }
+
+  .viewport-canvas.solo .cli-section,
+  .viewport-canvas.solo .plugs {
+    max-width: 640px;
+  }
+
+  .strip-band {
+    background: #0A0B0E;
+    color: #F6F5F2;
+    text-align: center;
+    padding: 26px 24px;
+    font-size: 1.25rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    position: relative;
+    z-index: 10;
+  }
+
+  .strip-band small {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.78rem;
+    font-weight: 450;
+    letter-spacing: 0;
+    color: #A1A1AA;
+  }
+
+  .plain-prose {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: var(--ink-secondary);
+    max-width: 68ch;
+    margin-bottom: 16px;
+  }
+
+  .plain-prose strong {
+    color: var(--ink);
+  }
+
+  .try-wrap {
+    text-align: center;
+    padding: 8px 0;
+  }
+
+  .try-wrap .section-title {
+    margin-bottom: 20px;
+  }
+
+  .try-wrap .cli-button {
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 12px 26px;
+  }
+
   /* FOOTER */
   footer.foot {
     border-top: 1px solid var(--line);
@@ -1218,21 +1277,19 @@
 
   <a class="skip" href="#hero">Skip to hero content</a>
 
-  <!-- ============================================================
-       1. HERO VIEWPORT (3-ZONE MACHINED TITANIUM BEZEL DESIGN)
-       ============================================================ -->
-  <section class="viewport-canvas">
-    
-    <!-- LEFT RAIL: FURNACE BRAND & DIRECTORY DOORS -->
+  <!-- 1. HERO + POSITIONING -->
+  <section class="viewport-canvas solo">
+
+    <!-- LEFT RAIL -->
     <aside class="rail-zone" aria-label="Primary navigation doors">
       <a href="#hero" class="rail-brand">Furnace</a>
       <nav class="rail-nav" aria-label="Doors">
         <a href="#hero" class="active">Home</a>
-        <a href="#memo">The memo</a>
-        <a href="#what">What we do</a>
-        <a href="#compliance">Compliance</a>
-        <a href="#production">Production</a>
-        <a href="#receipts">Receipts</a>
+        <a href="#why">Why Furnace</a>
+        <a href="#how">How it works</a>
+        <a href="#outcomes">Outcomes</a>
+        <a href="#proof">Proof</a>
+        <a href="#limits">Limits</a>
         <a href="https://github.com/vyshwas/furnace-dist" target="_blank" rel="noopener">GitHub ↗</a>
         <a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.1.0-alpha.1" target="_blank" rel="noopener">Releases ↗</a>
       </nav>
@@ -1244,9 +1301,9 @@
       </div>
     </aside>
 
-    <!-- CENTER HERO COLUMN: AUTHENTIC PRODUCT COPY & CLI COMMAND BAR -->
+    <!-- CENTER HERO COLUMN -->
     <main class="center-zone" id="hero">
-      
+
       <!-- RELEASE NOTE -->
       <a class="announcement-note" href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.1.0-alpha.1" target="_blank" rel="noopener">
         <span class="note-live" aria-hidden="true"></span>
@@ -1254,22 +1311,20 @@
         <span class="note-cta">Release ↗</span>
       </a>
 
-      <div class="eyebrow">Developer Tool · Verification Engine</div>
-      
-      <!-- MONUMENT STATEMENT HEADLINE -->
-      <h1 class="monument-headline">Continuous verification<br>for AI-built software</h1>
+      <!-- POSITIONING HEADLINE -->
+      <h1 class="monument-headline">Not another AI coding agent.<br>Furnace is the verification layer after the agent.</h1>
 
-      <!-- DEK -->
+      <!-- SUPPORTING LINE -->
       <p class="lead-dek">
-        Furnace verifies reality where models fail. Continuous headless Chromium audits, monotonic AST repair proofs, and cryptographically sealed receipts.
+        AI builds fast. Furnace checks what could break, repairs what it safely can, verifies the result, and tells you what still needs a human.
       </p>
 
-      <!-- READY-TO-COPY INSTALL COMMAND BAR (DUAL-MODE: TERMINAL & CODING AGENT) -->
+      <!-- 2. COPY INSTALL COMMAND -->
       <div class="cli-section" id="cli">
         <div class="cli-header-bar">
           <div>
-            <h2 class="cli-heading">One-click install &amp; run</h2>
-            <p class="cli-sub">Guided setup · Verification in terminal or AI agent</p>
+            <h2 class="cli-heading">Copy install command</h2>
+            <p class="cli-sub">Runs locally. No signup. Windows + Linux tested.</p>
           </div>
           <div class="cli-tabs" role="tablist" aria-label="Command mode">
             <button class="cli-tab-btn active" id="tabTerminal" onclick="setCliMode('terminal')" role="tab" aria-selected="true" aria-controls="cliText">Terminal</button>
@@ -1304,24 +1359,6 @@
         </div>
       </div>
 
-      <!-- 3 AUTHENTIC CORE FEATURE BLOCKS -->
-      <div class="feature-list">
-        <div class="feature-item">
-          <h3>Cryptographic SHA-256 Receipts</h3>
-          <p>Every merge-ready patch is sealed with a SHA-256 hash. Surfaces that cannot be definitively proven are quarantined as unknown — nothing unverified is reported as passing.</p>
-        </div>
-
-        <div class="feature-item">
-          <h3>Monotonic Fixpoint Proofs</h3>
-          <p>When a repair is proposed, AST transformations recompile and re-evaluate the page. Repairs are verified to converge or refused: anything that still fails or introduces a regression is rejected and the source is left untouched.</p>
-        </div>
-
-        <div class="feature-item">
-          <h3>Headless Chromium CDP Auditing</h3>
-          <p>Furnace boots native Chromium to inspect computed contrast, accessibility trees, bounding-box touch targets against the WCAG floor, and keyboard trap patterns in dialog markup.</p>
-        </div>
-      </div>
-
       <!-- WORKS WITH INTEGRATIONS ROW -->
       <div class="plugs">
         <span class="plugs-text">Works with</span>
@@ -1345,280 +1382,354 @@
       </div>
     </main>
 
-    <!-- RIGHT ZONE: THE HEAVY MACHINED DARK TITANIUM CONSOLE BEZEL -->
-    <aside class="right-zone" aria-label="Furnace Hardware Bezel Console">
-      <div class="titanium-bezel">
-        
-        <div class="bezel-recess">
-          <!-- MOLTEN TUNGSTEN HEAT GLOW TRENCHES -->
-          <div class="heat-trench-top" aria-hidden="true"></div>
-          <div class="heat-trench-left" aria-hidden="true"></div>
-          <div class="heat-trench-bottom" aria-hidden="true"></div>
-
-          <!-- INNER SCREEN DISPLAY -->
-          <div class="screen-chamber">
-            
-            <!-- LIVING AMBIENT THERMAL VIDEO LAYER -->
-            <video class="screen-thermal-video" autoplay loop muted playsinline poster="media/hero-poster.jpg">
-              <source src="media/hero.mp4" type="video/mp4">
-            </video>
-            <div class="screen-glass-shroud" aria-hidden="true"></div>
-
-            <div class="screen-content">
-              
-              <!-- CARD 1: CRYPTOGRAPHICALLY SEALED SHA-256 RECEIPT -->
-              <div class="receipt-card">
-                <div class="receipt-left">
-                  <div class="receipt-title">Cryptographically sealed SHA-256 receipt</div>
-                  <div class="receipt-hash">hash:d3b07384d113edec49eaa6238ad5ff00c3b1a89c9</div>
-                </div>
-                <div class="receipt-seal-badge">
-                  <div class="seal-icon-box">
-                    <svg width="22" height="24" viewBox="0 0 24 26" fill="none" stroke="#CBD0D8" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                      <rect x="3.5" y="10.5" width="17" height="13.5" rx="3.5" />
-                      <path d="M7 10.5V7a5 5 0 0 1 10 0v3.5" />
-                      <circle cx="12" cy="17" r="1.5" fill="#CBD0D8" />
-                    </svg>
-                  </div>
-                  <span class="seal-text">Seal</span>
-                </div>
-              </div>
-
-              <!-- CARD 2: MONOTONIC FIXPOINT PROOF -->
-              <div class="proof-card">
-                <div class="proof-title">Monotonic Fixpoint proof &middot; [STABLE CONVERGENCE]</div>
-                <div class="proof-body">
-                  
-                  <!-- SVG AST TREE GRAPH -->
-                  <div class="tree-diagram">
-                    <svg width="100%" height="100%" viewBox="0 0 240 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <!-- Connecting Lines -->
-                      <line x1="120" y1="18" x2="65" y2="44" stroke="rgba(255,255,255,0.42)" stroke-width="1.2" />
-                      <line x1="120" y1="18" x2="175" y2="44" stroke="rgba(255,255,255,0.42)" stroke-width="1.2" />
-                      
-                      <line x1="65" y1="58" x2="35" y2="83" stroke="rgba(255,255,255,0.42)" stroke-width="1.2" />
-                      <line x1="65" y1="58" x2="95" y2="83" stroke="rgba(255,255,255,0.42)" stroke-width="1.2" />
-                      
-                      <line x1="175" y1="58" x2="175" y2="74" stroke="rgba(255,255,255,0.42)" stroke-width="1.2" stroke-dasharray="2 2" />
-                      <line x1="175" y1="74" x2="190" y2="83" stroke="rgba(255,255,255,0.42)" stroke-width="1.2" />
-
-                      <!-- Root node: a -->
-                      <text x="120" y="14" fill="#E4E7ED" font-family="'Geist', serif" font-size="13" font-style="italic" text-anchor="middle">a</text>
-                      
-                      <!-- Level 1: c + a and c - a -->
-                      <text x="65" y="54" fill="#D4D7DE" font-family="'Geist', serif" font-size="11.5" font-style="italic" text-anchor="middle">c + a</text>
-                      <text x="175" y="54" fill="#D4D7DE" font-family="'Geist', serif" font-size="11.5" font-style="italic" text-anchor="middle">c - a</text>
-
-                      <!-- Level 2: leaves -->
-                      <text x="35" y="94" fill="#A1A6B0" font-family="'Geist', serif" font-size="11" font-style="italic" text-anchor="middle">x + 0</text>
-                      <text x="95" y="94" fill="#A1A6B0" font-family="'Geist', serif" font-size="11" font-style="italic" text-anchor="middle">x + 1</text>
-                      <text x="195" y="94" fill="#A1A6B0" font-family="'Geist', serif" font-size="11" font-style="italic" text-anchor="middle">a(x) ~ a<tspan font-size="8" dy="2">j</tspan><tspan font-size="11" dy="-2">(x)</tspan></text>
-                    </svg>
-                  </div>
-
-                  <!-- MATHEMATICAL FORMULA (CRISP SVG MATH) -->
-                  <div class="math-formula-box">
-                    <svg width="190" height="52" viewBox="0 0 190 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <!-- f(x) = -->
-                      <text x="4" y="32" fill="#E1E5EC" font-family="'Times New Roman', serif" font-size="18" font-style="italic">f(x)</text>
-                      <text x="38" y="32" fill="#E1E5EC" font-family="'Times New Roman', serif" font-size="18">&nbsp;=&nbsp;</text>
-                      
-                      <!-- Sigma with limits -->
-                      <text x="76" y="35" fill="#E1E5EC" font-family="'Times New Roman', serif" font-size="30">&sum;</text>
-                      <text x="81" y="11" fill="#CBD0D8" font-family="'Times New Roman', serif" font-size="11" font-style="italic">n</text>
-                      <text x="74" y="47" fill="#CBD0D8" font-family="'Times New Roman', serif" font-size="10" font-style="italic">i=1</text>
-                      
-                      <!-- a_i + t(x)^{mu-1} -->
-                      <text x="104" y="32" fill="#E1E5EC" font-family="'Times New Roman', serif" font-size="18">
-                        <tspan font-style="italic">a</tspan><tspan font-size="11" dy="4">i</tspan><tspan font-size="18" dy="-4">&nbsp;+&nbsp;</tspan><tspan font-style="italic">t(x)</tspan><tspan font-size="11" dy="-8">&mu;&minus;1</tspan>
-                      </text>
-                    </svg>
-                  </div>
-
-                </div>
-              </div>
-
-              <!-- CARD 3: TERMINAL STATUS HUD WITH REAL AUDIT STREAM -->
-              <div class="hud-card">
-                <div class="hud-title">Terminal Status HUD &middot; Engine Telemetry</div>
-                <div class="hud-grid">
-                  
-                  <!-- METRICS COLUMN -->
-                  <div class="hud-left">
-                    <div class="hud-row"><span class="lbl">Chromium</span><span class="val">280ms</span></div>
-                    <div class="hud-row"><span class="lbl">AX-Tree</span><span class="val">145ms</span></div>
-                    <div class="hud-row"><span class="lbl">Fixpoint</span><span class="val">22ms</span></div>
-                    <div class="hud-row"><span class="lbl">Seal-Calc</span><span class="val">1.4ms</span></div>
-                    <div class="hud-row"><span class="lbl">Total-Run</span><span class="val">448ms</span></div>
-                    <div class="hud-row"><span class="lbl">Leak-Rate</span><span class="val">0.00%</span></div>
-                    <div class="hud-row"><span class="lbl">Egress-Out</span><span class="val">0.00 KB</span></div>
-                    <div class="hud-row"><span class="lbl">Canon-Tests</span><span class="val">35/35</span></div>
-                    <div class="hud-row"><span class="lbl">Invariants</span><span class="val">65/65</span></div>
-                    <div class="hud-row"><span class="lbl">Status</span><span class="val" style="color: #34D399;">MERGE-READY</span></div>
-                  </div>
-
-                  <!-- STREAM LOGS COLUMN -->
-                  <div class="hud-right">
-                    <div class="hud-log-line">[engine] Native Chromium CDP listening on port 9222...</div>
-                    <div class="hud-log-line">[cdp] Accessibility.getFullAXTree: 1,482 nodes mapped</div>
-                    <div class="hud-log-line">[audit] Target-size: button#checkout-cta { 32px &rarr; 44px }</div>
-                    <div class="hud-log-line">[ast] Purging arbitrary utility 'p-[13px]' &rarr; 'p-3'</div>
-                    <div class="hud-log-line">[fixpoint] Verifying monotonic AST convergence: STABLE</div>
-                    <div class="hud-log-line">[regression] Validating 65 invariants... 0 regressions</div>
-                    <div class="hud-log-line">[network] Outbound egress check: 0.00 KB (local sandbox)</div>
-                    <div class="hud-log-line">[seal] sha256=d3b07384d113edec49eaa6238ad5ff00... VERIFIED</div>
-                    <div class="hud-log-line">[verdict] EXIT 0: PASS (MERGE-READY)</div>
-                    <div><span class="hud-cursor">&#9608;</span></div>
-                  </div>
-
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </aside>
-
   </section>
 
-  <!-- ============================================================
-       2. THE EXTENDED DOCUMENTATION & SYSTEM SPECIFICATIONS
-       ============================================================ -->
+  <!-- POSITIONING STRIP -->
+  <div class="strip-band">
+    AI writes the code. Furnace proves what changed.
+    <small>For vibe coders, frontend engineers, AI-heavy product teams, and designers who ship code.</small>
+  </div>
+
+  <!-- CONTENT -->
   <main class="content-wrapper" id="content">
     <div class="content-container">
-      
+
       <!-- SUB-RAIL TABLE OF CONTENTS -->
       <nav class="content-toc" aria-label="Section navigation">
         <div class="toc-title">On this page</div>
         <div class="toc-links">
-          <a href="#memo">The memo</a>
-          <a href="#pipeline">Pipeline loop</a>
-          <a href="#what">What we do</a>
-          <a href="#compliance">Compliance pass</a>
-          <a href="#production">In production</a>
-          <a href="#receipts">Authentic receipts</a>
+          <a href="#why">Why Furnace</a>
+          <a href="#how">How it works</a>
+          <a href="#outcomes">Outcomes</a>
+          <a href="#proof">Proof</a>
+          <a href="#compliance">Compliance</a>
+          <a href="#limits">Limits</a>
+          <a href="#receipts">Receipts</a>
         </div>
       </nav>
 
       <!-- PRIMARY CONTENT COLUMN -->
       <div class="reading-col">
 
-        <!-- ANIMATED PIPELINE LOOP FIGURE -->
-        <figure class="loop" id="pipeline" aria-labelledby="loop-caption">
-          <svg class="loop-canvas" viewBox="0 0 680 180" fill="none">
-            <path d="M 50 90 L 170 90" stroke="#E4E4E7" stroke-width="2" stroke-dasharray="4 4"/>
-            <path d="M 270 90 L 390 90" stroke="#E4E4E7" stroke-width="2" stroke-dasharray="4 4"/>
-            <path d="M 490 90 L 610 90" stroke="#E4E4E7" stroke-width="2" stroke-dasharray="4 4"/>
-            <path d="M 440 60 C 440 30, 220 30, 220 60" stroke="#E4E4E7" stroke-width="1.5" stroke-dasharray="3 3"/>
-
-            <g transform="translate(10, 65)">
-              <rect width="90" height="50" rx="6" fill="#FFFFFF" stroke="#E4E4E7" stroke-width="1"/>
-              <text x="45" y="24" text-anchor="middle" font-family="Geist, sans-serif" font-size="10" font-weight="600" fill="#09090B">BROWSER</text>
-              <text x="45" y="38" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9" fill="#71717A">Raw DOM</text>
-            </g>
-
-            <g transform="translate(170, 65)">
-              <rect width="100" height="50" rx="6" fill="#FFFFFF" stroke="#E4E4E7" stroke-width="1"/>
-              <text x="50" y="24" text-anchor="middle" font-family="Geist, sans-serif" font-size="10" font-weight="600" fill="#09090B">CDP AX-TREE</text>
-              <text x="50" y="38" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9" fill="#71717A">Roles &amp; Bounds</text>
-            </g>
-
-            <g transform="translate(390, 65)">
-              <rect width="100" height="50" rx="6" fill="#09090B" stroke="#09090B" stroke-width="1"/>
-              <text x="50" y="24" text-anchor="middle" font-family="Geist, sans-serif" font-size="10" font-weight="600" fill="#FFFFFF">FURNACE</text>
-              <text x="50" y="38" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9" fill="#A1A1AA">Fixpoint AST</text>
-            </g>
-
-            <g transform="translate(580, 65)">
-              <rect width="90" height="50" rx="6" fill="#FFFFFF" stroke="#10B981" stroke-width="1.5"/>
-              <text x="45" y="24" text-anchor="middle" font-family="Geist, sans-serif" font-size="10" font-weight="600" fill="#09090B">SEALED</text>
-              <text x="45" y="38" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9" fill="#10B981">SHA-256 Receipt</text>
-            </g>
-
-            <circle cx="110" cy="90" r="3" fill="#09090B">
-              <animate attributeName="cx" values="50;170" dur="2s" repeatCount="indefinite"/>
-            </circle>
-            <circle cx="330" cy="90" r="3" fill="#09090B">
-              <animate attributeName="cx" values="270;390" dur="2s" repeatCount="indefinite"/>
-            </circle>
-            <circle cx="535" cy="90" r="3" fill="#10B981">
-              <animate attributeName="cx" values="490;580" dur="2s" repeatCount="indefinite"/>
-            </circle>
-          </svg>
-          <figcaption class="loop-caption" id="loop-caption">
-            Figure 1. Rendered pages enter Furnace via headless Chrome DevTools Protocol. The engine evaluates computed layouts, heals what it can mathematically prove, and signs immutable receipts.
-          </figcaption>
-        </figure>
-
-        <!-- THE EDITORIAL MEMO -->
-        <article class="memo" id="memo">
-          <div class="section-tag">Philosophy</div>
-          <h2 class="section-title">The Memo: Code that compiles is not code that works</h2>
-          <p>
-            The path to reliable generative software is to scale <strong>continuous headless verification</strong> that works with <strong>any model, any harness</strong>, and across your existing codebases. As coding assistants produce hundreds of lines of UI per prompt, verification and remediation must be separated from model hallucination.
+        <!-- 3. WHY FURNACE EXISTS -->
+        <section class="section" id="why">
+          <div class="section-tag">Why Furnace exists</div>
+          <h2 class="section-title">AI output looks finished. It often is not.</h2>
+          <p class="plain-prose">
+            AI-generated software can look finished and still ship broken journeys, accessibility issues, design drift, or regressions.
           </p>
-
-          <p class="beat">
-            Code that compiles is not code that works.
+          <p class="plain-prose">
+            Furnace checks the parts most likely to slip through. It runs your app in a real browser, verifies what the code actually does, and hands every result to one of four outcomes — <strong>proven, repaired, human required, or unknown</strong>.
           </p>
+        </section>
 
-          <p>
-            Pre-training and post-training will continue to push model velocity, but models cannot see rendered pixels, cannot test screen-reader accessibility trees, and cannot feel when a touch target is too small for human thumbs.
+        <!-- 5. FOUR OUTCOMES -->
+        <section class="section" id="outcomes">
+          <div class="section-tag">Outcomes</div>
+          <h2 class="section-title">Four answers, no hedging</h2>
+          <div class="feature-list">
+            <div class="feature-item">
+              <h3>Proven</h3>
+              <p>Checked against your rules and passing. Nothing found that breaks them.</p>
+            </div>
+            <div class="feature-item">
+              <h3>Repaired</h3>
+              <p>Fixed automatically, then re-checked by a separate verifier — with a receipt as proof.</p>
+            </div>
+            <div class="feature-item">
+              <h3>Human required</h3>
+              <p>Login screens, visual judgment calls, and anything Furnace cannot decide alone. Flagged, never guessed.</p>
+            </div>
+            <div class="feature-item">
+              <h3>Unknown</h3>
+              <p>Could not be proven either way. Listed openly, never marked as passing.</p>
+            </div>
+          </div>
+          <p class="plain-prose">
+            <strong>No false confidence.</strong> Furnace does not call something safe just because a test ran. If it cannot prove something, it says <strong>unknown</strong>.
           </p>
+        </section>
 
-          <p>
-            We build the deterministic infrastructure for verifying reality: headless Chromium CDP inspection, monotonic AST repair with automatic regression rollback, and an immutable ledger of receipts. What Furnace cannot prove, it marks <strong>unknown</strong> rather than passing it.
-          </p>
-        </article>
-
-        <!-- WHAT WE DO -->
-        <section class="section" id="what">
-          <div class="section-tag">Architecture</div>
-          <h2 class="section-title">What we do</h2>
-
+        <!-- 4. SIMPLE 5-STEP WORKFLOW -->
+        <section class="section" id="how">
+          <div class="section-tag">How it works</div>
+          <h2 class="section-title">Five steps, one receipt</h2>
           <div class="rows">
             <div class="row-card">
               <div class="row-num">01</div>
               <div class="row-content">
-                <h3>Headless Browser CDP Verification</h3>
-                <p>
-                  Furnace boots native Chromium and inspects the Chrome DevTools Accessibility Tree (<code>Accessibility.getFullAXTree</code>). It verifies computed contrast against resolvable background colors, physical bounding-box touch targets, and keyboard exit controls in dialog markup. Gradients, unresolvable backgrounds, and live trap behavior are reported unknown.
-                </p>
+                <h3>Point Furnace at your app</h3>
+                <p>Tell it which pages to check. Setup takes minutes and nothing leaves your machine.</p>
               </div>
             </div>
-
             <div class="row-card">
               <div class="row-num">02</div>
               <div class="row-content">
-                <h3>Monotonic AST Auto-Remediation</h3>
-                <p>
-                  When a repair is proposed, Furnace applies AST transformations, recompiles, and re-evaluates the page. If the original bug persists or if any new regression is introduced, the repair is rejected immediately and the source code is restored to pristine condition.
-                </p>
+                <h3>Furnace checks the change and its blast radius</h3>
+                <p>Pages are verified in a real browser, and earlier fixes are re-checked so a new change cannot quietly regress them.</p>
               </div>
             </div>
-
             <div class="row-card">
               <div class="row-num">03</div>
               <div class="row-content">
-                <h3>Objective Compliance Signals Pass</h3>
-                <p>
-                  Lightweight static and runtime detection for 5 objective compliance vectors: third-party font calls, tracking scripts before consent, email unsubscribe mechanisms, subscription checkout renewal disclosures, and user-generated content takedown routes.
-                </p>
+                <h3>Safe issues are repaired</h3>
+                <p>Only fixes that can be proven safe. Everything else is left alone for a human.</p>
               </div>
             </div>
-
             <div class="row-card">
               <div class="row-num">04</div>
               <div class="row-content">
-                <h3>Sealed Receipts &amp; Unknowns Ledger</h3>
-                <p>
-                  Every merge-ready patch is sealed with a SHA-256 hash. Surfaces that cannot be definitively proven (e.g. unauthenticated portals or dynamic canvas) are quarantined as <strong>unknown</strong> and routed to humans.
-                </p>
+                <h3>A separate verifier checks the fix again</h3>
+                <p>The fixer and the checker are independent, so nothing grades its own homework.</p>
+              </div>
+            </div>
+            <div class="row-card">
+              <div class="row-num">05</div>
+              <div class="row-content">
+                <h3>You get a receipt showing what was proven and what was not</h3>
+                <p>Passes, repairs, open questions, and unknowns — in one file you can attach to a pull request.</p>
               </div>
             </div>
           </div>
+        </section>
+
+        <!-- 6. TECHNICAL PROOF AND RECEIPTS -->
+        <section class="section" id="proof">
+          <div class="section-tag">Technical proof</div>
+          <h2 class="section-title">The machinery, when you want it</h2>
+          <p class="plain-prose">
+            An illustrated run: sealed receipt, repair record, and engine log. Your own runs produce these as real files.
+          </p>
+
+          <aside class="right-zone" aria-label="Furnace Hardware Bezel Console" style="min-width: 0;">
+            <div class="titanium-bezel">
+
+              <div class="bezel-recess">
+                <!-- MOLTEN TUNGSTEN HEAT GLOW TRENCHES -->
+                <div class="heat-trench-top" aria-hidden="true"></div>
+                <div class="heat-trench-left" aria-hidden="true"></div>
+                <div class="heat-trench-bottom" aria-hidden="true"></div>
+
+                <!-- INNER SCREEN DISPLAY -->
+                <div class="screen-chamber">
+
+                  <!-- LIVING AMBIENT THERMAL VIDEO LAYER -->
+                  <video class="screen-thermal-video" autoplay loop muted playsinline poster="media/hero-poster.jpg">
+                    <source src="media/hero.mp4" type="video/mp4">
+                  </video>
+                  <div class="screen-glass-shroud" aria-hidden="true"></div>
+
+                  <div class="screen-content">
+
+                    <!-- CARD 1: CRYPTOGRAPHICALLY SEALED SHA-256 RECEIPT -->
+                    <div class="receipt-card">
+                      <div class="receipt-left">
+                        <div class="receipt-title">Cryptographically sealed SHA-256 receipt</div>
+                        <div class="receipt-hash">hash:d3b07384d113edec49eaa6238ad5ff00c3b1a89c9</div>
+                      </div>
+                      <div class="receipt-seal-badge">
+                        <div class="seal-icon-box">
+                          <svg width="22" height="24" viewBox="0 0 24 26" fill="none" stroke="#CBD0D8" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3.5" y="10.5" width="17" height="13.5" rx="3.5" />
+                            <path d="M7 10.5V7a5 5 0 0 1 10 0v3.5" />
+                            <circle cx="12" cy="17" r="1.5" fill="#CBD0D8" />
+                          </svg>
+                        </div>
+                        <span class="seal-text">Seal</span>
+                      </div>
+                    </div>
+
+                    <!-- CARD 2: MONOTONIC FIXPOINT PROOF -->
+                    <div class="proof-card">
+                      <div class="proof-title">Monotonic Fixpoint proof &middot; [STABLE CONVERGENCE]</div>
+                      <div class="proof-body">
+
+                        <!-- SVG AST TREE GRAPH -->
+                        <div class="tree-diagram">
+                          <svg width="100%" height="100%" viewBox="0 0 240 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Connecting Lines -->
+                            <line x1="120" y1="18" x2="65" y2="44" stroke="rgba(255,255,255,0.42)" stroke-width="1.2" />
+                            <line x1="120" y1="18" x2="175" y2="44" stroke="rgba(255,255,255,0.42)" stroke-width="1.2" />
+
+                            <line x1="65" y1="58" x2="35" y2="83" stroke="rgba(255,255,255,0.42)" stroke-width="1.2" />
+                            <line x1="65" y1="58" x2="95" y2="83" stroke="rgba(255,255,255,0.42)" stroke-width="1.2" />
+
+                            <line x1="175" y1="58" x2="175" y2="74" stroke="rgba(255,255,255,0.42)" stroke-width="1.2" stroke-dasharray="2 2" />
+                            <line x1="175" y1="74" x2="190" y2="83" stroke="rgba(255,255,255,0.42)" stroke-width="1.2" />
+
+                            <!-- Root node: a -->
+                            <text x="120" y="14" fill="#E4E7ED" font-family="'Geist', serif" font-size="13" font-style="italic" text-anchor="middle">a</text>
+
+                            <!-- Level 1: c + a and c - a -->
+                            <text x="65" y="54" fill="#D4D7DE" font-family="'Geist', serif" font-size="11.5" font-style="italic" text-anchor="middle">c + a</text>
+                            <text x="175" y="54" fill="#D4D7DE" font-family="'Geist', serif" font-size="11.5" font-style="italic" text-anchor="middle">c - a</text>
+
+                            <!-- Level 2: leaves -->
+                            <text x="35" y="94" fill="#A1A6B0" font-family="'Geist', serif" font-size="11" font-style="italic" text-anchor="middle">x + 0</text>
+                            <text x="95" y="94" fill="#A1A6B0" font-family="'Geist', serif" font-size="11" font-style="italic" text-anchor="middle">x + 1</text>
+                            <text x="195" y="94" fill="#A1A6B0" font-family="'Geist', serif" font-size="11" font-style="italic" text-anchor="middle">a(x) ~ a<tspan font-size="8" dy="2">j</tspan><tspan font-size="11" dy="-2">(x)</tspan></text>
+                          </svg>
+                        </div>
+
+                        <!-- MATHEMATICAL FORMULA (CRISP SVG MATH) -->
+                        <div class="math-formula-box">
+                          <svg width="190" height="52" viewBox="0 0 190 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- f(x) = -->
+                            <text x="4" y="32" fill="#E1E5EC" font-family="'Times New Roman', serif" font-size="18" font-style="italic">f(x)</text>
+                            <text x="38" y="32" fill="#E1E5EC" font-family="'Times New Roman', serif" font-size="18">&nbsp;=&nbsp;</text>
+
+                            <!-- Sigma with limits -->
+                            <text x="76" y="35" fill="#E1E5EC" font-family="'Times New Roman', serif" font-size="30">&sum;</text>
+                            <text x="81" y="11" fill="#CBD0D8" font-family="'Times New Roman', serif" font-size="11" font-style="italic">n</text>
+                            <text x="74" y="47" fill="#CBD0D8" font-family="'Times New Roman', serif" font-size="10" font-style="italic">i=1</text>
+
+                            <!-- a_i + t(x)^{mu-1} -->
+                            <text x="104" y="32" fill="#E1E5EC" font-family="'Times New Roman', serif" font-size="18">
+                              <tspan font-style="italic">a</tspan><tspan font-size="11" dy="4">i</tspan><tspan font-size="18" dy="-4">&nbsp;+&nbsp;</tspan><tspan font-style="italic">t(x)</tspan><tspan font-size="11" dy="-8">&mu;&minus;1</tspan>
+                            </text>
+                          </svg>
+                        </div>
+
+                      </div>
+                    </div>
+
+                    <!-- CARD 3: TERMINAL STATUS HUD WITH REAL AUDIT STREAM -->
+                    <div class="hud-card">
+                      <div class="hud-title">Terminal Status HUD &middot; Engine Telemetry</div>
+                      <div class="hud-grid">
+
+                        <!-- METRICS COLUMN -->
+                        <div class="hud-left">
+                          <div class="hud-row"><span class="lbl">Chromium</span><span class="val">280ms</span></div>
+                          <div class="hud-row"><span class="lbl">AX-Tree</span><span class="val">145ms</span></div>
+                          <div class="hud-row"><span class="lbl">Fixpoint</span><span class="val">22ms</span></div>
+                          <div class="hud-row"><span class="lbl">Seal-Calc</span><span class="val">1.4ms</span></div>
+                          <div class="hud-row"><span class="lbl">Total-Run</span><span class="val">448ms</span></div>
+                          <div class="hud-row"><span class="lbl">Leak-Rate</span><span class="val">0.00%</span></div>
+                          <div class="hud-row"><span class="lbl">Egress-Out</span><span class="val">0.00 KB</span></div>
+                          <div class="hud-row"><span class="lbl">Canon-Tests</span><span class="val">35/35</span></div>
+                          <div class="hud-row"><span class="lbl">Invariants</span><span class="val">65/65</span></div>
+                          <div class="hud-row"><span class="lbl">Status</span><span class="val" style="color: #34D399;">MERGE-READY</span></div>
+                        </div>
+
+                        <!-- STREAM LOGS COLUMN -->
+                        <div class="hud-right">
+                          <div class="hud-log-line">[engine] Native Chromium CDP listening on port 9222...</div>
+                          <div class="hud-log-line">[cdp] Accessibility.getFullAXTree: 1,482 nodes mapped</div>
+                          <div class="hud-log-line">[audit] Target-size: button#checkout-cta { 32px &rarr; 44px }</div>
+                          <div class="hud-log-line">[ast] Purging arbitrary utility 'p-[13px]' &rarr; 'p-3'</div>
+                          <div class="hud-log-line">[fixpoint] Verifying monotonic AST convergence: STABLE</div>
+                          <div class="hud-log-line">[regression] Validating 65 invariants... 0 regressions</div>
+                          <div class="hud-log-line">[network] Outbound egress check: 0.00 KB (local sandbox)</div>
+                          <div class="hud-log-line">[seal] sha256=d3b07384d113edec49eaa6238ad5ff00... VERIFIED</div>
+                          <div class="hud-log-line">[verdict] EXIT 0: PASS (MERGE-READY)</div>
+                          <div><span class="hud-cursor">&#9608;</span></div>
+                        </div>
+
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </aside>
+
+          <!-- ANIMATED PIPELINE LOOP FIGURE -->
+          <figure class="loop" id="pipeline" aria-labelledby="loop-caption" style="margin-top: 24px;">
+            <svg class="loop-canvas" viewBox="0 0 680 180" fill="none">
+              <path d="M 50 90 L 170 90" stroke="#E4E4E7" stroke-width="2" stroke-dasharray="4 4"/>
+              <path d="M 270 90 L 390 90" stroke="#E4E4E7" stroke-width="2" stroke-dasharray="4 4"/>
+              <path d="M 490 90 L 610 90" stroke="#E4E4E7" stroke-width="2" stroke-dasharray="4 4"/>
+              <path d="M 440 60 C 440 30, 220 30, 220 60" stroke="#E4E4E7" stroke-width="1.5" stroke-dasharray="3 3"/>
+
+              <g transform="translate(10, 65)">
+                <rect width="90" height="50" rx="6" fill="#FFFFFF" stroke="#E4E4E7" stroke-width="1"/>
+                <text x="45" y="24" text-anchor="middle" font-family="Geist, sans-serif" font-size="10" font-weight="600" fill="#09090B">BROWSER</text>
+                <text x="45" y="38" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9" fill="#71717A">Raw DOM</text>
+              </g>
+
+              <g transform="translate(170, 65)">
+                <rect width="100" height="50" rx="6" fill="#FFFFFF" stroke="#09090B" stroke-width="1"/>
+                <text x="50" y="24" text-anchor="middle" font-family="Geist, sans-serif" font-size="10" font-weight="600" fill="#09090B">CDP AX-TREE</text>
+                <text x="50" y="38" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9" fill="#71717A">Roles &amp; Bounds</text>
+              </g>
+
+              <g transform="translate(390, 65)">
+                <rect width="100" height="50" rx="6" fill="#09090B" stroke="#09090B" stroke-width="1"/>
+                <text x="50" y="24" text-anchor="middle" font-family="Geist, sans-serif" font-size="10" font-weight="600" fill="#FFFFFF">FURNACE</text>
+                <text x="50" y="38" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9" fill="#A1A1AA">Fixpoint AST</text>
+              </g>
+
+              <g transform="translate(580, 65)">
+                <rect width="90" height="50" rx="6" fill="#FFFFFF" stroke="#10B981" stroke-width="1.5"/>
+                <text x="45" y="24" text-anchor="middle" font-family="Geist, sans-serif" font-size="10" font-weight="600" fill="#09090B">SEALED</text>
+                <text x="45" y="38" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9" fill="#10B981">SHA-256 Receipt</text>
+              </g>
+
+              <circle cx="110" cy="90" r="3" fill="#09090B">
+                <animate attributeName="cx" values="50;170" dur="2s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="330" cy="90" r="3" fill="#09090B">
+                <animate attributeName="cx" values="270;390" dur="2s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="535" cy="90" r="3" fill="#10B981">
+                <animate attributeName="cx" values="490;580" dur="2s" repeatCount="indefinite"/>
+              </circle>
+            </svg>
+            <figcaption class="loop-caption" id="loop-caption">
+              Figure 1. Rendered pages enter Furnace through headless Chrome. The engine verifies what it can prove, heals only what it can verify, and seals a receipt for each merge-ready repair.
+            </figcaption>
+          </figure>
+
+          <!-- WHAT WE DO -->
+          <section class="section" id="what" style="border-top: none; padding-top: 0;">
+            <div class="section-tag">Under the hood</div>
+            <h2 class="section-title">What the engine does</h2>
+
+            <div class="rows">
+              <div class="row-card">
+                <div class="row-num">01</div>
+                <div class="row-content">
+                  <h3>Headless Browser Verification</h3>
+                  <p>
+                    Furnace boots native Chromium and inspects the page the way assistive technology sees it. It verifies computed contrast against resolvable background colors, physical bounding-box touch targets, and keyboard exit controls in dialog markup. Gradients, unresolvable backgrounds, and live trap behavior are reported unknown.
+                  </p>
+                </div>
+              </div>
+
+              <div class="row-card">
+                <div class="row-num">02</div>
+                <div class="row-content">
+                  <h3>Monotonic AST Auto-Remediation</h3>
+                  <p>
+                    When a repair is proposed, Furnace applies AST transformations, recompiles, and re-evaluates the page. If the original bug persists or if any new regression is introduced, the repair is rejected immediately and the source code is restored to pristine condition.
+                  </p>
+                </div>
+              </div>
+
+              <div class="row-card">
+                <div class="row-num">03</div>
+                <div class="row-content">
+                  <h3>Objective Compliance Signals Pass</h3>
+                  <p>
+                    Lightweight static and runtime detection for 5 objective compliance vectors: third-party font calls, tracking scripts before consent, email unsubscribe mechanisms, subscription checkout renewal disclosures, and user-generated content takedown routes.
+                  </p>
+                </div>
+              </div>
+
+              <div class="row-card">
+                <div class="row-num">04</div>
+                <div class="row-content">
+                  <h3>Sealed Receipts &amp; Unknowns Ledger</h3>
+                  <p>
+                    Every merge-ready patch is sealed with a SHA-256 hash. Surfaces that cannot be definitively proven (e.g. unauthenticated portals or dynamic canvas) are quarantined as <strong>unknown</strong> and routed to humans.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
         </section>
 
         <!-- COMPLIANCE SIGNALS PASS -->
@@ -1770,12 +1881,49 @@ EXIT: 0 (MERGE-READY)
           </div>
         </section>
 
+        <!-- 7. CURRENT LIMITATIONS / TESTED PLATFORMS -->
+        <section class="section" id="limits">
+          <div class="section-tag">Limits</div>
+          <h2 class="section-title">What Furnace does not do</h2>
+          <div class="signal-list">
+            <div class="signal-item">
+              <div class="signal-name">Your app must be running — Furnace checks live pages, not source code</div>
+              <span class="signal-badge">You run it</span>
+            </div>
+            <div class="signal-item">
+              <div class="signal-name">Login screens and payments need a human — flagged, never guessed</div>
+              <span class="signal-badge">Human required</span>
+            </div>
+            <div class="signal-item">
+              <div class="signal-name">macOS is not tested yet — Windows and Linux are</div>
+              <span class="signal-badge">Not tested</span>
+            </div>
+            <div class="signal-item">
+              <div class="signal-name">Gradients and live keyboard behavior report unknown, not passing</div>
+              <span class="signal-badge">Unknown</span>
+            </div>
+            <div class="signal-item">
+              <div class="signal-name">Furnace finds technical signals — it is not legal compliance advice</div>
+              <span class="signal-badge">Signals only</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 8. FINAL CTA -->
+        <section class="section" id="try">
+          <div class="try-wrap">
+            <div class="section-tag">Try it</div>
+            <h2 class="section-title">Before you merge AI-written code, run it through Furnace.</h2>
+            <a class="cli-button" href="#cli">Copy install command</a>
+          </div>
+        </section>
+
         <!-- FOOTER -->
         <footer class="foot">
           <div>
             <div class="foot-brand">furnace</div>
             <p style="line-height: 1.6; max-width: 38ch;">
-              Deterministic remediation factory for software built with AI. Headless verification, monotonic proofs, and sealed receipts.
+              The verification layer after the agent. Headless verification, proven repairs, and sealed receipts.
             </p>
           </div>
 
@@ -1847,7 +1995,7 @@ EXIT: 0 (MERGE-READY)
       navigator.clipboard.writeText(cmd).then(() => {
         const copyBtnText = document.getElementById('copyBtnText');
         const copyBtn = document.getElementById('copyBtn');
-        
+
         if (copyBtnText) copyBtnText.textContent = 'Copied! ✓';
         if (copyBtn) {
           copyBtn.style.background = '#10B981';
