@@ -644,7 +644,7 @@
     gap: 13px;
   }
 
-  /* CARD 1: CRYPTOGRAPHICALLY SEALED SHA-256 RECEIPT */
+  /* CARD 1: SHA-256 FINGERPRINT OF THE REPAIR GOAL */
   .receipt-card {
     background: var(--screen-card);
     border: 1px solid var(--screen-border);
@@ -701,7 +701,7 @@
     letter-spacing: 0.02em;
   }
 
-  /* CARD 2: MONOTONIC FIXPOINT PROOF */
+  /* CARD 2: VERIFIER CHECKS */
   .proof-card {
     background: var(--screen-card);
     border: 1px solid var(--screen-border);
@@ -738,6 +738,29 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .check-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.71rem;
+    line-height: 1.45;
+    color: #9298A2;
+  }
+
+  .check-row {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .check-ok {
+    color: #34D399;
+    font-weight: 600;
+    flex-shrink: 0;
+    width: 2ch;
   }
 
   /* CARD 3: TERMINAL STATUS HUD */
@@ -1498,7 +1521,7 @@
           <div class="section-tag">Technical proof</div>
           <h2 class="section-title">The machinery, when you want it</h2>
           <p class="plain-prose">
-            An illustrated run: sealed receipt, repair record, and engine log. Your own runs produce these as real files.
+            A real run of v0.1.0-alpha.1 on a small sample component: the receipt fingerprint, the verifier's checks, and the run output. Your own runs write the same files.
           </p>
 
           <aside class="right-zone" aria-label="Furnace Hardware Bezel Console" style="min-width: 0;">
@@ -1521,11 +1544,11 @@
 
                   <div class="screen-content">
 
-                    <!-- CARD 1: CRYPTOGRAPHICALLY SEALED SHA-256 RECEIPT -->
+                    <!-- CARD 1: SHA-256 FINGERPRINT OF THE REPAIR GOAL (real, from the sample run) -->
                     <div class="receipt-card">
                       <div class="receipt-left">
-                        <div class="receipt-title">Cryptographically sealed SHA-256 receipt</div>
-                        <div class="receipt-hash">hash:d3b07384d113edec49eaa6238ad5ff00c3b1a89c9</div>
+                        <div class="receipt-title">Repair goal, fingerprinted before the fix (SHA-256)</div>
+                        <div class="receipt-hash">sha256:a4c31ec384209a8766cad6cd0c24078d9f</div>
                       </div>
                       <div class="receipt-seal-badge">
                         <div class="seal-icon-box">
@@ -1535,94 +1558,50 @@
                             <circle cx="12" cy="17" r="1.5" fill="#CBD0D8" />
                           </svg>
                         </div>
-                        <span class="seal-text">Seal</span>
+                        <span class="seal-text">Frozen</span>
                       </div>
                     </div>
 
-                    <!-- CARD 2: MONOTONIC FIXPOINT PROOF -->
+                    <!-- CARD 2: VERIFIER CHECKS (real, copied from the sample receipt) -->
                     <div class="proof-card">
-                      <div class="proof-title">Monotonic Fixpoint proof &middot; [STABLE CONVERGENCE]</div>
-                      <div class="proof-body">
-
-                        <!-- SVG AST TREE GRAPH -->
-                        <div class="tree-diagram">
-                          <svg width="100%" height="100%" viewBox="0 0 240 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Connecting Lines -->
-                            <line x1="120" y1="18" x2="65" y2="44" stroke="rgba(255,255,255,0.42)" stroke-width="1.2" />
-                            <line x1="120" y1="18" x2="175" y2="44" stroke="rgba(255,255,255,0.42)" stroke-width="1.2" />
-
-                            <line x1="65" y1="58" x2="35" y2="83" stroke="rgba(255,255,255,0.42)" stroke-width="1.2" />
-                            <line x1="65" y1="58" x2="95" y2="83" stroke="rgba(255,255,255,0.42)" stroke-width="1.2" />
-
-                            <line x1="175" y1="58" x2="175" y2="74" stroke="rgba(255,255,255,0.42)" stroke-width="1.2" stroke-dasharray="2 2" />
-                            <line x1="175" y1="74" x2="190" y2="83" stroke="rgba(255,255,255,0.42)" stroke-width="1.2" />
-
-                            <!-- Root node: a -->
-                            <text x="120" y="14" fill="#E4E7ED" font-family="'Geist', serif" font-size="13" font-style="italic" text-anchor="middle">a</text>
-
-                            <!-- Level 1: c + a and c - a -->
-                            <text x="65" y="54" fill="#D4D7DE" font-family="'Geist', serif" font-size="11.5" font-style="italic" text-anchor="middle">c + a</text>
-                            <text x="175" y="54" fill="#D4D7DE" font-family="'Geist', serif" font-size="11.5" font-style="italic" text-anchor="middle">c - a</text>
-
-                            <!-- Level 2: leaves -->
-                            <text x="35" y="94" fill="#A1A6B0" font-family="'Geist', serif" font-size="11" font-style="italic" text-anchor="middle">x + 0</text>
-                            <text x="95" y="94" fill="#A1A6B0" font-family="'Geist', serif" font-size="11" font-style="italic" text-anchor="middle">x + 1</text>
-                            <text x="195" y="94" fill="#A1A6B0" font-family="'Geist', serif" font-size="11" font-style="italic" text-anchor="middle">a(x) ~ a<tspan font-size="8" dy="2">j</tspan><tspan font-size="11" dy="-2">(x)</tspan></text>
-                          </svg>
-                        </div>
-
-                        <!-- MATHEMATICAL FORMULA (CRISP SVG MATH) -->
-                        <div class="math-formula-box">
-                          <svg width="190" height="52" viewBox="0 0 190 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <!-- f(x) = -->
-                            <text x="4" y="32" fill="#E1E5EC" font-family="'Times New Roman', serif" font-size="18" font-style="italic">f(x)</text>
-                            <text x="38" y="32" fill="#E1E5EC" font-family="'Times New Roman', serif" font-size="18">&nbsp;=&nbsp;</text>
-
-                            <!-- Sigma with limits -->
-                            <text x="76" y="35" fill="#E1E5EC" font-family="'Times New Roman', serif" font-size="30">&sum;</text>
-                            <text x="81" y="11" fill="#CBD0D8" font-family="'Times New Roman', serif" font-size="11" font-style="italic">n</text>
-                            <text x="74" y="47" fill="#CBD0D8" font-family="'Times New Roman', serif" font-size="10" font-style="italic">i=1</text>
-
-                            <!-- a_i + t(x)^{mu-1} -->
-                            <text x="104" y="32" fill="#E1E5EC" font-family="'Times New Roman', serif" font-size="18">
-                              <tspan font-style="italic">a</tspan><tspan font-size="11" dy="4">i</tspan><tspan font-size="18" dy="-4">&nbsp;+&nbsp;</tspan><tspan font-style="italic">t(x)</tspan><tspan font-size="11" dy="-8">&mu;&minus;1</tspan>
-                            </text>
-                          </svg>
-                        </div>
-
+                      <div class="proof-title">Independent verifier &middot; 4 of 4 checks passed</div>
+                      <div class="check-list">
+                        <div class="check-row"><span class="check-ok">ok</span><span>parses &mdash; the fixed file still parses</span></div>
+                        <div class="check-row"><span class="check-ok">ok</span><span>changed &mdash; the fix actually changed the file</span></div>
+                        <div class="check-row"><span class="check-ok">ok</span><span>fixpoint &mdash; the original target-size failure is gone</span></div>
+                        <div class="check-row"><span class="check-ok">ok</span><span>no-regressions &mdash; no new findings introduced</span></div>
                       </div>
                     </div>
 
                     <!-- CARD 3: TERMINAL STATUS HUD WITH REAL AUDIT STREAM -->
                     <div class="hud-card">
-                      <div class="hud-title">Terminal Status HUD &middot; Engine Telemetry</div>
+                      <div class="hud-title">Run output &middot; sample component, v0.1.0-alpha.1</div>
                       <div class="hud-grid">
 
-                        <!-- METRICS COLUMN -->
+                        <!-- FACTS FROM THE SAMPLE RUN (receipt + summary.json) -->
                         <div class="hud-left">
-                          <div class="hud-row"><span class="lbl">Chromium</span><span class="val">280ms</span></div>
-                          <div class="hud-row"><span class="lbl">AX-Tree</span><span class="val">145ms</span></div>
-                          <div class="hud-row"><span class="lbl">Fixpoint</span><span class="val">22ms</span></div>
-                          <div class="hud-row"><span class="lbl">Seal-Calc</span><span class="val">1.4ms</span></div>
-                          <div class="hud-row"><span class="lbl">Total-Run</span><span class="val">448ms</span></div>
-                          <div class="hud-row"><span class="lbl">Leak-Rate</span><span class="val">0.00%</span></div>
-                          <div class="hud-row"><span class="lbl">Egress-Out</span><span class="val">0.00 KB</span></div>
-                          <div class="hud-row"><span class="lbl">Canon-Tests</span><span class="val">35/35</span></div>
-                          <div class="hud-row"><span class="lbl">Invariants</span><span class="val">65/65</span></div>
+                          <div class="hud-row"><span class="lbl">Files</span><span class="val">1</span></div>
+                          <div class="hud-row"><span class="lbl">Repairs</span><span class="val">1</span></div>
+                          <div class="hud-row"><span class="lbl">Merge-ready</span><span class="val">1</span></div>
+                          <div class="hud-row"><span class="lbl">Checks</span><span class="val">4/4</span></div>
+                          <div class="hud-row"><span class="lbl">File edited</span><span class="val">no</span></div>
+                          <div class="hud-row"><span class="lbl">Wall time</span><span class="val">~10 s</span></div>
+                          <div class="hud-row"><span class="lbl">Canon tests</span><span class="val">35/35</span></div>
+                          <div class="hud-row"><span class="lbl">Furnace tests</span><span class="val">71/73</span></div>
                           <div class="hud-row"><span class="lbl">Status</span><span class="val" style="color: #34D399;">MERGE-READY</span></div>
                         </div>
 
-                        <!-- STREAM LOGS COLUMN -->
+                        <!-- WHAT THE RUN DID, IN ORDER -->
                         <div class="hud-right">
-                          <div class="hud-log-line">[engine] Native Chromium CDP listening on port 9222...</div>
-                          <div class="hud-log-line">[cdp] Accessibility.getFullAXTree: 1,482 nodes mapped</div>
-                          <div class="hud-log-line">[audit] Target-size: button#checkout-cta { 32px &rarr; 44px }</div>
-                          <div class="hud-log-line">[ast] Purging arbitrary utility 'p-[13px]' &rarr; 'p-3'</div>
-                          <div class="hud-log-line">[fixpoint] Verifying monotonic AST convergence: STABLE</div>
-                          <div class="hud-log-line">[regression] Validating 65 invariants... 0 regressions</div>
-                          <div class="hud-log-line">[network] Outbound egress check: 0.00 KB (local sandbox)</div>
-                          <div class="hud-log-line">[seal] sha256=d3b07384d113edec49eaa6238ad5ff00... VERIFIED</div>
-                          <div class="hud-log-line">[verdict] EXIT 0: PASS (MERGE-READY)</div>
+                          <div class="hud-log-line">[plan] target-size: &lt;button class="text-sm"&gt; (line 4)</div>
+                          <div class="hud-log-line">[seal] goal fingerprinted: sha256 a4c31ec3&hellip;</div>
+                          <div class="hud-log-line">[fix] + p-2 min-h-[24px] min-w-[24px]</div>
+                          <div class="hud-log-line">[verify] parses ok &middot; changed ok</div>
+                          <div class="hud-log-line">[verify] original failure gone (fixpoint ok)</div>
+                          <div class="hud-log-line">[verify] no new findings (no-regressions ok)</div>
+                          <div class="hud-log-line">[verify] goal fingerprint unchanged</div>
+                          <div class="hud-log-line">[write] patches/src__Checkout.jsx.diff</div>
+                          <div class="hud-log-line">[done] 1 repair(s), 1 merge-ready</div>
                           <div><span class="hud-cursor">&#9608;</span></div>
                         </div>
 
@@ -1664,8 +1643,8 @@
 
               <g transform="translate(580, 65)">
                 <rect width="90" height="50" rx="6" fill="#FFFFFF" stroke="#10B981" stroke-width="1.5"/>
-                <text x="45" y="24" text-anchor="middle" font-family="Geist, sans-serif" font-size="10" font-weight="600" fill="#09090B">SEALED</text>
-                <text x="45" y="38" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9" fill="#10B981">SHA-256 Receipt</text>
+                <text x="45" y="24" text-anchor="middle" font-family="Geist, sans-serif" font-size="10" font-weight="600" fill="#09090B">RECEIPT</text>
+                <text x="45" y="38" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9" fill="#10B981">+ patch file</text>
               </g>
 
               <circle cx="110" cy="90" r="3" fill="#09090B">
@@ -1679,7 +1658,7 @@
               </circle>
             </svg>
             <figcaption class="loop-caption" id="loop-caption">
-              Figure 1. Rendered pages enter Furnace through headless Chrome. The engine verifies what it can prove, heals only what it can verify, and seals a receipt for each merge-ready repair.
+              Figure 1. Rendered pages enter Furnace through headless Chrome. The engine checks what it can prove, proposes only fixes a separate verifier accepts, and writes a receipt and a patch file for each one. Your source files are not edited.
             </figcaption>
           </figure>
 
@@ -1702,9 +1681,9 @@
               <div class="row-card">
                 <div class="row-num">02</div>
                 <div class="row-content">
-                  <h3>Monotonic AST Auto-Remediation</h3>
+                  <h3>Fixes are checked, then saved as patch files</h3>
                   <p>
-                    When a repair is proposed, Furnace applies AST transformations, recompiles, and re-evaluates the page. If the original bug persists or if any new regression is introduced, the repair is rejected immediately and the source code is restored to pristine condition.
+                    Furnace rewrites the component's syntax tree in memory. A separate verifier then re-checks the changed file: it must still parse, the original problem must be gone, and no new problem may appear. Anything that fails is thrown away. Accepted fixes are written as patch files for you to review; your source files are never edited. This check works on the file itself: the page is not re-rendered in a browser during it.
                   </p>
                 </div>
               </div>
@@ -1722,9 +1701,9 @@
               <div class="row-card">
                 <div class="row-num">04</div>
                 <div class="row-content">
-                  <h3>Sealed Receipts &amp; Unknowns Ledger</h3>
+                  <h3>Receipts &amp; Unknowns Ledger</h3>
                   <p>
-                    Every merge-ready patch is sealed with a SHA-256 hash. Surfaces that cannot be definitively proven (e.g. unauthenticated portals or dynamic canvas) are quarantined as <strong>unknown</strong> and routed to humans.
+                    Every repair gets a receipt. Its goal is fingerprinted with SHA-256 before the fixer starts, so the fixer cannot quietly lower the bar. The fingerprint shows whether a receipt was edited; it is not a signature and does not prove who ran it. Surfaces that cannot be definitively proven (e.g. unauthenticated portals or dynamic canvas) are listed as <strong>unknown</strong> and routed to humans.
                   </p>
                 </div>
               </div>
@@ -1786,98 +1765,78 @@
           </div>
         </section>
 
-        <!-- IN PRODUCTION / BENCHMARKS -->
+        <!-- MEASURED: only numbers we can source -->
         <section class="section" id="production">
-          <div class="section-tag">In production</div>
-          <h2 class="section-title">Telemetry &amp; performance metrics</h2>
+          <div class="section-tag">Measured</div>
+          <h2 class="section-title">What we have actually measured</h2>
 
           <div class="proof">
             <div class="stat-card">
               <span class="stat-label">
-                Local Evaluation Latency
-                <small>Per surface run, stock Node 24</small>
+                Run time
+                <small>One repair run on a sample component, Windows laptop</small>
               </span>
-              <table class="ledger">
-                <thead>
-                  <tr>
-                    <th>Operation</th>
-                    <th>Runtime</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Chromium Headless Launch</td>
-                    <td>280ms</td>
-                  </tr>
-                  <tr>
-                    <td>CDP AX-Tree Extraction</td>
-                    <td>145ms</td>
-                  </tr>
-                  <tr>
-                    <td>AST Fixpoint Remediation</td>
-                    <td>22ms</td>
-                  </tr>
-                  <tr>
-                    <td>SHA-256 Seal Calculation</td>
-                    <td>1.4ms</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div class="stat-number">~10 s</div>
+              <p class="stat-sub">Wall-clock time including Node start-up. Browser checks on real pages take longer and depend on your app. No production benchmarks yet.</p>
             </div>
 
             <div class="stat-card">
               <span class="stat-label">
-                Regression Leakage Rate
-                <small>Verified across test suites</small>
+                Fixes that add a problem
+                <small>A rule, not a measured rate</small>
               </span>
-              <div class="stat-number">0.00%</div>
-              <p class="stat-sub">Strict monotonic verification rolls back any proposed patch that introduces new findings.</p>
+              <div class="stat-number">Rejected</div>
+              <p class="stat-sub">The verifier throws away any proposed fix that introduces a new finding. The rule is covered by tests; we have not yet measured it across many real projects.</p>
             </div>
 
             <div class="stat-card">
               <span class="stat-label">
-                Egress Privacy Boundary
-                <small>Outbound network traffic</small>
+                What leaves your machine
+                <small>Checked against the code</small>
               </span>
-              <div class="stat-number">0.00 KB</div>
-              <p class="stat-sub">Strictly local execution. Zero telemetry. Source code never leaves your workstation or CI runner.</p>
+              <div class="stat-number">No telemetry</div>
+              <p class="stat-sub">Runs send nothing to us and your code is never uploaded. Furnace only contacts the pages you tell it to check; installing downloads packages from npm and a copy of Chrome.</p>
             </div>
 
             <div class="stat-card">
               <span class="stat-label">
-                Unit Test Confidence
-                <small>Proving suite verification</small>
+                Test suites for this release
+                <small>v0.1.0-alpha.1</small>
               </span>
               <div class="stat-number">106/108</div>
-              <p class="stat-sub">35/35 Canon root tests and 71/73 Furnace engine tests passing on Windows &amp; Linux (2 environment-dependent skips: shell and symlink privileges).</p>
+              <p class="stat-sub">35/35 Canon tests and 71/73 Furnace tests passing (2 environment-dependent skips: shell and symlink privileges). Re-run on Windows on 2026-09-24; Linux checked in CI at release.</p>
             </div>
           </div>
         </section>
 
-        <!-- IMMUTABLE SPECIMEN RECEIPTS -->
+        <!-- REAL SAMPLE RECEIPT (furnace-out/receipts/repair-src__Checkout.jsx.json, trimmed) -->
         <section class="section" id="receipts">
-          <div class="section-tag">Verifiable Evidence</div>
-          <h2 class="section-title">Authentic production receipt</h2>
+          <div class="section-tag">Evidence</div>
+          <h2 class="section-title">A real receipt, trimmed</h2>
           <p style="font-size: 0.95rem; color: var(--ink-secondary); margin-bottom: 20px;">
-            Unedited execution receipt from a live pilot run against a third-party Next.js codebase. Note the monotonic fixpoint checks and SHA-256 seal.
+            Produced by running v0.1.0-alpha.1 on a small sample component (not a customer project) on 2026-09-24. Fields are copied from the JSON receipt and patch the run wrote; some fields are left out for length.
           </p>
 
           <div class="specimen-receipt-box">
             <div class="specimen-receipt-top">
-              <span>RECEIPT: repair-src__app___components__intro.tsx</span>
+              <span>RECEIPT: repair-src__Checkout.jsx</span>
               <span>HOST: LOCAL</span>
             </div>
-MERGE-READY · repair-src__app___components__intro.tsx
+MERGE-READY · repair-src__Checkout.jsx
 route=auto-fix · verdict=pass
+goal: Guarantee 24px interactive targets in src\Checkout.jsx
 checks: parses ok · changed ok · fixpoint ok · no-regressions ok
-seal: sha256=d3b07384d113edec49eaa6238ad5ff00c3b1a89c9e8210bf72c847d0 ... [VERIFIED]
+goal fingerprint (sha256): a4c31ec384209a8766cad6cd0c24078d9f192eb6877184148201604ab7e02df7
+fingerprint taken before the fix: yes
 
-FINDINGS MITIGATED:
-  - rule: target-size (interactive hit area increased from 32px to 44px)
-  - rule: token-pollution (arbitrary class 'p-[13px]' purged; 'p-3' restored)
+FINDING FIXED:
+  - rule: target-size (&lt;button class="text-sm"&gt;, line 4: added p-2 for 24px target)
 
-SUMMARY: 1 engine ran, 1 repair verified, 0 regressions introduced.
-EXIT: 0 (MERGE-READY)
+PATCH (written to furnace-out/patches/, source file not edited):
+-      &lt;button className="text-sm"&gt;Pay now&lt;/button&gt;
++      &lt;button className="text-sm p-2 min-h-[24px] min-w-[24px]"&gt;Pay now&lt;/button&gt;
+
+SUMMARY: 0 engine(s) ran; 1 repair(s), 1 merge-ready.
           </div>
         </section>
 
@@ -1887,8 +1846,20 @@ EXIT: 0 (MERGE-READY)
           <h2 class="section-title">What Furnace does not do</h2>
           <div class="signal-list">
             <div class="signal-item">
-              <div class="signal-name">Your app must be running — Furnace checks live pages, not source code</div>
+              <div class="signal-name">Page checks need your app running; Furnace does not start it for you</div>
               <span class="signal-badge">You run it</span>
+            </div>
+            <div class="signal-item">
+              <div class="signal-name">In this alpha, <code>furnace run</code> exits 0 even when checks fail, so it cannot block a CI build yet. Read the report instead. Fixed for the next release.</div>
+              <span class="signal-badge">Known issue</span>
+            </div>
+            <div class="signal-item">
+              <div class="signal-name">Fixes are verified on the changed file, not by re-rendering the page in a browser</div>
+              <span class="signal-badge">Scope</span>
+            </div>
+            <div class="signal-item">
+              <div class="signal-name">Receipt fingerprints show edits; they are not signatures and do not prove who ran the check</div>
+              <span class="signal-badge">Not a signature</span>
             </div>
             <div class="signal-item">
               <div class="signal-name">Login screens and payments need a human — flagged, never guessed</div>
@@ -1923,7 +1894,7 @@ EXIT: 0 (MERGE-READY)
           <div>
             <div class="foot-brand">furnace</div>
             <p style="line-height: 1.6; max-width: 38ch;">
-              The verification layer after the agent. Headless verification, proven repairs, and sealed receipts.
+              The verification layer after the agent. Headless verification, checked repairs, and receipts you can inspect.
             </p>
           </div>
 
@@ -1953,7 +1924,7 @@ EXIT: 0 (MERGE-READY)
   <script>
     const CLI_COMMANDS = {
       terminal: "mkdir furnace-alpha && cd furnace-alpha && curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.1.0-alpha.1/furnace-v0.1.0-alpha.1.tgz | tar xz && ./install.sh",
-      agent: "Install Furnace v0.1.0-alpha.1 and run a reality verification pass on this codebase: curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.1.0-alpha.1/furnace-v0.1.0-alpha.1.tgz | tar xz && ./install.sh"
+      agent: "Install Furnace v0.1.0-alpha.1 in its own folder OUTSIDE this codebase (never extract it into this repo: the archive contains its own package.json, README.md and src/), then run a reality verification pass on this codebase: mkdir -p ../furnace-alpha && cd ../furnace-alpha && curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.1.0-alpha.1/furnace-v0.1.0-alpha.1.tgz | tar xz && ./install.sh"
     };
 
     let activeCliMode = 'terminal';
