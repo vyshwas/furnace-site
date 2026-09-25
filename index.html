@@ -1314,7 +1314,7 @@
         <a href="#proof">Proof</a>
         <a href="#limits">Limits</a>
         <a href="https://github.com/vyshwas/furnace-dist" target="_blank" rel="noopener">GitHub ↗</a>
-        <a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.2.0-alpha.1" target="_blank" rel="noopener">Releases ↗</a>
+        <a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.2.1-alpha.1" target="_blank" rel="noopener">Releases ↗</a>
       </nav>
 
       <div class="rail-bottom">
@@ -1328,9 +1328,9 @@
     <main class="center-zone" id="hero">
 
       <!-- RELEASE NOTE -->
-      <a class="announcement-note" href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.2.0-alpha.1" target="_blank" rel="noopener">
+      <a class="announcement-note" href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.2.1-alpha.1" target="_blank" rel="noopener">
         <span class="note-live" aria-hidden="true"></span>
-        <span>Introducing furnace v0.2.0-alpha.1</span>
+        <span>Introducing furnace v0.2.1-alpha.1</span>
         <span class="note-cta">Release ↗</span>
       </a>
 
@@ -1358,7 +1358,7 @@
         <div class="cli-bar" id="cliBar" onclick="copyActiveCmd(event)" role="button" tabindex="0" title="Click anywhere to copy terminal install command" aria-label="Click to copy install command">
           <div class="cli-input-display">
             <span class="cli-prompt-symbol" id="cliPrompt">$</span>
-            <code class="cli-code-text" id="cliText" title="mkdir furnace-alpha &amp;&amp; cd furnace-alpha &amp;&amp; curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.2.0-alpha.1/furnace-v0.2.0-alpha.1.tgz | tar xz &amp;&amp; ./install.sh">mkdir furnace-alpha &amp;&amp; cd furnace-alpha &amp;&amp; curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.2.0-alpha.1/furnace-v0.2.0-alpha.1.tgz | tar xz &amp;&amp; ./install.sh</code>
+            <code class="cli-code-text" id="cliText" title="mkdir furnace-alpha &amp;&amp; cd furnace-alpha &amp;&amp; curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.2.1-alpha.1/furnace-v0.2.1-alpha.1.tgz | tar xz &amp;&amp; ./install.sh">mkdir furnace-alpha &amp;&amp; cd furnace-alpha &amp;&amp; curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.2.1-alpha.1/furnace-v0.2.1-alpha.1.tgz | tar xz &amp;&amp; ./install.sh</code>
           </div>
           <button class="cli-button" id="copyBtn" onclick="copyActiveCmd(event)" type="button" aria-label="Copy install command">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -1378,7 +1378,7 @@
           <span>·</span>
           <span>Zero telemetry in runs</span>
           <span>·</span>
-          <a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.2.0-alpha.1" target="_blank" rel="noopener" style="color: #FF6A00; text-decoration: none; font-weight: 500;">v0.2.0-alpha.1 ↗</a>
+          <a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.2.1-alpha.1" target="_blank" rel="noopener" style="color: #FF6A00; text-decoration: none; font-weight: 500;">v0.2.1-alpha.1 ↗</a>
         </div>
       </div>
 
@@ -1712,7 +1712,7 @@
                 <div class="row-content">
                   <h3>Launch check</h3>
                   <p>
-                    <code>furnace launch-check</code> reads your code for exposed secrets (including passwords written in as fallbacks), sign-in and per-user checks, admin access, abuse limits, trust in data the browser sends, unsafe input handling, and launch hygiene, and answers READY, NOT_READY, or UNKNOWN with the evidence. It can also probe a local or explicitly authorised staging URL. Code-reading checks look for patterns; anything they cannot establish is UNKNOWN, never a pass.
+                    <code>furnace launch-check</code> lists your app's server routes and checks each one: does it need a login, does it check the record belongs to the user, is an admin route limited to admins, does a route that calls a paid AI or email service have a rate limit. It also checks Supabase row-level security and Firebase rules, exposed secrets (including passwords written in as fallbacks), trust in data the browser sends, unsafe input handling, and launch hygiene, and answers READY, NOT_READY, or UNKNOWN with the route and line. It can also probe a local or explicitly authorised staging URL. Code-reading checks look for patterns; anything they cannot establish is UNKNOWN, never a pass.
                   </p>
                 </div>
               </div>
@@ -1810,10 +1810,10 @@
             <div class="stat-card">
               <span class="stat-label">
                 Test suites for this release
-                <small>v0.2.0-alpha.1</small>
+                <small>v0.2.1-alpha.1</small>
               </span>
-              <div class="stat-number">441/443</div>
-              <p class="stat-sub">35/35 Caliper tests and 406/408 Furnace tests passing (2 environment-dependent skips: shell and symlink privileges), plus a 40-check accuracy benchmark with 0 false passes. Run on Windows on 2026-09-24; not yet re-run on Linux for this release.</p>
+              <div class="stat-number">450/452</div>
+              <p class="stat-sub">35/35 Caliper tests and 415/417 Furnace tests passing (2 environment-dependent skips: shell and symlink privileges). Run on Windows on 2026-09-25; not yet re-run on Linux for this release. The launch check also has an 87-check accuracy benchmark, written by us alongside the code it tests, so it shows the checks do what we intended, not that they are right on your app. Our previous release scored 40 of 40 on its own benchmark and still called a broken test app READY.</p>
             </div>
           </div>
         </section>
@@ -1860,10 +1860,10 @@ RESULT: NEEDS WORK (exit 1) — 1 verified repair not yet applied (see patches/)
           <div class="specimen-receipt-box">
             <div class="specimen-receipt-top">
               <span>RELEASE KEY · Ed25519 · id 39d945dc02ce99f0</span>
-              <span>v0.2.0-alpha.1</span>
+              <span>v0.2.1-alpha.1</span>
             </div>
-archive: furnace-v0.2.0-alpha.1.tgz
-sha256:  9cd3e2ccb687f1cfdc870b421610ffdab80af7a36adc7d95c6f2d52cfa0b601e
+archive: furnace-v0.2.1-alpha.1.tgz
+sha256:  0bcf22cfa6eaee6c4d441ba18300a1c0eb7696b28097692e2d2af27b94ea31da
 
 -----BEGIN PUBLIC KEY-----
 MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
@@ -1928,7 +1928,7 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
           <div>
             <div style="font-weight: 600; color: var(--ink); margin-bottom: 10px;">Distribution</div>
             <ul class="foot-links">
-              <li><a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.2.0-alpha.1" target="_blank" rel="noopener">Release v0.2.0-alpha.1</a></li>
+              <li><a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.2.1-alpha.1" target="_blank" rel="noopener">Release v0.2.1-alpha.1</a></li>
               <li><a href="https://github.com/vyshwas/furnace-dist" target="_blank" rel="noopener">GitHub Repository</a></li>
               <li><a href="https://github.com/vyshwas/furnace-dist/issues" target="_blank" rel="noopener">Feedback &amp; Issues</a></li>
             </ul>
@@ -1951,8 +1951,8 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
 
   <script>
     const CLI_COMMANDS = {
-      terminal: "mkdir furnace-alpha && cd furnace-alpha && curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.2.0-alpha.1/furnace-v0.2.0-alpha.1.tgz | tar xz && ./install.sh",
-      agent: "Install Furnace v0.2.0-alpha.1 in its own folder OUTSIDE this codebase (never extract it into this repo: the archive contains its own package.json, README.md and src/), then run a reality verification pass on this codebase: mkdir -p ../furnace-alpha && cd ../furnace-alpha && curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.2.0-alpha.1/furnace-v0.2.0-alpha.1.tgz | tar xz && ./install.sh"
+      terminal: "mkdir furnace-alpha && cd furnace-alpha && curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.2.1-alpha.1/furnace-v0.2.1-alpha.1.tgz | tar xz && ./install.sh",
+      agent: "Install Furnace v0.2.1-alpha.1 in its own folder OUTSIDE this codebase (never extract it into this repo: the archive contains its own package.json, README.md and src/), then run a reality verification pass on this codebase: mkdir -p ../furnace-alpha && cd ../furnace-alpha && curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.2.1-alpha.1/furnace-v0.2.1-alpha.1.tgz | tar xz && ./install.sh"
     };
 
     let activeCliMode = 'terminal';
