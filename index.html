@@ -3,2029 +3,527 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Furnace — The verification layer after the agent</title>
-<meta name="description" content="Not another AI coding agent. Furnace checks what could break, repairs what it safely can, verifies the result, and tells you what still needs a human.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230A0B0E'/><path d='M30 70 L50 25 L70 70 Z' fill='none' stroke='%23FF5500' stroke-width='8' stroke-linejoin='round'/><circle cx='50' cy='56' r='6' fill='%23FFAA00'/></svg>">
-<meta property="og:title" content="Furnace — The verification layer after the agent">
-<meta property="og:description" content="AI builds fast. Furnace checks what could break, repairs what it safely can, verifies the result, and tells you what still needs a human.">
+<title>Furnace — AI wrote it. Furnace checks it.</title>
+<meta name="description" content="Run Furnace before you merge AI-written code. It fixes what is safe, flags what is not, and never fakes a pass.">
+<meta property="og:title" content="Furnace — AI wrote it. Furnace checks it.">
+<meta property="og:description" content="Run it before you merge. It fixes what is safe, flags what is not, and never fakes a pass.">
 <meta property="og:type" content="website">
-
-<!-- Geist & Geist Mono fonts -->
+<meta name="theme-color" content="#0B0A09">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230B0A09'/><path d='M30 70 L50 25 L70 70 Z' fill='none' stroke='%23FF5A1F' stroke-width='8' stroke-linejoin='round'/><circle cx='50' cy='56' r='6' fill='%23FFB020'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
   :root {
-    --bg-page: #F6F5F2;
-    --bg-card: #FFFFFF;
-    --bg-subtle: #FAFAFA;
-    --bg-muted: #F4F4F5;
+    /* palette: coal, bone, one accent (heat). Amber only marks "your call". */
+    --coal: #0B0A09;
+    --coal-2: #141210;
+    --bone: #F2EDE4;
+    --ash: #A39C92;
+    --ash-dim: #6F6961;
+    --line: rgba(242, 237, 228, 0.12);
+    --line-strong: rgba(242, 237, 228, 0.24);
+    --heat: #FF5A1F;
+    --heat-rgb: 255, 90, 31;
+    --amber: #FFB020;
+    --ok: #6EE7A8;
 
-    --ink: #0A0B0E;
-    --ink-secondary: #3E434C;
-    --ink-muted: #6E737D;
-    --ink-faint: #969DA8;
+    /* type: one sans, one mono. Four sizes carry the whole page. */
+    --sans: "Geist", -apple-system, "Segoe UI", sans-serif;
+    --mono: "Geist Mono", ui-monospace, Menlo, Consolas, monospace;
+    --fs-display: clamp(2.6rem, 6vw, 4.75rem);
+    --fs-h2: clamp(1.6rem, 3vw, 2.25rem);
+    --fs-body: 1.0625rem;
+    --fs-small: 0.875rem;
 
-    --line: #E4E4E7;
-    --line-subtle: #F4F4F5;
+    /* radius scale: pill, small, medium */
+    --r-pill: 999px;
+    --r-sm: 8px;
+    --r-md: 14px;
 
-    --accent-emerald: #10B981;
-    --accent-emerald-bg: rgba(16, 185, 129, 0.08);
-
-    --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-
-    --bezel-bg: linear-gradient(135deg, #444750 0%, #25282F 30%, #17181D 100%);
-    --screen-bg: #101216;
-    --screen-card: rgba(255, 255, 255, 0.032);
-    --screen-border: rgba(255, 255, 255, 0.08);
-
-    --amber-core: #FF6A00;
-    --amber-bright: #FFA438;
-    --amber-glow: rgba(255, 106, 0, 0.88);
-    --amber-deep: rgba(255, 70, 0, 0.45);
-
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 14px;
-    --radius-full: 9999px;
+    --gutter: clamp(20px, 5vw, 56px);
+    --measure: 1080px;
+    --section: clamp(72px, 10vw, 128px);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html {
-    font-size: 16px;
-    background-color: var(--bg-page);
-    color: var(--ink);
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-    scroll-behavior: smooth;
-  }
-
-  body {
-    background-color: var(--bg-page);
-    font-family: var(--font-sans);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow-x: hidden;
-  }
-
-  /* SUBTLE SCROLLBAR */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.16); border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.32); }
-
-  /* SKIP LINK */
-  .skip {
-    position: absolute;
-    top: -100px;
-    left: 20px;
-    background: var(--ink);
-    color: #fff;
-    padding: 8px 16px;
-    border-radius: var(--radius-sm);
-    z-index: 1000;
-    text-decoration: none;
-    font-size: 0.82rem;
-  }
-  .skip:focus { top: 20px; }
-
-  /* ============================================================
-     1. HERO VIEWPORT (3-ZONE MACHINED TITANIUM BEZEL DESIGN)
-     ============================================================ */
-  .viewport-canvas {
-    width: 100%;
-    min-height: 820px;
-    display: flex;
-    padding: 36px 36px 64px 44px;
-    gap: 36px;
-    background: radial-gradient(ellipse at 70% 40%, #ECE8DF 0%, #F6F5F2 65%);
-    position: relative;
-    box-sizing: border-box;
-    align-items: flex-start;
-  }
-
-  /* LEFT RAIL NAVIGATION */
-  .rail-zone {
-    width: 125px;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    padding-top: 2px;
-    z-index: 10;
-  }
-
-  .rail-brand {
-    font-size: 1.65rem;
-    font-weight: 750;
-    letter-spacing: -0.04em;
-    color: var(--ink);
-    text-decoration: none;
-    margin-bottom: 28px;
-    line-height: 1;
-    display: block;
-  }
-
-  .rail-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-bottom: 112px;
-  }
-
-  .rail-nav a {
-    font-size: 0.90rem;
-    font-weight: 450;
-    color: #26292E;
-    text-decoration: none;
-    letter-spacing: -0.01em;
-    transition: color 0.15s ease;
-    line-height: 1.35;
-  }
-
-  .rail-nav a:hover, .rail-nav a.active {
-    color: #000000;
-    font-weight: 600;
-  }
-
-  .rail-bottom {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    font-size: 0.82rem;
-    color: #2F333A;
-    font-weight: 450;
-    line-height: 1.35;
-  }
-
-  /* CENTER HERO EDITORIAL COLUMN */
-  .center-zone {
-    width: 455px;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    padding-top: 2px;
-    z-index: 10;
-  }
-
-  .announcement-note {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 3px 12px 3px 8px;
-    background: #EDEAE3;
-    border: 1px solid #DCD7CD;
-    border-radius: var(--radius-full);
-    font-size: 0.76rem;
-    color: var(--ink-secondary);
-    text-decoration: none;
-    margin-bottom: 20px;
-    width: fit-content;
-    transition: background 0.15s ease, border-color 0.15s ease;
-  }
-
-  .announcement-note:hover {
-    background: #E3DFD5;
-    border-color: #CFC9BD;
-  }
-
-  .note-live {
-    width: 6px;
-    height: 6px;
-    background: var(--accent-emerald);
-    border-radius: 50%;
-    box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
-  }
-
-  .note-cta {
-    font-weight: 600;
-    color: var(--ink);
-  }
-
-  .eyebrow {
-    font-size: 0.88rem;
-    font-weight: 500;
-    color: #26292F;
-    letter-spacing: -0.01em;
-    margin-bottom: 10px;
-  }
-
-  .monument-headline {
-    font-size: 2.50rem;
-    font-weight: 750;
-    line-height: 1.04;
-    letter-spacing: -0.045em;
-    color: #090A0D;
-    margin-bottom: 16px;
-  }
-
-  .lead-dek {
-    font-size: 0.835rem;
-    line-height: 1.45;
-    color: #3C414A;
-    max-width: 410px;
-    margin-bottom: 22px;
-    letter-spacing: -0.01em;
-  }
-
-  .feature-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-bottom: 30px;
-    max-width: 415px;
-  }
-
-  .feature-item h3 {
-    font-size: 0.875rem;
-    font-weight: 650;
-    color: #0A0B0E;
-    letter-spacing: -0.015em;
-    margin-bottom: 2px;
-  }
-
-  .feature-item p {
-    font-size: 0.775rem;
-    line-height: 1.38;
-    color: #4C515C;
-    letter-spacing: -0.005em;
-  }
-
-  /* HERO QUICK INSTALL BANNER */
-  .hero-install-banner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #EDEAE3;
-    border: 1px solid #DCD7CD;
-    border-radius: var(--radius-sm);
-    padding: 7px 12px;
-    margin-bottom: 24px;
-    cursor: pointer;
-    max-width: 440px;
-    transition: all 0.15s ease;
-  }
-
-  .hero-install-banner:hover {
-    background: #E4E0D7;
-    border-color: #CFC9BD;
-    transform: translateY(-1px);
-  }
-
-  .banner-left {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    overflow: hidden;
-    min-width: 0;
-  }
-
-  .banner-prompt {
-    color: #FF5500;
-    font-family: var(--font-mono);
-    font-weight: 700;
-    font-size: 0.76rem;
-    user-select: none;
-  }
-
-  .banner-code {
-    font-family: var(--font-mono);
-    font-size: 0.74rem;
-    color: #2F333A;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    user-select: all;
-  }
-
-  .banner-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    background: #FFFFFF;
-    border: 1px solid #D0C9BD;
-    border-radius: 4px;
-    padding: 2px 8px;
-    font-size: 0.70rem;
-    font-weight: 600;
-    color: #0A0B0E;
-    flex-shrink: 0;
-    transition: all 0.15s ease;
-  }
-
-  /* ONE-CLICK CLI COMMAND BAR */
-  .cli-section {
-    width: 100%;
-    max-width: 455px;
-    margin-top: 4px;
-    margin-bottom: 22px;
-  }
-
-  .cli-header-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 8px;
-    gap: 12px;
-  }
-
-  .cli-heading {
-    font-size: 1.05rem;
-    font-weight: 650;
-    letter-spacing: -0.02em;
-    color: #0A0B0E;
-    margin-bottom: 2px;
-  }
-
-  .cli-sub {
-    font-size: 0.765rem;
-    color: #555A64;
-    line-height: 1.35;
-  }
-
-  .cli-tabs {
-    display: flex;
-    background: #E8E5DC;
-    padding: 2px;
-    border-radius: 6px;
-    gap: 2px;
-    flex-shrink: 0;
-  }
-
-  .cli-tab-btn {
-    background: transparent;
-    border: none;
-    font-family: var(--font-sans);
-    font-size: 0.72rem;
-    font-weight: 500;
-    color: #5C616B;
-    padding: 3px 8px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.15s ease;
-  }
-
-  .cli-tab-btn.active {
-    background: #FFFFFF;
-    color: #0A0B0E;
-    font-weight: 600;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  }
-
-  .cli-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #15171A;
-    border: 1px solid #282B32;
-    border-radius: 9px;
-    padding: 7px 8px 7px 14px;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
-    position: relative;
-    cursor: pointer;
-    gap: 12px;
-  }
-
-  .cli-input-display {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--font-mono);
-    font-size: 0.76rem;
-    color: #8C929C;
-    overflow: hidden;
-    white-space: nowrap;
-    flex: 1;
-    min-width: 0;
-  }
-
-  .cli-prompt-symbol {
-    color: #FF6A00;
-    font-weight: 700;
-    font-size: 0.82rem;
-    user-select: none;
-    flex-shrink: 0;
-  }
-
-  .cli-code-text {
-    color: #E6E8ED;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    user-select: all;
-    display: block;
-  }
-
-  .cli-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: #FFFFFF;
-    color: #0A0B0E;
-    font-family: var(--font-sans);
-    font-size: 0.78rem;
-    font-weight: 650;
-    padding: 6px 14px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    flex-shrink: 0;
-  }
-
-  .cli-button:hover {
-    background: #EAEAEA;
-    transform: scale(1.02);
-  }
-
-  .cli-button:active {
-    transform: scale(0.98);
-  }
-
-  .cli-meta-hints {
-    font-family: var(--font-mono);
-    font-size: 0.69rem;
-    color: #727782;
-    margin-top: 8px;
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .cli-meta-hints span {
-    white-space: nowrap;
-  }
-
-  /* INTEGRATION MARKS ROW ("WORKS WITH") */
-  .plugs {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-top: 20px;
-    padding-top: 14px;
-    border-top: 1px solid rgba(0, 0, 0, 0.08);
-    width: 100%;
-    max-width: 455px;
-  }
-
-  .plugs-text {
-    font-size: 0.70rem;
-    font-weight: 600;
-    color: var(--ink-faint);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    flex-shrink: 0;
-  }
-
-  .plugs-row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    list-style: none;
-  }
-
-  .plugs-row li {
-    display: flex;
-    align-items: center;
-  }
-
-  .plug-icon {
-    height: 18px;
-    opacity: 0.72;
-    transition: opacity 0.15s ease;
-    color: #2F333A;
-  }
-
-  .plug-icon:hover { opacity: 1; }
-
-
-
-  /* RIGHT ZONE: THE HEAVY MACHINED DARK TITANIUM CONSOLE BEZEL */
-  .right-zone {
-    flex: 1;
-    min-width: 660px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    position: relative;
-    padding-top: 0px;
-  }
-
-  .titanium-bezel {
-    width: 100%;
-    max-width: 860px;
-    border-radius: 44px;
-    background: var(--bezel-bg);
-    position: relative;
-    padding: 20px 22px 24px 22px;
-    box-shadow:
-      0 0 0 1px #4C505A,
-      0 2px 0 1px rgba(255, 255, 255, 0.22) inset,
-      0 45px 100px -15px rgba(0, 0, 0, 0.75),
-      0 20px 45px -8px rgba(0, 0, 0, 0.55);
-    overflow: hidden;
-  }
-
-  .titanium-bezel::before {
-    content: "";
-    position: absolute;
-    inset: 1px;
-    border-radius: 43px;
-    border-top: 1.5px solid rgba(255, 255, 255, 0.28);
-    border-left: 1.5px solid rgba(255, 255, 255, 0.16);
-    pointer-events: none;
-    z-index: 5;
-  }
-
-  .bezel-recess {
-    position: relative;
-    width: 100%;
-    border-radius: 28px;
-    background: #0C0E12;
-    padding: 16px 16px 18px 16px;
-    box-shadow: inset 0 4px 16px rgba(0, 0, 0, 0.95);
-    border: 1px solid #1C1E23;
-  }
-
-  /* MOLTEN TUNGSTEN HEAT GLOW TRENCHES */
-  .heat-trench-top {
-    position: absolute;
-    top: 7px;
-    left: 44px;
-    right: 44px;
-    height: 4.5px;
-    border-radius: 3px;
-    background: linear-gradient(90deg, #FF3E00 0%, #FF7F00 20%, #FFAE00 50%, #FF7F00 80%, #FF3E00 100%);
-    box-shadow: 0 0 10px #FF5500, 0 0 24px var(--amber-glow), 0 0 45px var(--amber-deep);
-    z-index: 6;
-    animation: trenchShimmer 4s infinite alternate ease-in-out;
-  }
-
-  .heat-trench-left {
-    position: absolute;
-    top: 40px;
-    left: 7px;
-    bottom: 40px;
-    width: 4.5px;
-    border-radius: 3px;
-    background: linear-gradient(180deg, #FF3E00 0%, #FF8500 35%, #FFA800 65%, #FF3E00 100%);
-    box-shadow: 0 0 10px #FF5500, 0 0 24px var(--amber-glow), 0 0 45px var(--amber-deep);
-    z-index: 6;
-    animation: trenchShimmer 4s infinite alternate-reverse ease-in-out;
-  }
-
-  .heat-trench-bottom {
-    position: absolute;
-    bottom: 7px;
-    left: 44px;
-    right: 44px;
-    height: 3.5px;
-    border-radius: 2px;
-    background: linear-gradient(90deg, #FF3E00 0%, #FF7700 50%, #FF3E00 100%);
-    box-shadow: 0 0 8px #FF5500, 0 0 20px var(--amber-glow);
-    z-index: 6;
-    opacity: 0.9;
-  }
-
-  @keyframes trenchShimmer {
-    0% { opacity: 0.85; filter: brightness(0.95); }
-    100% { opacity: 1; filter: brightness(1.22); }
-  }
-
-  /* INNER SCREEN DISPLAY */
-  .screen-chamber {
-    position: relative;
-    width: 100%;
-    border-radius: 18px;
-    background: var(--screen-bg);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    padding: 20px 24px 22px 24px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    gap: 13px;
-  }
-
-  .screen-thermal-video {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.14;
-    filter: sepia(1) saturate(5) hue-rotate(-25deg) contrast(1.2) brightness(0.75);
-    mix-blend-mode: screen;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  .screen-glass-shroud {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 90% 10%, rgba(255, 106, 0, 0.08) 0%, transparent 65%),
-                linear-gradient(180deg, rgba(16, 18, 22, 0.65) 0%, rgba(16, 18, 22, 0.92) 100%);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    pointer-events: none;
-    z-index: 2;
-  }
-
-  .screen-content {
-    position: relative;
-    z-index: 3;
-    display: flex;
-    flex-direction: column;
-    gap: 13px;
-  }
-
-  /* CARD 1: SHA-256 FINGERPRINT OF THE REPAIR GOAL */
-  .receipt-card {
-    background: var(--screen-card);
-    border: 1px solid var(--screen-border);
-    border-radius: 9px;
-    padding: 14px 18px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    backdrop-filter: blur(12px);
-  }
-
-  .receipt-left {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-
-  .receipt-title {
-    font-size: 0.815rem;
-    font-weight: 500;
-    color: #E6E8ED;
-    letter-spacing: -0.01em;
-  }
-
-  .receipt-hash {
-    font-family: var(--font-mono);
-    font-size: 0.735rem;
-    color: #9298A3;
-    letter-spacing: -0.005em;
-  }
-
-  .receipt-seal-badge {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2px;
-    flex-shrink: 0;
-    padding-left: 14px;
-  }
-
-  .seal-icon-box {
-    width: 26px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .seal-text {
-    font-size: 0.63rem;
-    font-weight: 500;
-    color: #9DA3AE;
-    letter-spacing: 0.02em;
-  }
-
-  /* CARD 2: VERIFIER CHECKS */
-  .proof-card {
-    background: var(--screen-card);
-    border: 1px solid var(--screen-border);
-    border-radius: 9px;
-    padding: 14px 18px 16px 18px;
-    display: flex;
-    flex-direction: column;
-    backdrop-filter: blur(12px);
-  }
-
-  .proof-title {
-    font-size: 0.815rem;
-    font-weight: 500;
-    color: #E6E8ED;
-    letter-spacing: -0.01em;
-    margin-bottom: 10px;
-  }
-
-  .proof-body {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    min-height: 105px;
-  }
-
-  .tree-diagram {
-    flex: 1.15;
-    height: 105px;
-  }
-
-  .math-formula-box {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .check-list {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    font-family: var(--font-mono);
-    font-size: 0.71rem;
-    line-height: 1.45;
-    color: #9298A2;
-  }
-
-  .check-row {
-    display: flex;
-    gap: 10px;
-    align-items: baseline;
-  }
-
-  .check-ok {
-    color: #34D399;
-    font-weight: 600;
-    flex-shrink: 0;
-    width: 2ch;
-  }
-
-  /* CARD 3: TERMINAL STATUS HUD */
-  .hud-card {
-    padding: 2px 2px 0 2px;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .hud-title {
-    font-size: 0.815rem;
-    font-weight: 500;
-    color: #E6E8ED;
-    letter-spacing: -0.01em;
-    margin-bottom: 10px;
-  }
-
-  .hud-grid {
-    display: grid;
-    grid-template-columns: 140px 1fr;
-    gap: 20px;
-    font-family: var(--font-mono);
-    font-size: 0.71rem;
-    line-height: 1.54;
-    color: #9298A2;
-  }
-
-  .hud-left {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .hud-row {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .hud-row .lbl { color: #7E848E; }
-  .hud-row .val { color: #CFD4DC; font-weight: 500; }
-
-  .hud-right {
-    display: flex;
-    flex-direction: column;
-    color: #8C929D;
-    overflow: hidden;
-  }
-
-  .hud-log-line {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .hud-cursor {
-    display: inline-block;
-    color: #E1E5EC;
-    margin-top: 1px;
-    animation: cursorBlink 0.9s infinite;
-  }
-
-  @keyframes cursorBlink {
-    0%, 49% { opacity: 1; }
-    50%, 100% { opacity: 0; }
-  }
-
-  /* ============================================================
-     2. THE EXTENDED DOCUMENTATION & SYSTEM SPECIFICATIONS
-     ============================================================ */
-  .content-wrapper {
-    background: #FFFFFF;
-    border-top: 1px solid var(--line);
-    padding: 72px 48px 120px 48px;
-    position: relative;
-    z-index: 10;
-  }
-
-  .content-container {
-    max-width: 1080px;
-    margin: 0 auto;
-    display: flex;
-    gap: 64px;
-  }
-
-  /* SUB-RAIL TABLE OF CONTENTS */
-  .content-toc {
-    width: 200px;
-    flex-shrink: 0;
-    position: sticky;
-    top: 40px;
-    height: fit-content;
-  }
-
-  .toc-title {
-    font-size: 0.74rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--ink-faint);
-    margin-bottom: 14px;
-  }
-
-  .toc-links {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    border-left: 1px solid var(--line);
-    padding-left: 14px;
-  }
-
-  .toc-links a {
-    color: var(--ink-muted);
-    font-size: 0.84rem;
-    text-decoration: none;
-    transition: color 0.15s ease;
-    line-height: 1.4;
-  }
-
-  .toc-links a:hover, .toc-links a.active {
-    color: var(--ink);
-    font-weight: 600;
-  }
-
-  /* PRIMARY READING COLUMN */
-  .reading-col {
-    flex: 1;
-    min-width: 0;
-  }
-
-  /* ANIMATED CIRCUIT FIGURE */
-  figure.loop {
-    margin: 0 0 64px 0;
-    background: var(--bg-subtle);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-md);
-    padding: 24px;
-    overflow: hidden;
-  }
-
-  .loop-canvas {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-
-  figcaption.loop-caption {
-    font-size: 0.81rem;
-    color: var(--ink-muted);
-    margin-top: 14px;
-    line-height: 1.5;
-  }
-
-  /* EDITORIAL MEMO */
-  article.memo {
-    margin-bottom: 72px;
-    font-size: 1.05rem;
-    line-height: 1.7;
-    color: var(--ink-secondary);
-  }
-
-  article.memo p {
-    margin-bottom: 20px;
-  }
-
-  article.memo p strong {
-    color: var(--ink);
-    font-weight: 600;
-  }
-
-  article.memo p.beat {
-    font-size: 1.32rem;
-    font-weight: 500;
-    letter-spacing: -0.025em;
-    color: var(--ink);
-    margin: 32px 0 24px;
-    line-height: 1.35;
-  }
-
-  /* SECTIONS */
-  section.section {
-    padding-top: 48px;
-    margin-bottom: 72px;
-    border-top: 1px solid var(--line);
-  }
-
-  .section-tag {
-    font-family: var(--font-mono);
-    font-size: 0.74rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--ink-faint);
-    margin-bottom: 12px;
-  }
-
-  h2.section-title {
-    font-size: 1.65rem;
-    font-weight: 600;
-    letter-spacing: -0.03em;
-    color: var(--ink);
-    margin-bottom: 24px;
-  }
-
-  /* WHAT WE DO ARCHITECTURE CARDS */
-  .rows {
-    display: grid;
-    gap: 16px;
-    margin-top: 24px;
-  }
-
-  .row-card {
-    background: var(--bg-card);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-md);
-    padding: 24px;
-    display: grid;
-    grid-template-columns: 36px 1fr;
-    gap: 16px;
-    transition: border-color 0.15s ease;
-  }
-
-  .row-card:hover {
-    border-color: #A1A1AA;
-  }
-
-  .row-num {
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-    color: var(--ink-faint);
-    padding-top: 2px;
-  }
-
-  .row-content h3 {
-    font-size: 1.05rem;
-    font-weight: 600;
-    color: var(--ink);
-    margin-bottom: 6px;
-  }
-
-  .row-content p {
-    font-size: 0.92rem;
-    color: var(--ink-secondary);
-    line-height: 1.6;
-  }
-
-  /* COMPLIANCE SIGNALS PASS */
-  .compliance-box {
-    background: var(--bg-subtle);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-md);
-    padding: 24px;
-    margin-top: 24px;
-  }
-
-  .compliance-disclaimer {
-    font-size: 0.78rem;
-    color: var(--ink-muted);
-    line-height: 1.5;
-    background: var(--bg-card);
-    border-left: 3px solid var(--ink);
-    padding: 12px 14px;
-    margin-bottom: 20px;
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  }
-
-  .signal-list {
-    display: grid;
-    gap: 12px;
-  }
-
-  .signal-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 16px;
-    background: var(--bg-card);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-sm);
-  }
-
-  .signal-name {
-    font-size: 0.88rem;
-    font-weight: 550;
-    color: var(--ink);
-  }
-
-  .signal-badge {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    font-weight: 600;
-    padding: 3px 8px;
-    border-radius: 4px;
-    background: var(--bg-muted);
-    color: var(--ink-secondary);
-    border: 1px solid var(--line);
-  }
-
-  /* BENCHMARKS & LATENCY LEDGER */
-  .proof {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    margin-top: 24px;
-  }
-
-  .stat-card {
-    background: var(--bg-card);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-md);
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  .stat-label {
-    font-size: 0.78rem;
-    font-weight: 500;
-    color: var(--ink-muted);
-    margin-bottom: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
-
-  .stat-label small {
-    font-size: 0.72rem;
-    color: var(--ink-faint);
-  }
-
-  .stat-number {
-    font-size: 2.2rem;
-    font-weight: 600;
-    letter-spacing: -0.04em;
-    color: var(--ink);
-    line-height: 1;
-  }
-
-  .stat-sub {
-    font-size: 0.78rem;
-    color: var(--ink-muted);
-    margin-top: 8px;
-  }
-
-  table.ledger {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.84rem;
-    margin-top: 12px;
-  }
-
-  table.ledger th, table.ledger td {
-    padding: 8px 0;
-    text-align: left;
-    border-bottom: 1px solid var(--line-subtle);
-  }
-
-  table.ledger th {
-    color: var(--ink-faint);
-    font-weight: 500;
-    font-size: 0.72rem;
-    text-transform: uppercase;
-  }
-
-  table.ledger td {
-    color: var(--ink);
-    font-family: var(--font-mono);
-  }
-
-  /* SPECIMEN RECEIPTS */
-  .specimen-receipt-box {
-    background: #0C0E12;
-    color: #A1A1AA;
-    border: 1px solid #27272A;
-    border-radius: var(--radius-md);
-    padding: 20px;
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    line-height: 1.6;
-    overflow-x: auto;
-    white-space: pre-wrap;
-    margin-top: 16px;
-  }
-
-  .specimen-receipt-top {
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid #27272A;
-    padding-bottom: 10px;
-    margin-bottom: 12px;
-    color: #71717A;
-    font-size: 0.72rem;
-  }
-
-  /* COPY-HIERARCHY PASS: positioning strip, solo hero, plain prose, final CTA */
-  .viewport-canvas.solo .center-zone {
-    width: 640px;
-    max-width: 100%;
-  }
-
-  .viewport-canvas.solo .cli-section,
-  .viewport-canvas.solo .plugs {
-    max-width: 640px;
-  }
-
-  .strip-band {
-    background: #0A0B0E;
-    color: #F6F5F2;
-    text-align: center;
-    padding: 26px 24px;
-    font-size: 1.25rem;
-    font-weight: 650;
-    letter-spacing: -0.02em;
-    position: relative;
-    z-index: 10;
-  }
-
-  .strip-band small {
-    display: block;
-    margin-top: 6px;
-    font-size: 0.78rem;
-    font-weight: 450;
-    letter-spacing: 0;
-    color: #A1A1AA;
-  }
-
-  .plain-prose {
-    font-size: 0.95rem;
-    line-height: 1.65;
-    color: var(--ink-secondary);
-    max-width: 68ch;
-    margin-bottom: 16px;
-  }
-
-  .plain-prose strong {
-    color: var(--ink);
-  }
-
-  .try-wrap {
-    text-align: center;
-    padding: 8px 0;
-  }
-
-  .try-wrap .section-title {
-    margin-bottom: 20px;
-  }
-
-  .try-wrap .cli-button {
-    text-decoration: none;
-    font-size: 0.9rem;
-    padding: 12px 26px;
-  }
-
-  /* FOOTER */
-  footer.foot {
-    border-top: 1px solid var(--line);
-    padding-top: 48px;
-    margin-top: 64px;
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 32px;
-    font-size: 0.84rem;
-    color: var(--ink-muted);
-  }
-
-  .foot-brand {
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: 8px;
-    letter-spacing: -0.02em;
-  }
-
-  .foot-links {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .foot-links a {
-    color: var(--ink-muted);
-    text-decoration: none;
-    transition: color 0.15s ease;
-  }
-
-  .foot-links a:hover {
-    color: var(--ink);
-  }
-
-  /* RESPONSIVE BREAKPOINTS */
-  @media (max-width: 1240px) {
-    .viewport-canvas {
-      flex-direction: column;
-      padding: 24px;
-      gap: 32px;
-    }
-    .rail-zone {
-      width: 100%;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .rail-nav {
-      flex-direction: row;
-      gap: 16px;
-      margin-bottom: 0;
-    }
-    .rail-bottom {
-      display: none;
-    }
-    .center-zone {
-      width: 100%;
-      max-width: 600px;
-    }
-    .right-zone {
-      min-width: auto;
-      width: 100%;
-      padding-top: 0;
-    }
-    .content-container {
-      flex-direction: column;
-    }
-    .content-toc {
-      display: none;
-    }
-    .proof {
-      grid-template-columns: 1fr;
-    }
-    footer.foot {
-      grid-template-columns: 1fr;
-    }
+  html { background: var(--coal); color: var(--bone); -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+  body { background: var(--coal); font-family: var(--sans); font-size: var(--fs-body); line-height: 1.55; }
+  a { color: inherit; }
+  code { font-family: var(--mono); }
+  ::selection { background: var(--heat); color: var(--coal); }
+  :focus-visible { outline: 2px solid var(--heat); outline-offset: 3px; border-radius: 4px; }
+
+  .wrap { max-width: var(--measure); margin: 0 auto; padding: 0 var(--gutter); }
+  .skip { position: absolute; left: 16px; top: -80px; z-index: 100; background: var(--heat); color: var(--coal); padding: 10px 16px; border-radius: var(--r-pill); font-weight: 600; text-decoration: none; }
+  .skip:focus { top: 16px; }
+
+  .eyebrow { font: 500 0.75rem var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ash); }
+  h2 { font-size: var(--fs-h2); font-weight: 600; letter-spacing: -0.03em; line-height: 1.15; }
+  .lede { color: var(--ash); max-width: 52ch; margin-top: 16px; }
+
+  /* ===== buttons ===== */
+  .btn {
+    display: inline-flex; align-items: center; min-height: 44px; padding: 0 22px;
+    border-radius: var(--r-pill); border: 1px solid var(--line-strong); background: transparent;
+    color: var(--bone); font: 600 0.9rem var(--sans); text-decoration: none; cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .btn:hover { background: var(--bone); color: var(--coal); border-color: var(--bone); }
+  .btn--primary { background: var(--heat); border-color: var(--heat); color: var(--coal); }
+  .btn--primary:hover { background: var(--bone); border-color: var(--bone); }
+
+  /* ===== nav ===== */
+  .nav { position: sticky; top: 0; z-index: 50; background: rgba(11, 10, 9, 0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+  .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+  .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 700; letter-spacing: -0.03em; font-size: 1.1rem; }
+  .brand svg { width: 26px; height: 26px; }
+  .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; font-size: var(--fs-small); }
+  .nav-links a:not(.btn) { color: var(--ash); text-decoration: none; transition: color 0.2s ease; }
+  .nav-links a:not(.btn):hover { color: var(--bone); }
+  .nav-links .btn { min-height: 38px; padding: 0 18px; }
+
+  /* ===== hero ===== */
+  .hero { padding: clamp(64px, 9vw, 112px) 0 var(--section); }
+  .hero h1 { font-size: var(--fs-display); font-weight: 700; letter-spacing: -0.045em; line-height: 1.02; margin-top: 20px; max-width: 14ch; }
+  .hero h1 .dim { color: var(--ash-dim); }
+  .hero h1 .accent { color: var(--heat); }
+  .hero .lede { font-size: 1.25rem; max-width: 40ch; margin-top: 24px; }
+  .hero .lede b { color: var(--bone); font-weight: 500; }
+  .hero .install { margin-top: 40px; max-width: 720px; }
+
+  /* ===== install bar ===== */
+  .install-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
+  .install-meta { font: 0.75rem var(--mono); color: var(--ash-dim); }
+  .tabs { display: inline-flex; padding: 3px; border-radius: var(--r-pill); border: 1px solid var(--line); }
+  .tab { border: 0; background: transparent; color: var(--ash); font: 500 0.78rem var(--sans); padding: 6px 14px; border-radius: var(--r-pill); cursor: pointer; transition: background 0.2s ease, color 0.2s ease; }
+  .tab[aria-selected="true"] { background: var(--bone); color: var(--coal); }
+  .cmd { display: flex; align-items: center; gap: 12px; padding: 8px 8px 8px 20px; border-radius: var(--r-pill); background: var(--coal-2); border: 1px solid var(--line-strong); }
+  .cmd-prompt { font: 600 0.85rem var(--mono); color: var(--heat); flex-shrink: 0; }
+  .cmd-text { flex: 1; min-width: 0; font: 0.82rem var(--mono); color: var(--bone); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .copy { flex-shrink: 0; display: inline-flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 20px; border: 0; border-radius: var(--r-pill); background: var(--heat); color: var(--coal); font: 600 0.88rem var(--sans); cursor: pointer; transition: background 0.2s ease; }
+  .copy:hover { background: var(--bone); }
+  .copy svg { width: 14px; height: 14px; }
+  .copy.done { background: var(--ok); }
+  .copy-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* ===== sections ===== */
+  .section { padding: var(--section) 0; border-top: 1px solid var(--line); }
+  .section-head { margin-bottom: clamp(36px, 5vw, 56px); }
+  .section-head h2 { margin-top: 12px; max-width: 24ch; }
+
+  /* ===== demo ===== */
+  .demo { padding-bottom: var(--section); }
+  .win { border-radius: var(--r-md); border: 1px solid var(--line-strong); background: var(--coal-2); overflow: clip; }
+  .win-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--line); font: 0.78rem var(--mono); color: var(--ash); }
+  .win-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); }
+  .pane { padding: 22px 24px 26px; min-width: 0; }
+  .pane + .pane { border-left: 1px solid var(--line); background: var(--coal); }
+  .pane-label { font: 0.7rem var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ash-dim); margin-bottom: 14px; }
+  .code { font: 0.85rem/1.9 var(--mono); }
+  .ln { display: grid; grid-template-columns: 28px 1fr; white-space: pre-wrap; }
+  .ln b { font-weight: 400; color: var(--ash-dim); }
+  .ln .k { color: var(--amber); }
+  .ln.flag { background: rgba(var(--heat-rgb), 0.12); box-shadow: -12px 0 0 rgba(var(--heat-rgb), 0.12), -14px 0 0 var(--heat); }
+  .callout { margin-top: 18px; padding: 14px 16px; border-radius: var(--r-sm); border: 1px solid rgba(var(--heat-rgb), 0.45); font-size: var(--fs-small); line-height: 1.5; }
+  .callout .sev { display: block; font: 600 0.68rem var(--mono); letter-spacing: 0.1em; color: var(--heat); margin-bottom: 6px; }
+  .callout p + p { margin-top: 6px; color: var(--ash); }
+  .callout b { color: var(--ok); font-weight: 500; }
+
+  .out { font: 0.8rem/1.75 var(--mono); color: var(--ash); }
+  .out .verdict { color: var(--heat); font-weight: 500; margin-bottom: 16px; }
+  .out .sec { color: var(--bone); margin-top: 14px; font-size: 0.72rem; letter-spacing: 0.06em; }
+  .out .row { display: grid; grid-template-columns: 9ch 1fr; gap: 12px; }
+  .out .crit { color: var(--heat); font-weight: 500; }
+  .out .high { color: var(--amber); font-weight: 500; }
+  .out .low { color: var(--ash); font-weight: 500; }
+  .out .passed { margin-top: 16px; color: var(--ash-dim); }
+  .out .passed span { color: var(--ok); }
+  .demo-note { margin-top: 14px; font: 0.75rem var(--mono); color: var(--ash-dim); }
+
+  /* ===== four answers ===== */
+  .answers { list-style: none; border-top: 1px solid var(--line); }
+  .answers li { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 24px; align-items: baseline; padding: 24px 0; border-bottom: 1px solid var(--line); }
+  .answers h3 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.03em; }
+  .answers li:nth-child(2) h3 { color: var(--heat); }
+  .answers li:nth-child(3) h3 { color: var(--amber); }
+  .answers li:nth-child(4) h3 { color: var(--ash); }
+  .answers p { color: var(--ash); }
+  .answers p b { color: var(--bone); font-weight: 500; }
+
+  /* ===== steps ===== */
+  .steps { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 4vw, 48px); }
+  .step-n { font: 500 0.8rem var(--mono); color: var(--heat); }
+  .steps h3 { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; margin: 12px 0 8px; }
+  .steps p { color: var(--ash); }
+  .steps code { display: block; margin-top: 16px; padding: 12px 14px; border-radius: var(--r-sm); background: var(--coal-2); border: 1px solid var(--line); font-size: 0.75rem; color: var(--ash); word-break: break-all; }
+
+  /* ===== proof ===== */
+  .numbers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(20px, 3vw, 40px); }
+  .num-v { font-size: clamp(2.2rem, 4vw, 3.25rem); font-weight: 600; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .num-v small { font-size: 0.45em; color: var(--ash-dim); letter-spacing: 0; font-weight: 500; }
+  .numbers p { margin-top: 12px; color: var(--ash); font-size: var(--fs-small); max-width: 24ch; }
+  .numbers p b { color: var(--bone); font-weight: 500; }
+
+  /* ===== details ===== */
+  .fine-list { border-top: 1px solid var(--line); max-width: 760px; }
+  details { border-bottom: 1px solid var(--line); }
+  summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 22px 0; font-size: 1.15rem; font-weight: 500; letter-spacing: -0.02em; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; font: 400 1.4rem var(--mono); color: var(--ash); transition: transform 0.25s ease; }
+  details[open] summary::after { transform: rotate(45deg); color: var(--heat); }
+  summary:hover { color: var(--heat); }
+  .fine-body { padding: 0 0 28px; color: var(--ash); font-size: 0.95rem; }
+  .fine-body ul { list-style: none; display: grid; gap: 10px; }
+  .fine-body li { display: grid; grid-template-columns: 18px 1fr; }
+  .fine-body li::before { content: "—"; color: var(--ash-dim); }
+  .fine-body pre { margin-top: 14px; padding: 16px; border-radius: var(--r-sm); background: var(--coal-2); border: 1px solid var(--line); font: 0.75rem/1.65 var(--mono); color: var(--bone); white-space: pre-wrap; word-break: break-all; }
+  .fine-body p + p, .fine-body p + pre { margin-top: 12px; }
+  .fine-body code { color: var(--bone); font-size: 0.85em; }
+  .fine-body .minus { color: var(--heat); }
+  .fine-body .plus { color: var(--ok); }
+
+  /* ===== closing ===== */
+  .closing { padding: var(--section) 0 40px; border-top: 1px solid var(--line); }
+  .closing h2 { font-size: var(--fs-display); font-weight: 700; letter-spacing: -0.045em; line-height: 1.02; max-width: 12ch; }
+  .closing .install { max-width: 720px; margin-top: 40px; }
+  .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; margin-top: clamp(64px, 9vw, 112px); padding-top: 22px; border-top: 1px solid var(--line); font: 0.75rem var(--mono); color: var(--ash-dim); }
+  .foot ul { list-style: none; display: flex; flex-wrap: wrap; gap: 24px; }
+  .foot a { text-decoration: none; }
+  .foot a:hover { color: var(--bone); }
+
+  /* ===== responsive ===== */
+  @media (max-width: 860px) {
+    .nav-links li.hide-sm { display: none; }
+    .win-body, .answers li, .steps, .numbers { grid-template-columns: minmax(0, 1fr); }
+    .pane + .pane { border-left: 0; border-top: 1px solid var(--line); }
+    .answers li { gap: 6px; }
+    .numbers { gap: 32px; }
+  }
+  @media (max-width: 560px) {
+    .copy span { display: none; }
+    .copy { padding: 0 14px; }
+    .cmd { padding-left: 16px; }
+    .out .row { grid-template-columns: 8ch 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { transition-duration: 0.001ms !important; }
   }
 </style>
 </head>
-
 <body>
+<a class="skip" href="#main">Skip to content</a>
 
-  <a class="skip" href="#hero">Skip to hero content</a>
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Furnace home">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="var(--coal-2)"/><path d="M30 70 L50 25 L70 70 Z" fill="none" stroke="var(--heat)" stroke-width="8" stroke-linejoin="round"/><circle cx="50" cy="56" r="6" fill="var(--amber)"/></svg>
+      furnace
+    </a>
+    <ul class="nav-links">
+      <li class="hide-sm"><a href="#how">How it works</a></li>
+      <li class="hide-sm"><a href="#proof">Proof</a></li>
+      <li class="hide-sm"><a href="https://github.com/vyshwas/furnace-dist" target="_blank" rel="noopener">GitHub ↗</a></li>
+      <li><a class="btn btn--primary" href="#get">Install</a></li>
+    </ul>
+  </div>
+</header>
 
-  <!-- 1. HERO + POSITIONING -->
-  <section class="viewport-canvas solo">
+<main id="main">
 
-    <!-- LEFT RAIL -->
-    <aside class="rail-zone" aria-label="Primary navigation doors">
-      <a href="#hero" class="rail-brand">Furnace</a>
-      <nav class="rail-nav" aria-label="Doors">
-        <a href="#hero" class="active">Home</a>
-        <a href="#why">Why Furnace</a>
-        <a href="#how">How it works</a>
-        <a href="#outcomes">Outcomes</a>
-        <a href="#proof">Proof</a>
-        <a href="#limits">Limits</a>
-        <a href="https://github.com/vyshwas/furnace-dist" target="_blank" rel="noopener">GitHub ↗</a>
-        <a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.4.0-alpha.1" target="_blank" rel="noopener">Releases ↗</a>
-      </nav>
+  <!-- 1. PROMISE -->
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <div class="wrap">
+      <p class="eyebrow">v0.4.0 alpha · free · <a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.4.0-alpha.1" target="_blank" rel="noopener">release notes ↗</a></p>
+      <h1 id="hero-title"><span class="dim">AI wrote it.</span><br>Furnace <span class="accent">checks</span> it.</h1>
+      <p class="lede">Run it before you launch. It finds the holes, <b>tells you how to fix each one</b>, and never fakes a pass.</p>
 
-      <div class="rail-bottom">
-        <div>Geist Mono</div>
-        <div>Geist Sans</div>
-        <div>Node.js 24+</div>
-      </div>
-    </aside>
-
-    <!-- CENTER HERO COLUMN -->
-    <main class="center-zone" id="hero">
-
-      <!-- RELEASE NOTE -->
-      <a class="announcement-note" href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.4.0-alpha.1" target="_blank" rel="noopener">
-        <span class="note-live" aria-hidden="true"></span>
-        <span>Introducing furnace v0.4.0-alpha.1</span>
-        <span class="note-cta">Release ↗</span>
-      </a>
-
-      <!-- POSITIONING HEADLINE -->
-      <h1 class="monument-headline">Not another AI coding agent.<br>Furnace is the verification layer after the agent.</h1>
-
-      <!-- SUPPORTING LINE -->
-      <p class="lead-dek">
-        AI builds fast. Furnace checks what could break, repairs what it safely can, verifies the result, and tells you what still needs a human.
-      </p>
-
-      <!-- 2. COPY INSTALL COMMAND -->
-      <div class="cli-section" id="cli">
-        <div class="cli-header-bar">
-          <div>
-            <h2 class="cli-heading">Copy install command</h2>
-            <p class="cli-sub">Runs locally. No signup. Tested on Windows.</p>
-          </div>
-          <div class="cli-tabs" role="tablist" aria-label="Command mode">
-            <button class="cli-tab-btn active" id="tabTerminal" onclick="setCliMode('terminal')" role="tab" aria-selected="true" aria-controls="cliText">Terminal</button>
-            <button class="cli-tab-btn" id="tabAgent" onclick="setCliMode('agent')" role="tab" aria-selected="false" aria-controls="cliText">Coding Agent</button>
+      <div class="install" data-install>
+        <div class="install-top">
+          <span class="install-meta">Runs on your machine · No signup · Node 24+</span>
+          <div class="tabs" role="tablist" aria-label="Install for">
+            <button class="tab" role="tab" aria-selected="true" data-mode="terminal">Terminal</button>
+            <button class="tab" role="tab" aria-selected="false" data-mode="agent">AI assistant</button>
           </div>
         </div>
-
-        <div class="cli-bar" id="cliBar" onclick="copyActiveCmd(event)" role="button" tabindex="0" title="Click anywhere to copy terminal install command" aria-label="Click to copy install command">
-          <div class="cli-input-display">
-            <span class="cli-prompt-symbol" id="cliPrompt">$</span>
-            <code class="cli-code-text" id="cliText" title="mkdir furnace-alpha &amp;&amp; cd furnace-alpha &amp;&amp; curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.4.0-alpha.1/furnace-v0.4.0-alpha.1.tgz | tar xz &amp;&amp; ./install.sh">mkdir furnace-alpha &amp;&amp; cd furnace-alpha &amp;&amp; curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.4.0-alpha.1/furnace-v0.4.0-alpha.1.tgz | tar xz &amp;&amp; ./install.sh</code>
-          </div>
-          <button class="cli-button" id="copyBtn" onclick="copyActiveCmd(event)" type="button" aria-label="Copy install command">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-            </svg>
-            <span id="copyBtnText">Copy</span>
+        <div class="cmd">
+          <span class="cmd-prompt" data-prompt>$</span>
+          <code class="cmd-text" data-cmd></code>
+          <button class="copy" type="button" data-copy aria-label="Copy install command">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span data-copy-label>Copy</span>
           </button>
         </div>
-
-        <div class="cli-meta-hints">
-          <span>Requires Node 24+</span>
-          <span>·</span>
-          <span>Windows (Linux: last tested on v0.1.0)</span>
-          <span>·</span>
-          <span>POSIX shell (Git Bash on Windows)</span>
-          <span>·</span>
-          <span>Zero telemetry in runs</span>
-          <span>·</span>
-          <a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.4.0-alpha.1" target="_blank" rel="noopener" style="color: #FF6A00; text-decoration: none; font-weight: 500;">v0.4.0-alpha.1 ↗</a>
-        </div>
+        <span class="copy-status" role="status" aria-live="polite" data-status></span>
       </div>
-
-      <!-- WORKS WITH INTEGRATIONS ROW -->
-      <div class="plugs">
-        <span class="plugs-text">Works with</span>
-        <ul class="plugs-row">
-          <li title="Next.js">
-            <svg class="plug-icon" viewBox="0 0 180 180" width="18" height="18"><mask height="180" id="m0" maskUnits="userSpaceOnUse" width="180" x="0" y="0" style="mask-type:alpha"><circle cx="90" cy="90" fill="black" r="90"/></mask><g mask="url(#m0)"><circle cx="90" cy="90" fill="currentColor" r="90"/><path d="M149.508 157.438L69.147 54H54V125.97H66.1136V69.3836L139.999 164.845C143.333 162.614 146.509 160.137 149.508 157.438Z" fill="#FFF"/><rect fill="#FFF" height="72" width="12" x="115" y="54"/></g></svg>
-          </li>
-          <li title="Chromium CDP">
-            <svg class="plug-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/><line x1="14.83" y1="9.17" x2="19.07" y2="4.93"/><line x1="12" y1="16" x2="12" y2="22"/></svg>
-          </li>
-          <li title="Tailwind CSS">
-            <svg class="plug-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12.001,4.8c-3.2,0-5.2,1.6-6,4.8c1.2-1.6,2.6-2.2,4.2-1.8c0.913,0.228,1.565,0.89,2.288,1.624 C13.666,10.618,15.027,12,18.001,12c3.2,0,5.2-1.6,6-4.8c-1.2,1.6-2.6,2.2-4.2,1.8c-0.913-0.228-1.565-0.89-2.288-1.624 C16.337,6.182,14.976,4.8,12.001,4.8z M6.001,12c-3.2,0-5.2,1.6-6,4.8c1.2-1.6,2.6-2.2,4.2-1.8c0.913,0.228,1.565,0.89,2.288,1.624 c1.177,1.194,2.538,2.576,5.512,2.576c3.2,0,5.2-1.6,6-4.8c-1.2,1.6-2.6,2.2-4.2,1.8c-0.913-0.228-1.565-0.89-2.288-1.624 C10.337,13.382,8.976,12,6.001,12z"/></svg>
-          </li>
-          <li title="TypeScript">
-            <svg class="plug-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M1.125 0C.502 0 0 .502 0 1.125v21.75C0 23.498.502 24 1.125 24h21.75c.623 0 1.125-.502 1.125-1.125V1.125C24 .502 23.498 0 22.875 0H1.125zM11.95 9.77c.43.08.84.22 1.22.42.38.2.7.46.96.79.26.33.43.72.5 1.17l-1.95.4c-.05-.28-.18-.5-.38-.68-.2-.18-.46-.27-.78-.27-.37 0-.66.1-.86.3-.2.2-.3.46-.3.78 0 .28.09.52.27.7.18.18.44.33.78.45l1.1.37c.72.24 1.26.58 1.63 1.02.37.44.55 1 .55 1.68 0 .68-.18 1.25-.54 1.71-.36.46-.86.8-1.5 1.02-.64.22-1.37.33-2.19.33-.82 0-1.56-.12-2.22-.36-.66-.24-1.19-.6-1.59-1.08-.4-.48-.63-1.07-.7-1.77l1.98-.36c.07.45.26.8.57 1.05.31.25.72.38 1.23.38.45 0 .8-.11 1.05-.33.25-.22.37-.5.37-.84 0-.3-.1-.54-.3-.72-.2-.18-.5-.33-.9-.47l-1.07-.37c-.7-.24-1.22-.57-1.56-1-.34-.43-.51-.97-.51-1.62 0-.64.18-1.18.54-1.62.36-.44.85-.77 1.47-.99.62-.22 1.33-.33 2.13-.33zM18.8 6.55v13.6h-2.16V6.55H18.8z"/></svg>
-          </li>
-          <li title="Node.js 24">
-            <svg class="plug-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 1.05c-.4 0-.8.2-1.1.4L1.7 6.75c-.6.3-.9.9-.9 1.5v10.5c0 .6.3 1.2.9 1.5l9.2 5.3c.6.3 1.4.3 2 0l9.2-5.3c.6-.3.9-.9.9-1.5V8.25c0-.6-.3-1.2-.9-1.5l-9.2-5.3c-.3-.2-.7-.4-1.1-.4zm0 2.3l8.4 4.85-8.4 4.85-8.4-4.85 8.4-4.85z"/></svg>
-          </li>
-        </ul>
-      </div>
-    </main>
-
+    </div>
   </section>
 
-  <!-- POSITIONING STRIP -->
-  <div class="strip-band">
-    AI writes the code. Furnace proves what changed.
-    <small>For vibe coders, frontend engineers, AI-heavy product teams, and designers who ship code.</small>
-  </div>
-
-  <!-- CONTENT -->
-  <main class="content-wrapper" id="content">
-    <div class="content-container">
-
-      <!-- SUB-RAIL TABLE OF CONTENTS -->
-      <nav class="content-toc" aria-label="Section navigation">
-        <div class="toc-title">On this page</div>
-        <div class="toc-links">
-          <a href="#why">Why Furnace</a>
-          <a href="#how">How it works</a>
-          <a href="#outcomes">Outcomes</a>
-          <a href="#proof">Proof</a>
-          <a href="#compliance">Compliance</a>
-          <a href="#limits">Limits</a>
-          <a href="#receipts">Receipts</a>
+  <!-- 2. SEE IT -->
+  <section class="demo" aria-label="Example run">
+    <div class="wrap">
+      <figure class="win" aria-label="Furnace checking a small app. It finds 1 problem, 1 question and 1 improvement, and says NOT READY.">
+        <div class="win-bar"><span>my-app — furnace launch-check</span><span>done</span></div>
+        <div class="win-body">
+          <div class="pane">
+            <p class="pane-label">api.js</p>
+            <div class="code">
+              <div class="ln"><b>1</b><span><span class="k">export async function</span> getResource(req, res) {</span></div>
+              <div class="ln flag"><b>2</b><span>  <span class="k">const</span> row = <span class="k">await</span> db.findById(req.params.id);</span></div>
+              <div class="ln"><b>3</b><span>  <span class="k">return</span> res.json(row);</span></div>
+              <div class="ln"><b>4</b><span>}</span></div>
+            </div>
+            <div class="callout">
+              <span class="sev">CRITICAL · LINE 2</span>
+              <p>A signed-in user can change the id in the address and open other people's records.</p>
+              <p><b>Fix:</b> look the record up by its id AND the signed-in user's id.</p>
+            </div>
+          </div>
+          <div class="pane">
+            <p class="pane-label">terminal</p>
+            <div class="out">
+              <div class="verdict">NOT READY: 1 problem to fix · 1 question for you · 1 improvement.</div>
+              <div class="sec">PROBLEMS (fix before launch)</div>
+              <div class="row"><span class="crit">CRITICAL</span><span>Records are fetched by id without checking who owns them</span></div>
+              <div class="sec">QUESTIONS (only you can answer these)</div>
+              <div class="row"><span class="high">HIGH</span><span>Could not confirm that private requests need a login</span></div>
+              <div class="sec">WORTH IMPROVING (does not block launch)</div>
+              <div class="row"><span class="low">LOW</span><span>1 submitted value has no visible validation</span></div>
+              <div class="passed"><span>✓</span> Passed: secrets · admin access · rate limits · browser-sent roles and prices · dangerous input · deployment settings</div>
+            </div>
+          </div>
         </div>
-      </nav>
+      </figure>
+      <p class="demo-note">Real output from Furnace v0.4.0 on a small test app with a planted bug. Paths trimmed.</p>
+    </div>
+  </section>
 
-      <!-- PRIMARY CONTENT COLUMN -->
-      <div class="reading-col">
+  <!-- 3. THE FOUR ANSWERS -->
+  <section class="section" id="answers" aria-labelledby="answers-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">What you get back</p>
+        <h2 id="answers-title">Every check ends in one of four answers.</h2>
+      </div>
+      <ul class="answers">
+        <li><h3>Proven</h3><p><b>It works.</b> Checked in a real browser.</p></li>
+        <li><h3>Repaired</h3><p><b>Fixed,</b> then re-checked by a separate verifier.</p></li>
+        <li><h3>Needs you</h3><p><b>A judgment call.</b> Flagged, never guessed.</p></li>
+        <li><h3>Unknown</h3><p><b>Can't prove it?</b> Then it's not a pass.</p></li>
+      </ul>
+    </div>
+  </section>
 
-        <!-- 3. WHY FURNACE EXISTS -->
-        <section class="section" id="why">
-          <div class="section-tag">Why Furnace exists</div>
-          <h2 class="section-title">AI output looks finished. It often is not.</h2>
-          <p class="plain-prose">
-            AI-generated software can look finished and still ship broken journeys, accessibility issues, design drift, or regressions.
-          </p>
-          <p class="plain-prose">
-            Furnace checks the parts most likely to slip through. It runs your app in a real browser, verifies what the code actually does, and hands every result to one of four outcomes — <strong>proven, repaired, human required, or unknown</strong>.
-          </p>
-        </section>
+  <!-- 4. HOW IT WORKS -->
+  <section class="section" id="how" aria-labelledby="how-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">How it works</p>
+        <h2 id="how-title">Three steps. No setup.</h2>
+      </div>
+      <ol class="steps">
+        <li>
+          <span class="step-n">01</span>
+          <h3>Install</h3>
+          <p>One line. Stays on your machine.</p>
+          <code>$ ./install.sh</code>
+        </li>
+        <li>
+          <span class="step-n">02</span>
+          <h3>Point it at your app</h3>
+          <p>It reads every route and page.</p>
+          <code>$ node furnace/bin/furnace.js launch-check --workspace=./my-app</code>
+        </li>
+        <li>
+          <span class="step-n">03</span>
+          <h3>Get a straight answer</h3>
+          <p>READY, NOT READY, or NOT SURE YET. Each problem comes with a fix you can paste into your AI assistant.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
 
-        <!-- 5. FOUR OUTCOMES -->
-        <section class="section" id="outcomes">
-          <div class="section-tag">Outcomes</div>
-          <h2 class="section-title">Four answers, no hedging</h2>
-          <div class="feature-list">
-            <div class="feature-item">
-              <h3>Proven</h3>
-              <p>Checked against your rules and passing. Nothing found that breaks them.</p>
-            </div>
-            <div class="feature-item">
-              <h3>Repaired</h3>
-              <p>Fixed automatically, then re-checked by a separate verifier — with a receipt as proof.</p>
-            </div>
-            <div class="feature-item">
-              <h3>Human required</h3>
-              <p>Login screens, visual judgment calls, and anything Furnace cannot decide alone. Flagged, never guessed.</p>
-            </div>
-            <div class="feature-item">
-              <h3>Unknown</h3>
-              <p>Could not be proven either way. Listed openly, never marked as passing.</p>
-            </div>
+  <!-- 5. PROOF -->
+  <section class="section" id="proof" aria-labelledby="proof-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Proof, not promises</p>
+        <h2 id="proof-title">We ran it on 24 real apps. None were ready.</h2>
+      </div>
+      <div class="numbers">
+        <div>
+          <div class="num-v">24<small> → </small>0</div>
+          <p><b>Real apps → ready to launch.</b> Each had about 2.4 open questions.</p>
+        </div>
+        <div>
+          <div class="num-v">490<small>/492</small></div>
+          <p><b>Tests passing</b> for this release. 2 skipped on purpose.</p>
+        </div>
+        <div>
+          <div class="num-v">0.4<small>s</small></div>
+          <p><b>One repair run,</b> checked and re-checked, on a laptop.</p>
+        </div>
+        <div>
+          <div class="num-v">0<small> bytes</small></div>
+          <p><b>Sent to us.</b> No telemetry. Your code never leaves.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. DETAILS -->
+  <section class="section" id="details" aria-labelledby="details-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">The details</p>
+        <h2 id="details-title">Honest about its limits.</h2>
+      </div>
+      <div class="fine-list">
+        <details>
+          <summary>What it doesn't do</summary>
+          <div class="fine-body">
+            <ul>
+              <li>Page checks need your app running. Furnace doesn't start it for you.</li>
+              <li>Fixes are verified on the changed file, not by re-rendering the page.</li>
+              <li>Login screens and payments need a human. Flagged, never guessed.</li>
+              <li>Gradients and live keyboard behaviour come back unknown, not passing.</li>
+              <li>Receipt fingerprints show edits. They are not signatures.</li>
+              <li>Tested on Windows for this release. Linux last tested on v0.1.0. macOS not tested.</li>
+              <li>Code-reading checks look for patterns. Anything they can't establish is a question for you.</li>
+            </ul>
           </div>
-          <p class="plain-prose">
-            <strong>No false confidence.</strong> Furnace does not call something safe just because a test ran. If it cannot prove something, it says <strong>unknown</strong>.
-          </p>
-        </section>
-
-        <!-- 4. SIMPLE 5-STEP WORKFLOW -->
-        <section class="section" id="how">
-          <div class="section-tag">How it works</div>
-          <h2 class="section-title">Five steps, one receipt</h2>
-          <div class="rows">
-            <div class="row-card">
-              <div class="row-num">01</div>
-              <div class="row-content">
-                <h3>Point Furnace at your app</h3>
-                <p>Tell it which pages to check. Setup takes minutes and nothing leaves your machine.</p>
-              </div>
-            </div>
-            <div class="row-card">
-              <div class="row-num">02</div>
-              <div class="row-content">
-                <h3>Furnace checks the change and its blast radius</h3>
-                <p>Pages are verified in a real browser, and earlier fixes are re-checked so a new change cannot quietly regress them.</p>
-              </div>
-            </div>
-            <div class="row-card">
-              <div class="row-num">03</div>
-              <div class="row-content">
-                <h3>Safe issues are repaired</h3>
-                <p>Only fixes that can be proven safe. Everything else is left alone for a human.</p>
-              </div>
-            </div>
-            <div class="row-card">
-              <div class="row-num">04</div>
-              <div class="row-content">
-                <h3>A separate verifier checks the fix again</h3>
-                <p>The fixer and the checker are independent, so nothing grades its own homework.</p>
-              </div>
-            </div>
-            <div class="row-card">
-              <div class="row-num">05</div>
-              <div class="row-content">
-                <h3>You get a receipt showing what was proven and what was not</h3>
-                <p>Passes, repairs, open questions, and unknowns — in one file you can attach to a pull request.</p>
-              </div>
-            </div>
+        </details>
+        <details>
+          <summary>What else it checks</summary>
+          <div class="fine-body">
+            <ul>
+              <li>Login and ownership checks on every server route, admin limits, rate limits on paid AI or email calls.</li>
+              <li>Supabase row-level security, Firebase rules, secrets in code and git history.</li>
+              <li>Your live site with <code>--url</code>: headers, cookies, CORS, exposed files.</li>
+              <li><code>furnace blocks --since=HEAD</code> reviews only what your AI assistant just changed.</li>
+              <li>Compliance signals: third-party fonts, trackers before consent, unsubscribe links, renewal terms, report buttons. Signals only — not legal advice.</li>
+            </ul>
           </div>
-        </section>
+        </details>
+        <details>
+          <summary>What a repair receipt looks like</summary>
+          <div class="fine-body">
+            <p>Every fix leaves a receipt: what changed, what was checked, and a fingerprint taken before the fix, so the bar can't quietly drop. A real one, trimmed.</p>
+            <pre>FURNACE · repair receipt · local run
+FILE    src/Checkout.jsx
+RULE    target-size · line 4
+ROUTE   auto-fix
+GOAL    24px tap targets
+sha256  a4c31ec384209a8766cad6cd0c24078d9f192eb6877184148201604ab7e02df7
+        (fingerprinted before the fix)
 
-        <!-- 6. TECHNICAL PROOF AND RECEIPTS -->
-        <section class="section" id="proof">
-          <div class="section-tag">Technical proof</div>
-          <h2 class="section-title">The machinery, when you want it</h2>
-          <p class="plain-prose">
-            A real run of v0.2.0-alpha.1 on a small sample component: the receipt fingerprint, the verifier's checks, and the run output. Your own runs write the same files.
-          </p>
+<span class="minus">- className="text-sm"</span>
+<span class="plus">+ className="text-sm p-2 min-h-[24px] min-w-[24px]"</span>
 
-          <aside class="right-zone" aria-label="Furnace Hardware Bezel Console" style="min-width: 0;">
-            <div class="titanium-bezel">
+parses                   OK
+changed                  OK
+original failure gone    OK
+no new problems          OK
+source file edited       NO  (patch saved to patches/)
 
-              <div class="bezel-recess">
-                <!-- MOLTEN TUNGSTEN HEAT GLOW TRENCHES -->
-                <div class="heat-trench-top" aria-hidden="true"></div>
-                <div class="heat-trench-left" aria-hidden="true"></div>
-                <div class="heat-trench-bottom" aria-hidden="true"></div>
-
-                <!-- INNER SCREEN DISPLAY -->
-                <div class="screen-chamber">
-
-                  <!-- LIVING AMBIENT THERMAL VIDEO LAYER -->
-                  <video class="screen-thermal-video" autoplay loop muted playsinline poster="media/hero-poster.jpg">
-                    <source src="media/hero.mp4" type="video/mp4">
-                  </video>
-                  <div class="screen-glass-shroud" aria-hidden="true"></div>
-
-                  <div class="screen-content">
-
-                    <!-- CARD 1: SHA-256 FINGERPRINT OF THE REPAIR GOAL (real, from the sample run) -->
-                    <div class="receipt-card">
-                      <div class="receipt-left">
-                        <div class="receipt-title">Repair goal, fingerprinted before the fix (SHA-256)</div>
-                        <div class="receipt-hash">sha256:a4c31ec384209a8766cad6cd0c24078d9f</div>
-                      </div>
-                      <div class="receipt-seal-badge">
-                        <div class="seal-icon-box">
-                          <svg width="22" height="24" viewBox="0 0 24 26" fill="none" stroke="#CBD0D8" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3.5" y="10.5" width="17" height="13.5" rx="3.5" />
-                            <path d="M7 10.5V7a5 5 0 0 1 10 0v3.5" />
-                            <circle cx="12" cy="17" r="1.5" fill="#CBD0D8" />
-                          </svg>
-                        </div>
-                        <span class="seal-text">Frozen</span>
-                      </div>
-                    </div>
-
-                    <!-- CARD 2: VERIFIER CHECKS (real, copied from the sample receipt) -->
-                    <div class="proof-card">
-                      <div class="proof-title">Independent verifier &middot; 4 of 4 checks passed</div>
-                      <div class="check-list">
-                        <div class="check-row"><span class="check-ok">ok</span><span>parses &mdash; the fixed file still parses</span></div>
-                        <div class="check-row"><span class="check-ok">ok</span><span>changed &mdash; the fix actually changed the file</span></div>
-                        <div class="check-row"><span class="check-ok">ok</span><span>fixpoint &mdash; the original target-size failure is gone</span></div>
-                        <div class="check-row"><span class="check-ok">ok</span><span>no-regressions &mdash; no new findings introduced</span></div>
-                      </div>
-                    </div>
-
-                    <!-- CARD 3: TERMINAL STATUS HUD WITH REAL AUDIT STREAM -->
-                    <div class="hud-card">
-                      <div class="hud-title">Run output &middot; sample component, v0.2.0-alpha.1</div>
-                      <div class="hud-grid">
-
-                        <!-- FACTS FROM THE SAMPLE RUN (receipt + summary.json) -->
-                        <div class="hud-left">
-                          <div class="hud-row"><span class="lbl">Files</span><span class="val">1</span></div>
-                          <div class="hud-row"><span class="lbl">Repairs</span><span class="val">1</span></div>
-                          <div class="hud-row"><span class="lbl">Merge-ready</span><span class="val">1</span></div>
-                          <div class="hud-row"><span class="lbl">Checks</span><span class="val">4/4</span></div>
-                          <div class="hud-row"><span class="lbl">File edited</span><span class="val">no</span></div>
-                          <div class="hud-row"><span class="lbl">Wall time</span><span class="val">0.4 s</span></div>
-                          <div class="hud-row"><span class="lbl">Caliper tests</span><span class="val">35/35</span></div>
-                          <div class="hud-row"><span class="lbl">Furnace tests</span><span class="val">406/408</span></div>
-                          <div class="hud-row"><span class="lbl">Status</span><span class="val" style="color: #34D399;">MERGE-READY</span></div>
-                        </div>
-
-                        <!-- WHAT THE RUN DID, IN ORDER -->
-                        <div class="hud-right">
-                          <div class="hud-log-line">[plan] target-size: &lt;button class="text-sm"&gt; (line 4)</div>
-                          <div class="hud-log-line">[seal] goal fingerprinted: sha256 a4c31ec3&hellip;</div>
-                          <div class="hud-log-line">[fix] + p-2 min-h-[24px] min-w-[24px]</div>
-                          <div class="hud-log-line">[verify] parses ok &middot; changed ok</div>
-                          <div class="hud-log-line">[verify] original failure gone (fixpoint ok)</div>
-                          <div class="hud-log-line">[verify] no new findings (no-regressions ok)</div>
-                          <div class="hud-log-line">[verify] goal fingerprint unchanged</div>
-                          <div class="hud-log-line">[write] patches/src__Checkout.jsx.diff</div>
-                          <div class="hud-log-line">[done] NEEDS WORK (exit 1): fix waiting in patches/</div>
-                          <div><span class="hud-cursor">&#9608;</span></div>
-                        </div>
-
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </aside>
-
-          <!-- ANIMATED PIPELINE LOOP FIGURE -->
-          <figure class="loop" id="pipeline" aria-labelledby="loop-caption" style="margin-top: 24px;">
-            <svg class="loop-canvas" viewBox="0 0 680 180" fill="none">
-              <path d="M 50 90 L 170 90" stroke="#E4E4E7" stroke-width="2" stroke-dasharray="4 4"/>
-              <path d="M 270 90 L 390 90" stroke="#E4E4E7" stroke-width="2" stroke-dasharray="4 4"/>
-              <path d="M 490 90 L 610 90" stroke="#E4E4E7" stroke-width="2" stroke-dasharray="4 4"/>
-              <path d="M 440 60 C 440 30, 220 30, 220 60" stroke="#E4E4E7" stroke-width="1.5" stroke-dasharray="3 3"/>
-
-              <g transform="translate(10, 65)">
-                <rect width="90" height="50" rx="6" fill="#FFFFFF" stroke="#E4E4E7" stroke-width="1"/>
-                <text x="45" y="24" text-anchor="middle" font-family="Geist, sans-serif" font-size="10" font-weight="600" fill="#09090B">BROWSER</text>
-                <text x="45" y="38" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9" fill="#71717A">Raw DOM</text>
-              </g>
-
-              <g transform="translate(170, 65)">
-                <rect width="100" height="50" rx="6" fill="#FFFFFF" stroke="#09090B" stroke-width="1"/>
-                <text x="50" y="24" text-anchor="middle" font-family="Geist, sans-serif" font-size="10" font-weight="600" fill="#09090B">CDP AX-TREE</text>
-                <text x="50" y="38" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9" fill="#71717A">Roles &amp; Bounds</text>
-              </g>
-
-              <g transform="translate(390, 65)">
-                <rect width="100" height="50" rx="6" fill="#09090B" stroke="#09090B" stroke-width="1"/>
-                <text x="50" y="24" text-anchor="middle" font-family="Geist, sans-serif" font-size="10" font-weight="600" fill="#FFFFFF">FURNACE</text>
-                <text x="50" y="38" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9" fill="#A1A1AA">Fixpoint AST</text>
-              </g>
-
-              <g transform="translate(580, 65)">
-                <rect width="90" height="50" rx="6" fill="#FFFFFF" stroke="#10B981" stroke-width="1.5"/>
-                <text x="45" y="24" text-anchor="middle" font-family="Geist, sans-serif" font-size="10" font-weight="600" fill="#09090B">RECEIPT</text>
-                <text x="45" y="38" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9" fill="#10B981">+ patch file</text>
-              </g>
-
-              <circle cx="110" cy="90" r="3" fill="#09090B">
-                <animate attributeName="cx" values="50;170" dur="2s" repeatCount="indefinite"/>
-              </circle>
-              <circle cx="330" cy="90" r="3" fill="#09090B">
-                <animate attributeName="cx" values="270;390" dur="2s" repeatCount="indefinite"/>
-              </circle>
-              <circle cx="535" cy="90" r="3" fill="#10B981">
-                <animate attributeName="cx" values="490;580" dur="2s" repeatCount="indefinite"/>
-              </circle>
-            </svg>
-            <figcaption class="loop-caption" id="loop-caption">
-              Figure 1. Rendered pages enter Furnace through headless Chrome. The engine checks what it can prove, proposes only fixes a separate verifier accepts, and writes a receipt and a patch file for each one. Your source files are not edited.
-            </figcaption>
-          </figure>
-
-          <!-- WHAT WE DO -->
-          <section class="section" id="what" style="border-top: none; padding-top: 0;">
-            <div class="section-tag">Under the hood</div>
-            <h2 class="section-title">What the engine does</h2>
-
-            <div class="rows">
-              <div class="row-card">
-                <div class="row-num">01</div>
-                <div class="row-content">
-                  <h3>Headless Browser Verification</h3>
-                  <p>
-                    Furnace boots native Chromium and inspects the page the way assistive technology sees it. It verifies computed contrast against resolvable background colors, physical bounding-box touch targets, and keyboard exit controls in dialog markup. Gradients, unresolvable backgrounds, and live trap behavior are reported unknown.
-                  </p>
-                </div>
-              </div>
-
-              <div class="row-card">
-                <div class="row-num">02</div>
-                <div class="row-content">
-                  <h3>Fixes are checked, then saved as patch files</h3>
-                  <p>
-                    Furnace rewrites the component's syntax tree in memory. A separate verifier then re-checks the changed file: it must still parse, the original problem must be gone, and no new problem may appear. Anything that fails is thrown away. Accepted fixes are written as patch files for you to review; your source files are never edited. This check works on the file itself: the page is not re-rendered in a browser during it.
-                  </p>
-                </div>
-              </div>
-
-              <div class="row-card">
-                <div class="row-num">03</div>
-                <div class="row-content">
-                  <h3>Objective Compliance Signals Pass</h3>
-                  <p>
-                    Lightweight static and runtime detection for 5 objective compliance vectors: third-party font calls, tracking scripts before consent, email unsubscribe mechanisms, subscription checkout renewal disclosures, and user-generated content takedown routes.
-                  </p>
-                </div>
-              </div>
-
-              <div class="row-card">
-                <div class="row-num">04</div>
-                <div class="row-content">
-                  <h3>Receipts &amp; Unknowns Ledger</h3>
-                  <p>
-                    Every repair gets a receipt. Its goal is fingerprinted with SHA-256 before the fixer starts, so the fixer cannot quietly lower the bar. The fingerprint shows whether a receipt was edited; it is not a signature and does not prove who ran it. Surfaces that cannot be definitively proven (e.g. unauthenticated portals or dynamic canvas) are listed as <strong>unknown</strong> and routed to humans.
-                  </p>
-                </div>
-              </div>
-              <div class="row-card">
-                <div class="row-num">05</div>
-                <div class="row-content">
-                  <h3>Launch check</h3>
-                  <p>
-                    <code>furnace launch-check</code> needs no setup: point it at your app's folder. It lists your app's server routes and checks each one: does it need a login, does it check the record belongs to the user, is an admin route limited to admins, does a route that calls a paid AI or email service have a rate limit. It also checks Supabase row-level security and Firebase rules, secrets in code, git history and browser-exposed variables, trust in data the browser sends, unsafe input handling, and launch hygiene. The answer is READY, NOT READY, or NOT SURE YET, with each problem, question and improvement listed with the route and line, a fix with example code for your framework, how to check it worked, and a prompt to paste into your AI coding assistant. Add <code>--url</code> to also check your running site (headers, cookies, CORS, exposed files, keys in its JavaScript), and <code>--deps</code> to check packages for known vulnerabilities. Code-reading checks look for patterns; anything they cannot establish is a question for you, never a pass. New in v0.4.0: <code>furnace blocks</code> reviews your code one function or route at a time, as a security reviewer and as a senior engineer, remembers what a person has already signed off, and with <code>--since=HEAD</code> checks only what your AI assistant just changed.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-        </section>
-
-        <!-- COMPLIANCE SIGNALS PASS -->
-        <section class="section" id="compliance">
-          <div class="section-tag">Lightweight Engine</div>
-          <h2 class="section-title">Compliance signals pass</h2>
-
-          <div class="compliance-box">
-            <div class="compliance-disclaimer">
-              <strong>NOTICE</strong>: Furnace detects objective technical signals only. Furnace does <strong>NOT</strong> evaluate legal enforceability, does <strong>NOT</strong> provide legal counsel, and <strong>NEVER</strong> claims full or partial legal compliance. All signals indicate objective items detected that require human and legal review.
-            </div>
-
-            <div class="signal-list">
-              <div class="signal-item">
-                <div>
-                  <div class="signal-name">Third-Party Font Calls</div>
-                  <small style="color: var(--ink-muted);">Detects external font CDNs (Google Fonts, Typekit) vs local self-hosted fonts</small>
-                </div>
-                <span class="signal-badge">Pass / Fail / Unknown</span>
-              </div>
-
-              <div class="signal-item">
-                <div>
-                  <div class="signal-name">Tracking Scripts Before Consent</div>
-                  <small style="color: var(--ink-muted);">Checks for un-gated analytics trackers (GTM, Meta Pixel, Hotjar, TikTok) prior to consent</small>
-                </div>
-                <span class="signal-badge">Pass / Fail / Unknown</span>
-              </div>
-
-              <div class="signal-item">
-                <div>
-                  <div class="signal-name">Missing Unsubscribe in Emails</div>
-                  <small style="color: var(--ink-muted);">Verifies opt-out links and List-Unsubscribe headers across email templates</small>
-                </div>
-                <span class="signal-badge">Pass / Fail / Unknown</span>
-              </div>
-
-              <div class="signal-item">
-                <div>
-                  <div class="signal-name">Subscription Renewal Disclosures</div>
-                  <small style="color: var(--ink-muted);">Checks for explicit recurring billing terms, cadence, and cancellation routes on checkout</small>
-                </div>
-                <span class="signal-badge">Pass / Fail / Unknown</span>
-              </div>
-
-              <div class="signal-item">
-                <div>
-                  <div class="signal-name">UGC Takedown &amp; Report Route</div>
-                  <small style="color: var(--ink-muted);">Verifies report/flag buttons or DMCA abuse routes on user-generated content feeds</small>
-                </div>
-                <span class="signal-badge">Pass / Fail / Unknown</span>
-              </div>
-            </div>
+4 / 4 CHECKS · MERGE-READY
+sample component · v0.2.0-alpha.1</pre>
           </div>
-        </section>
-
-        <!-- MEASURED: only numbers we can source -->
-        <section class="section" id="production">
-          <div class="section-tag">Measured</div>
-          <h2 class="section-title">What we have actually measured</h2>
-
-          <div class="proof">
-            <div class="stat-card">
-              <span class="stat-label">
-                Run time
-                <small>One repair run on a sample component, Windows laptop</small>
-              </span>
-              <div class="stat-number">0.4 s</div>
-              <p class="stat-sub">Wall-clock time including Node start-up (0.41–0.43 s over three warm runs). Browser checks on real pages take longer and depend on your app. No production benchmarks yet.</p>
-            </div>
-
-            <div class="stat-card">
-              <span class="stat-label">
-                Fixes that add a problem
-                <small>A rule, not a measured rate</small>
-              </span>
-              <div class="stat-number">Rejected</div>
-              <p class="stat-sub">The verifier throws away any proposed fix that introduces a new finding. The rule is covered by tests; we have not yet measured it across many real projects.</p>
-            </div>
-
-            <div class="stat-card">
-              <span class="stat-label">
-                What leaves your machine
-                <small>Checked against the code</small>
-              </span>
-              <div class="stat-number">No telemetry</div>
-              <p class="stat-sub">Runs send nothing to us and your code is never uploaded. Furnace only contacts the pages you tell it to check; installing downloads packages from npm and a copy of Chrome.</p>
-            </div>
-
-            <div class="stat-card">
-              <span class="stat-label">
-                Test suites for this release
-                <small>v0.4.0-alpha.1</small>
-              </span>
-              <div class="stat-number">490/492</div>
-              <p class="stat-sub">37/37 Caliper tests and 453/455 Furnace tests passing (2 environment-dependent skips: shell and symlink privileges). Run on Windows on 2026-09-27; not yet re-run on Linux for this release. Before this release we ran Furnace on its own code and fixed the five false alarms it raised. The launch check also has a 201-check accuracy benchmark, written by us alongside the code it tests, so it shows the checks do what we intended, not that they are right on your app. Our earlier releases scored 40 of 40 and 87 of 87 on their own benchmarks and still let real holes through, so we also ran 24 real apps and read the code behind every changed answer. None of the 24 came out READY, and each averages 2.4 questions for its owner.</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- REAL SAMPLE RECEIPT (furnace-out/receipts/repair-src__Checkout.jsx.json, trimmed) -->
-        <section class="section" id="receipts">
-          <div class="section-tag">Evidence</div>
-          <h2 class="section-title">A real receipt, trimmed</h2>
-          <p style="font-size: 0.95rem; color: var(--ink-secondary); margin-bottom: 20px;">
-            Produced by running v0.2.0-alpha.1 on a small sample component (not a customer project) on 2026-09-24. Fields are copied from the JSON receipt and patch the run wrote; some fields are left out for length.
-          </p>
-
-          <div class="specimen-receipt-box">
-            <div class="specimen-receipt-top">
-              <span>RECEIPT: repair-src__Checkout.jsx</span>
-              <span>HOST: LOCAL</span>
-            </div>
-MERGE-READY · repair-src__Checkout.jsx
-route=auto-fix · verdict=pass
-goal: Guarantee 24px interactive targets in src\Checkout.jsx
-checks: parses ok · changed ok · fixpoint ok · no-regressions ok
-goal fingerprint (sha256): a4c31ec384209a8766cad6cd0c24078d9f192eb6877184148201604ab7e02df7
-fingerprint taken before the fix: yes
-
-FINDING FIXED:
-  - rule: target-size (&lt;button class="text-sm"&gt;, line 4: added p-2 for 24px target)
-
-PATCH (written to furnace-out/patches/, source file not edited):
--      &lt;button className="text-sm"&gt;Pay now&lt;/button&gt;
-+      &lt;button className="text-sm p-2 min-h-[24px] min-w-[24px]"&gt;Pay now&lt;/button&gt;
-
-SUMMARY: 0 engine(s) ran; 1 repair(s), 1 merge-ready.
-RESULT: NEEDS WORK (exit 1) — 1 verified repair not yet applied (see patches/)
-          </div>
-        </section>
-
-        <!-- VERIFY THE DOWNLOAD (second channel for the release key) -->
-        <section class="section" id="verify">
-          <div class="section-tag">Verify</div>
-          <h2 class="section-title">Check the download is ours</h2>
-          <p style="font-size: 0.95rem; color: var(--ink-secondary); margin-bottom: 20px;">
-            Each release ships <code>release.signed.json</code>, which holds the archive's fingerprint signed with our release key. The public key is below, so you can compare it with the copy in the release. After installing, run <code>node furnace/bin/furnace.js verify-receipt --file=release.signed.json --trusted-key=furnace-release-key.pub.pem</code>; exit 0 means intact and signed by this key.
-          </p>
-          <div class="specimen-receipt-box">
-            <div class="specimen-receipt-top">
-              <span>RELEASE KEY · Ed25519 · id 39d945dc02ce99f0</span>
-              <span>v0.4.0-alpha.1</span>
-            </div>
-archive: furnace-v0.4.0-alpha.1.tgz
-sha256:  9b1cfa3b27f0598200d9cc1e80b72fd4b970dd46cd7d778c0cea4a033035fb44
+        </details>
+        <details>
+          <summary>Check the download is ours</summary>
+          <div class="fine-body">
+            <p>Each release ships <code>release.signed.json</code>, signed with this key. After installing, run the command below. Exit 0 means intact and signed by this key.</p>
+            <pre>node furnace/bin/furnace.js verify-receipt --file=release.signed.json --trusted-key=furnace-release-key.pub.pem</pre>
+            <pre>Ed25519 · id 39d945dc02ce99f0
+archive  furnace-v0.4.0-alpha.1.tgz
+sha256   9b1cfa3b27f0598200d9cc1e80b72fd4b970dd46cd7d778c0cea4a033035fb44
 
 -----BEGIN PUBLIC KEY-----
 MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
------END PUBLIC KEY-----
+-----END PUBLIC KEY-----</pre>
           </div>
-        </section>
-
-        <!-- 7. CURRENT LIMITATIONS / TESTED PLATFORMS -->
-        <section class="section" id="limits">
-          <div class="section-tag">Limits</div>
-          <h2 class="section-title">What Furnace does not do</h2>
-          <div class="signal-list">
-            <div class="signal-item">
-              <div class="signal-name">Page checks need your app running; Furnace does not start it for you</div>
-              <span class="signal-badge">You run it</span>
-            </div>
-            <div class="signal-item">
-              <div class="signal-name">Fixes are verified on the changed file, not by re-rendering the page in a browser</div>
-              <span class="signal-badge">Scope</span>
-            </div>
-            <div class="signal-item">
-              <div class="signal-name">Receipt fingerprints show edits; they are not signatures. Signed reports (<code>furnace sign</code>) prove which key signed, not who holds it</div>
-              <span class="signal-badge">Not a signature</span>
-            </div>
-            <div class="signal-item">
-              <div class="signal-name">Login screens and payments need a human — flagged, never guessed</div>
-              <span class="signal-badge">Human required</span>
-            </div>
-            <div class="signal-item">
-              <div class="signal-name">Tested on Windows for this release; Linux was last tested on v0.1.0-alpha.1; macOS is not tested</div>
-              <span class="signal-badge">Not tested</span>
-            </div>
-            <div class="signal-item">
-              <div class="signal-name">Gradients and live keyboard behavior report unknown, not passing</div>
-              <span class="signal-badge">Unknown</span>
-            </div>
-            <div class="signal-item">
-              <div class="signal-name">Furnace finds technical signals — it is not legal compliance advice</div>
-              <span class="signal-badge">Signals only</span>
-            </div>
-          </div>
-        </section>
-
-        <!-- 8. FINAL CTA -->
-        <section class="section" id="try">
-          <div class="try-wrap">
-            <div class="section-tag">Try it</div>
-            <h2 class="section-title">Before you merge AI-written code, run it through Furnace.</h2>
-            <a class="cli-button" href="#cli">Copy install command</a>
-          </div>
-        </section>
-
-        <!-- FOOTER -->
-        <footer class="foot">
-          <div>
-            <div class="foot-brand">furnace</div>
-            <p style="line-height: 1.6; max-width: 38ch;">
-              The verification layer after the agent. Headless verification, checked repairs, and receipts you can inspect.
-            </p>
-          </div>
-
-          <div>
-            <div style="font-weight: 600; color: var(--ink); margin-bottom: 10px;">Distribution</div>
-            <ul class="foot-links">
-              <li><a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.4.0-alpha.1" target="_blank" rel="noopener">Release v0.4.0-alpha.1</a></li>
-              <li><a href="https://github.com/vyshwas/furnace-dist" target="_blank" rel="noopener">GitHub Repository</a></li>
-              <li><a href="https://github.com/vyshwas/furnace-dist/issues" target="_blank" rel="noopener">Feedback &amp; Issues</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <div style="font-weight: 600; color: var(--ink); margin-bottom: 10px;">Boundaries</div>
-            <ul class="foot-links">
-              <li>Node.js 24+ Required</li>
-              <li>Tested on Windows</li>
-              <li>Zero Telemetry In Runs</li>
-              <li>Free beta licence (not open source)</li>
-            </ul>
-          </div>
-        </footer>
-
+        </details>
       </div>
     </div>
-  </main>
+  </section>
 
-  <script>
-    const CLI_COMMANDS = {
-      terminal: "mkdir furnace-alpha && cd furnace-alpha && curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.4.0-alpha.1/furnace-v0.4.0-alpha.1.tgz | tar xz && ./install.sh",
-      agent: "Install Furnace v0.4.0-alpha.1 in its own folder OUTSIDE this codebase (never extract it into this repo: the archive contains its own package.json, README.md and src/), then run a reality verification pass on this codebase: mkdir -p ../furnace-alpha && cd ../furnace-alpha && curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.4.0-alpha.1/furnace-v0.4.0-alpha.1.tgz | tar xz && ./install.sh"
-    };
+  <!-- 7. INSTALL -->
+  <section class="closing" id="get" aria-labelledby="get-title">
+    <div class="wrap">
+      <h2 id="get-title">Put it through the fire.</h2>
+      <div class="install" data-install>
+        <div class="install-top">
+          <span class="install-meta">Free beta · v0.4.0-alpha.1 · Node 24+</span>
+          <div class="tabs" role="tablist" aria-label="Install for">
+            <button class="tab" role="tab" aria-selected="true" data-mode="terminal">Terminal</button>
+            <button class="tab" role="tab" aria-selected="false" data-mode="agent">AI assistant</button>
+          </div>
+        </div>
+        <div class="cmd">
+          <span class="cmd-prompt" data-prompt>$</span>
+          <code class="cmd-text" data-cmd></code>
+          <button class="copy" type="button" data-copy aria-label="Copy install command">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span data-copy-label>Copy</span>
+          </button>
+        </div>
+        <span class="copy-status" role="status" aria-live="polite" data-status></span>
+      </div>
 
-    let activeCliMode = 'terminal';
+      <footer class="foot">
+        <span>furnace · free beta licence (not open source) · zero telemetry</span>
+        <ul>
+          <li><a href="https://github.com/vyshwas/furnace-dist" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.4.0-alpha.1" target="_blank" rel="noopener">Release</a></li>
+          <li><a href="https://github.com/vyshwas/furnace-dist/issues" target="_blank" rel="noopener">Feedback</a></li>
+        </ul>
+      </footer>
+    </div>
+  </section>
+</main>
 
-    function setCliMode(mode) {
-      activeCliMode = mode;
-      const tabTerm = document.getElementById('tabTerminal');
-      const tabAgent = document.getElementById('tabAgent');
-      const prompt = document.getElementById('cliPrompt');
-      const code = document.getElementById('cliText');
-      const cliBar = document.getElementById('cliBar');
-
-      if (mode === 'terminal') {
-        tabTerm.classList.add('active');
-        tabTerm.setAttribute('aria-selected', 'true');
-        tabAgent.classList.remove('active');
-        tabAgent.setAttribute('aria-selected', 'false');
-        prompt.textContent = '$';
-        code.textContent = CLI_COMMANDS.terminal;
-        code.setAttribute('title', CLI_COMMANDS.terminal);
-        if (cliBar) cliBar.setAttribute('title', 'Click anywhere to copy terminal install command');
-      } else {
-        tabAgent.classList.add('active');
-        tabAgent.setAttribute('aria-selected', 'true');
-        tabTerm.classList.remove('active');
-        tabTerm.setAttribute('aria-selected', 'false');
-        prompt.textContent = 'agent >';
-        code.textContent = CLI_COMMANDS.agent;
-        code.setAttribute('title', CLI_COMMANDS.agent);
-        if (cliBar) cliBar.setAttribute('title', 'Click anywhere to copy coding agent prompt');
-      }
-    }
-
-    function copyActiveCmd(event) {
-      if (event) {
-        event.stopPropagation();
-      }
-      const cmd = CLI_COMMANDS[activeCliMode] || CLI_COMMANDS.terminal;
-      navigator.clipboard.writeText(cmd).then(() => {
-        const copyBtnText = document.getElementById('copyBtnText');
-        const copyBtn = document.getElementById('copyBtn');
-
-        if (copyBtnText) copyBtnText.textContent = 'Copied! ✓';
-        if (copyBtn) {
-          copyBtn.style.background = '#10B981';
-          copyBtn.style.color = '#FFFFFF';
-        }
-
-        setTimeout(() => {
-          if (copyBtnText) copyBtnText.textContent = 'Copy';
-          if (copyBtn) {
-            copyBtn.style.background = '#FFFFFF';
-            copyBtn.style.color = '#0A0B0E';
-          }
-        }, 2000);
-      }).catch(err => {
-        console.error('Clipboard copy failed:', err);
-      });
-    }
-
-    // Keyboard support for cliBar accessibility
-    document.addEventListener('DOMContentLoaded', () => {
-      const cliBar = document.getElementById('cliBar');
-      if (cliBar) {
-        cliBar.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            copyActiveCmd(e);
-          }
-        });
-      }
+<script>
+(() => {
+  const CMDS = {
+    terminal: "mkdir furnace-alpha && cd furnace-alpha && curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.4.0-alpha.1/furnace-v0.4.0-alpha.1.tgz | tar xz && ./install.sh",
+    agent: "Install Furnace v0.4.0-alpha.1 in its own folder OUTSIDE this codebase (never extract it into this repo: the archive contains its own package.json, README.md and src/), then run a reality verification pass on this codebase: mkdir -p ../furnace-alpha && cd ../furnace-alpha && curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.4.0-alpha.1/furnace-v0.4.0-alpha.1.tgz | tar xz && ./install.sh"
+  };
+  let mode = 'terminal';
+  const bars = [...document.querySelectorAll('[data-install]')];
+  function renderMode() {
+    bars.forEach(b => {
+      const c = b.querySelector('[data-cmd]');
+      c.textContent = CMDS[mode];
+      c.title = CMDS[mode];
+      b.querySelector('[data-prompt]').textContent = mode === 'terminal' ? '$' : 'ai ›';
+      b.querySelectorAll('[data-mode]').forEach(t => t.setAttribute('aria-selected', String(t.dataset.mode === mode)));
     });
-  </script>
-
+  }
+  bars.forEach(b => {
+    b.querySelectorAll('[data-mode]').forEach(t => t.addEventListener('click', () => { mode = t.dataset.mode; renderMode(); }));
+    const btn = b.querySelector('[data-copy]');
+    btn.addEventListener('click', async () => {
+      const text = CMDS[mode];
+      try { await navigator.clipboard.writeText(text); }
+      catch {
+        const ta = Object.assign(document.createElement('textarea'), { value: text });
+        document.body.append(ta); ta.select(); document.execCommand('copy'); ta.remove();
+      }
+      btn.classList.add('done');
+      b.querySelector('[data-copy-label]').textContent = 'Copied';
+      b.querySelector('[data-status]').textContent = 'Install command copied to clipboard';
+      setTimeout(() => {
+        btn.classList.remove('done');
+        b.querySelector('[data-copy-label]').textContent = 'Copy';
+        b.querySelector('[data-status]').textContent = '';
+      }, 1800);
+    });
+  });
+  renderMode();
+})();
+</script>
 </body>
 </html>
