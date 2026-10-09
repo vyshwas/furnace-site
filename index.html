@@ -184,6 +184,27 @@
   .fine-body .minus { color: var(--heat); }
   .fine-body .plus { color: var(--ok); }
 
+  /* ===== plans (price test) ===== */
+  [hidden] { display: none !important; }
+  .plans { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2vw, 24px); }
+  .plan { display: flex; flex-direction: column; gap: 14px; padding: 28px; border-radius: var(--r-md); border: 1px solid var(--line-strong); background: var(--coal-2); }
+  .plan h3 { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; }
+  .plan .tag { font: 600 0.68rem var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); }
+  .plan .tag--on { color: var(--ok); }
+  .hold-address { font: 0.8rem var(--mono); color: var(--ash-dim); }
+  .plan .price { font-size: clamp(2rem, 3.4vw, 2.75rem); font-weight: 600; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .plan .price small { margin-left: 4px; font-size: 0.4em; font-weight: 500; letter-spacing: 0; color: var(--ash-dim); }
+  .plan-for { flex: 1; color: var(--ash); font-size: 0.95rem; }
+  .plan .btn { justify-content: center; }
+  .hold { margin-top: 24px; padding: 28px; border-radius: var(--r-md); border: 1px solid rgba(var(--heat-rgb), 0.45); }
+  .hold h3 { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; }
+  .hold p { margin-top: 8px; max-width: 62ch; color: var(--ash); }
+  .hold p b { color: var(--bone); font-weight: 500; }
+  .hold-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+  .reasons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .reasons .btn { min-height: 38px; padding: 0 16px; font-weight: 500; }
+  .plans-note { margin-top: 16px; font: 0.75rem var(--mono); color: var(--ash-dim); }
+
   /* ===== closing ===== */
   .closing { padding: var(--section) 0 40px; border-top: 1px solid var(--line); }
   .closing h2 { font-size: var(--fs-display); font-weight: 700; letter-spacing: -0.045em; line-height: 1.02; max-width: 12ch; }
@@ -196,7 +217,7 @@
   /* ===== responsive ===== */
   @media (max-width: 860px) {
     .nav-links li.hide-sm { display: none; }
-    .win-body, .answers li, .steps, .numbers { grid-template-columns: minmax(0, 1fr); }
+    .win-body, .answers li, .steps, .numbers, .plans { grid-template-columns: minmax(0, 1fr); }
     .pane + .pane { border-left: 0; border-top: 1px solid var(--line); }
     .answers li { gap: 6px; }
     .numbers { gap: 32px; }
@@ -450,6 +471,58 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
     </div>
   </section>
 
+  <!-- 6b. PLANS: one price, and only emails count. Pro is not on sale; the audit is. See the script at the bottom. -->
+  <section class="section" id="pricing" aria-labelledby="pricing-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Plans</p>
+        <h2 id="pricing-title">Free on your machine. Paid when you want us to watch.</h2>
+        <p class="lede">Everything that runs on your computer or in your own CI stays free. We would charge only for things that need our servers. Today, only the audit is on sale.</p>
+      </div>
+      <ul class="plans">
+        <li class="plan">
+          <h3>Free</h3>
+          <p class="price">$0</p>
+          <p class="plan-for">The full checks, on your machine or in your own CI. No account.</p>
+          <a class="btn" href="#get" data-plan-free>Install it</a>
+        </li>
+        <li class="plan">
+          <h3>Pro <span class="tag">Planned</span></h3>
+          <p class="price">$19<small>/ project / month</small></p>
+          <p class="plan-for">Comments on every pull request, alerts when a new weakness is found in a package you use, and a saved history of what changed.</p>
+          <button class="btn btn--primary" type="button" data-plan="pro">Get Pro</button>
+        </li>
+        <li class="plan">
+          <h3>Launch Audit <span class="tag tag--on">Available</span></h3>
+          <p class="price">$299<small>one time</small></p>
+          <p class="plan-for">A person runs Furnace on your project, checks every finding by hand, and sends you a signed report with what to fix first.</p>
+          <button class="btn btn--primary" type="button" data-plan="audit">Request an audit</button>
+        </li>
+      </ul>
+
+      <div class="hold" data-hold tabindex="-1" role="status" aria-live="polite" hidden>
+        <h3 data-hold-title></h3>
+        <p data-hold-text></p>
+        <div class="hold-actions">
+          <a class="btn btn--primary" href="#" data-mail hidden>Send the email</a>
+          <button class="btn" type="button" data-copy-mail hidden>Copy the address</button>
+          <button class="btn" type="button" data-hold-close>Not for me</button>
+        </div>
+        <p class="hold-address" data-address hidden></p>
+        <div data-reasons hidden>
+          <p>No problem. What is the main reason?</p>
+          <div class="reasons">
+            <button class="btn" type="button" data-reason="too_expensive">Too expensive</button>
+            <button class="btn" type="button" data-reason="not_needed">I do not need it</button>
+            <button class="btn" type="button" data-reason="just_looking">Just looking</button>
+          </div>
+        </div>
+        <p data-thanks hidden>Thank you. That helps us decide what to build.</p>
+      </div>
+      <p class="plans-note" data-plans-note hidden>This page counts which plan you click, and nothing else. No cookies, no personal data.</p>
+    </div>
+  </section>
+
   <!-- 7. INSTALL -->
   <section class="closing" id="get" aria-labelledby="get-title">
     <div class="wrap">
@@ -523,6 +596,134 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
     });
   });
   renderMode();
+})();
+</script>
+
+<script>
+/* Plan interest. Fill these in to switch counting on; with them empty the page
+   still works and nothing is sent anywhere.
+     email    where the emails go
+     vantage  the address of your Vantage server (no trailing slash)
+     study    the id of a Vantage study made for this page
+   Only emails count as real interest; clicks are a side signal. */
+(() => {
+  const CONFIG = { email: "vyshwas.work@gmail.com", vantage: "https://wan-attorney-softball-win.trycloudflare.com", study: "9MML545tgx" };
+  const PLANS = {
+    pro: {
+      label: "Pro", price: 19, per: "per project per month",
+      title: "Pro is not open yet.",
+      text: "That is the price we are considering: $19 per project per month. If you would pay it, send one email and we will keep that founding price for you and tell you when it opens. Nothing is charged.",
+      subject: "Hold Pro at $19 per project per month",
+      body: "Hi, I would pay $19 per project per month for Furnace Pro. Please hold the founding price and tell me when it opens.",
+    },
+    audit: {
+      label: "Launch Audit", price: 299, per: "one time",
+      title: "Request a Launch Audit.",
+      text: "Send one email with a line on what your app does, when you launch, and a link to the project or how to share the code. We reply with what we need and a fixed scope. Nothing is charged until you agree.",
+      subject: "Launch Audit request",
+      body: "Hi, I would like a Launch Audit ($299).\n\nWhat the app does:\nLaunch date:\nHow to share the code:",
+    },
+  };
+
+  const params = new URLSearchParams(location.search);
+
+  // Where the visitor came from: ?src=linkedin on the link you post, or the referrer.
+  const clean = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9_.-]/g, "").slice(0, 30);
+  let src = clean(params.get("src") || params.get("utm_source"));
+  if (!src && document.referrer) { try { src = clean(new URL(document.referrer).hostname); } catch { /* ignore */ } }
+  src = src || "direct";
+
+  const counting = Boolean(CONFIG.vantage && CONFIG.study) && navigator.doNotTrack !== "1" && !navigator.globalPrivacyControl;
+  const note = document.querySelector("[data-plans-note]");
+  if (counting && note) note.hidden = false;
+
+  // Only this page's own events go to Vantage. No cursor, scroll or text.
+  const t0 = performance.now();
+  let session = null;
+  const post = (path, body) => fetch(CONFIG.vantage + path, {
+    method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body), keepalive: true,
+  });
+  function track(name, props = {}) {
+    if (!counting) return;
+    if (!session) {
+      session = post("/api/session/start", { studyId: CONFIG.study, guided: false, url: location.origin + location.pathname, w: innerWidth, h: innerHeight, dpr: window.devicePixelRatio || 1 })
+        .then((r) => r.json()).then((j) => j.sid);
+    }
+    session
+      .then((sid) => post("/api/ingest", { sid, events: [{ e: "custom", t: Math.round(performance.now() - t0), name, props: { src, ...props } }] }))
+      .catch(() => { session = null; });
+  }
+
+  const section = document.getElementById("pricing");
+  if (section && "IntersectionObserver" in window) {
+    const seen = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { seen.disconnect(); track("pricing_viewed"); }
+    }, { threshold: 0.4 });
+    seen.observe(section);
+  }
+
+  const hold = document.querySelector("[data-hold]");
+  const mail = hold.querySelector("[data-mail]");
+  const copyMail = hold.querySelector("[data-copy-mail]");
+  const address = hold.querySelector("[data-address]");
+  const closeBtn = hold.querySelector("[data-hold-close]");
+  const reasons = hold.querySelector("[data-reasons]");
+  const thanks = hold.querySelector("[data-thanks]");
+  let chosen = null;
+
+  document.querySelectorAll("[data-plan]").forEach((button) => button.addEventListener("click", () => {
+    const key = button.dataset.plan;
+    const plan = PLANS[key];
+    chosen = { plan: key, price: plan.price };
+    hold.querySelector("[data-hold-title]").textContent = plan.title;
+    hold.querySelector("[data-hold-text]").textContent = plan.text;
+    reasons.hidden = true;
+    thanks.hidden = true;
+    closeBtn.hidden = false;
+    if (CONFIG.email) {
+      mail.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent(plan.subject)}&body=${encodeURIComponent(plan.body + `\n\n(ref: ${src})`)}`;
+      mail.hidden = false;
+      copyMail.hidden = false;
+      // Not everyone has a mail app set up, so the address is always shown too.
+      address.textContent = `No mail app? Write to ${CONFIG.email} and say "${plan.subject}".`;
+      address.hidden = false;
+    } else {
+      mail.hidden = true;
+      copyMail.hidden = true;
+      address.hidden = true;
+    }
+    hold.hidden = false;
+    hold.focus({ preventScroll: false });
+    track("plan_click", chosen);
+  }));
+
+  mail.addEventListener("click", () => { if (chosen) track("plan_email_click", chosen); });
+
+  copyMail.addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(CONFIG.email); }
+    catch {
+      const ta = Object.assign(document.createElement("textarea"), { value: CONFIG.email });
+      document.body.append(ta); ta.select(); document.execCommand("copy"); ta.remove();
+    }
+    copyMail.textContent = "Copied";
+    setTimeout(() => { copyMail.textContent = "Copy the address"; }, 1800);
+    if (chosen) track("plan_copy_email", chosen);
+  });
+
+  closeBtn.addEventListener("click", () => {
+    if (chosen) track("plan_dismiss", chosen);
+    closeBtn.hidden = true;
+    mail.hidden = true;
+    copyMail.hidden = true;
+    address.hidden = true;
+    reasons.hidden = false;
+  });
+
+  hold.querySelectorAll("[data-reason]").forEach((button) => button.addEventListener("click", () => {
+    if (chosen) track("plan_reason", { ...chosen, reason: button.dataset.reason });
+    reasons.hidden = true;
+    thanks.hidden = false;
+  }));
 })();
 </script>
 </body>
