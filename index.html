@@ -258,7 +258,7 @@
   <!-- 1. PROMISE -->
   <section class="hero" id="top" aria-labelledby="hero-title">
     <div class="wrap">
-      <p class="eyebrow">v0.6.0 alpha · paid per project · <a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.6.0-alpha.1" target="_blank" rel="noopener">release notes ↗</a></p>
+      <p class="eyebrow">v0.6.1 alpha · paid per project · <a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.6.1-alpha.1" target="_blank" rel="noopener">release notes ↗</a></p>
       <h1 id="hero-title"><span class="dim">AI wrote it.</span><br>Furnace <span class="accent">checks</span> it.</h1>
       <p class="lede">Run it before you launch. It finds the holes, <b>tells you how to fix each one</b>, and never fakes a pass.</p>
 
@@ -460,8 +460,8 @@ sample component · v0.2.0-alpha.1</pre>
             <p>Each release ships <code>release.signed.json</code>, signed with this key. After installing, run the command below. Exit 0 means intact and signed by this key.</p>
             <pre>node furnace/bin/furnace.js verify-receipt --file=release.signed.json --trusted-key=furnace-release-key.pub.pem</pre>
             <pre>Ed25519 · id 39d945dc02ce99f0
-archive  furnace-v0.6.0-alpha.1.tgz
-sha256   5424890ecaf0a68ca0f62e80c91559691a8559d4b188e03acaa210487da02d97
+archive  furnace-v0.6.1-alpha.1.tgz
+sha256   9d0dd9fad2eac724410131b0b85a6af7a307b5c983e77e4d18c67660681a5356
 
 -----BEGIN PUBLIC KEY-----
 MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
@@ -478,19 +478,19 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
       <div class="section-head">
         <p class="eyebrow">Plans</p>
         <h2 id="pricing-title">Paid from the first project.</h2>
-        <p class="lede">There is no free tier and no trial. You pay for each project you want Furnace to check, or for an audit where a person checks every finding by hand and puts their name to the report. If the audit finds nothing you need to fix before launch, you get your money back. A countersignature means a Pro account submitted that exact report on that date; it does not mean the report was checked. You pay through a payment link sent by email; nothing on this page charges you.</p>
+        <p class="lede">There is no free tier and no trial. You pay for each project you want Furnace to check, or for an audit where a person checks every finding by hand and puts their name to the report. If the audit finds nothing you need to fix before launch, you get your money back. A countersignature means a Pro account submitted that exact report on that date; it does not mean the report was checked. You pay on Gumroad, which handles card payment and sales tax; nothing on this page charges you.</p>
       </div>
       <ul class="plans">
         <li class="plan">
           <h3>Launch Audit <span class="tag tag--on">Available</span></h3>
-          <p class="price">$299<small>one time</small></p>
-          <p class="plan-for">A person runs Furnace on your project, checks every finding by hand, and sends you a signed report with what to fix first. Includes 30 days of Pro on that project. Paid before the audit starts; if it finds nothing you need to fix before launch, you get your money back.</p>
-          <button class="btn btn--primary" type="button" data-plan="audit">Book an audit for $299</button>
+          <p class="price">$99<small>one time · founding price, then $299</small></p>
+          <p class="plan-for">Founding price for the first 10 audits, then $299. A person runs Furnace on your project, checks every finding by hand, and sends you a signed report with what to fix first. Includes 30 days of Pro on that project. Paid before the audit starts; if it finds nothing you need to fix before launch, you get your money back.</p>
+          <button class="btn btn--primary" type="button" data-plan="audit">Book an audit for $99</button>
         </li>
         <li class="plan">
           <h3>Pro <span class="tag tag--on">Available</span></h3>
           <p class="price">$19<small>/ project / month</small></p>
-          <p class="plan-for">The scan, the verdict and the list of problems in plain English, run on your own machine; live checks against your running app; block review; a fix prompt for your AI coding tool on every finding; a check on every pull request; and a receipt we countersign. A countersignature means a Pro account submitted that exact report on that date; it does not mean the report was checked. Paid monthly, before use. Stop any time; your project keeps working until the end of the month you paid for.</p>
+          <p class="plan-for">The scan, the verdict and the list of problems in plain English, run on your own machine; live checks against your running app; block review; a fix prompt for your AI coding tool on every finding; a check on every pull request; and a receipt we countersign. A countersignature means a Pro account submitted that exact report on that date; it does not mean the report was checked. Paid monthly, before use. Cancel any time; your plan runs to the end of the month you paid for. Full refund within 14 days of your first payment if Furnace cannot check your app.</p>
           <button class="btn" type="button" data-plan="pro">Buy Pro at $19</button>
         </li>
       </ul>
@@ -525,7 +525,7 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
       <h2 id="get-title">Put it through the fire.</h2>
       <div class="install" data-install>
         <div class="install-top">
-          <span class="install-meta">Paid per project · v0.6.0-alpha.1 · Node 24+</span>
+          <span class="install-meta">Paid per project · v0.6.1-alpha.1 · Node 24+</span>
           <div class="tabs" role="tablist" aria-label="Install for">
             <button class="tab" role="tab" aria-selected="true" data-mode="terminal">Terminal</button>
             <button class="tab" role="tab" aria-selected="false" data-mode="agent">AI assistant</button>
@@ -546,7 +546,7 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
         <span>furnace · paid licence per project (not open source) · code check sends nothing</span>
         <ul>
           <li><a href="https://github.com/vyshwas/furnace-dist" target="_blank" rel="noopener">GitHub</a></li>
-          <li><a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.6.0-alpha.1" target="_blank" rel="noopener">Release</a></li>
+          <li><a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.6.1-alpha.1" target="_blank" rel="noopener">Release</a></li>
           <li><a href="https://github.com/vyshwas/furnace-dist/issues" target="_blank" rel="noopener">Feedback</a></li>
         </ul>
       </footer>
@@ -557,8 +557,8 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
 <script>
 (() => {
   const CMDS = {
-    terminal: "mkdir furnace-alpha && cd furnace-alpha && curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.6.0-alpha.1/furnace-v0.6.0-alpha.1.tgz | tar xz && ./install.sh",
-    agent: "Install Furnace v0.6.0-alpha.1 in its own folder OUTSIDE this codebase (never extract it into this repo: the archive contains its own package.json, README.md and src/), then run a reality verification pass on this codebase: mkdir -p ../furnace-alpha && cd ../furnace-alpha && curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.6.0-alpha.1/furnace-v0.6.0-alpha.1.tgz | tar xz && ./install.sh"
+    terminal: "mkdir furnace-alpha && cd furnace-alpha && curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.6.1-alpha.1/furnace-v0.6.1-alpha.1.tgz | tar xz && ./install.sh",
+    agent: "Install Furnace v0.6.1-alpha.1 in its own folder OUTSIDE this codebase (never extract it into this repo: the archive contains its own package.json, README.md and src/), then run a reality verification pass on this codebase: mkdir -p ../furnace-alpha && cd ../furnace-alpha && curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.6.1-alpha.1/furnace-v0.6.1-alpha.1.tgz | tar xz && ./install.sh"
   };
   let mode = 'terminal';
   const bars = [...document.querySelectorAll('[data-install]')];
@@ -606,21 +606,21 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
   // vantage is empty: the old tunnel address is dead. Put a live one back to count clicks.
   const CONFIG = { email: "vyshwas.work@gmail.com", vantage: "", study: "9MML545tgx" };
   const PLANS = {
-    // payLink: a payment page (Razorpay, Lemon Squeezy, PayPal...). Empty = ask by email,
-    // and the link is sent back by reply. Keep in step with furnace/src/pricing.js.
+    // payLink: the plan's Gumroad page (it handles card payment and sales tax). Empty = ask by email.
+    // Keep in step with furnace/src/pricing.js (a test fails if they drift).
     pro: {
-      label: "Pro", price: 19, per: "per project per month", payLink: "",
-      title: "Buy Pro for one project.",
-      text: "Send one email with your GitHub name. We reply with a payment link for $19 per project per month, and your project is switched on as soon as it is paid.",
+      label: "Pro", price: 19, per: "per project per month", payLink: "https://vyomster77.gumroad.com/l/furnace-pro",
+      title: "Buy Pro for one project ($19 a month).",
+      text: "You pay on Gumroad. Enter your GitHub username at checkout and your plan is switched on within 24 hours. Cancel any time; full refund within 14 days of your first payment if Furnace cannot check your app.",
       subject: "Furnace Pro for 1 project",
-      body: "Hi, I would like Furnace Pro ($19 per project per month) for 1 project.\n\nMy GitHub name:",
+      body: "Hi, I have a question about Furnace Pro ($19 per project per month).",
     },
     audit: {
-      label: "Launch Audit", price: 299, per: "one time", payLink: "",
-      title: "Book a Launch Audit.",
-      text: "Send one email with a line on what your app does, when you launch, and how to share the code. We reply with a fixed scope and a payment link for $299. The audit starts once it is paid; if it finds nothing you need to fix before launch, you get your money back.",
+      label: "Launch Audit", price: 99, per: "one time", payLink: "https://vyomster77.gumroad.com/l/furnace-launch-audit",
+      title: "Book a Launch Audit ($99 founding price).",
+      text: "You pay on Gumroad. Enter your GitHub username and your app's link at checkout, then reply to the receipt with how to share your code. Founding price for the first 10 audits, then $299. If the audit finds nothing you need to fix before launch, you get your money back.",
       subject: "Launch Audit request",
-      body: "Hi, I would like a Launch Audit ($299).\n\nWhat the app does:\nLaunch date:\nHow to share the code:\nMy GitHub name:",
+      body: "Hi, I have a question about the Launch Audit ($99 founding price).\n\nWhat the app does:\nLaunch date:\nHow to share the code:\nMy GitHub name:",
     },
   };
 
@@ -682,7 +682,12 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
     closeBtn.hidden = false;
     pay.hidden = !plan.payLink;
     if (plan.payLink) pay.href = plan.payLink;
-    if (CONFIG.email) {
+    if (CONFIG.email && plan.payLink) {
+      mail.hidden = true;
+      copyMail.hidden = true;
+      address.textContent = `Questions first? Write to ${CONFIG.email}.`;
+      address.hidden = false;
+    } else if (CONFIG.email) {
       mail.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent(plan.subject)}&body=${encodeURIComponent(plan.body + `\n\n(ref: ${src})`)}`;
       mail.hidden = false;
       copyMail.hidden = false;
