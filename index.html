@@ -8,25 +8,26 @@
 <meta property="og:title" content="Furnace — AI wrote it. Furnace checks it.">
 <meta property="og:description" content="Run it before you merge. It fixes what is safe, flags what is not, and never fakes a pass.">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#0B0A09">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230B0A09'/><path d='M30 70 L50 25 L70 70 Z' fill='none' stroke='%23FF5A1F' stroke-width='8' stroke-linejoin='round'/><circle cx='50' cy='56' r='6' fill='%23FFB020'/></svg>">
+<meta name="theme-color" content="#03060C">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='it' gradientUnits='userSpaceOnUse' x1='0' y1='70' x2='0' y2='25'><stop offset='0' stop-color='%231450C8'/><stop offset='.55' stop-color='%232D7BFF'/><stop offset='1' stop-color='%23A8E4FF'/></linearGradient><linearGradient id='if' gradientUnits='userSpaceOnUse' x1='0' y1='64' x2='0' y2='42'><stop offset='0' stop-color='%232D7BFF'/><stop offset='1' stop-color='%235FB2FF'/></linearGradient></defs><rect width='100' height='100' rx='20' fill='%2303060C'/><path d='M30 70 L50 25 L70 70 Z' fill='none' stroke='url(%23it)' stroke-width='8' stroke-linejoin='round'/><path d='M50 41.8 C53.5 49 56.4 55.6 56.4 57.8 A6.4 6.4 0 0 1 43.6 57.8 C43.6 55.6 46.5 49 50 41.8 Z' fill='url(%23if)'/><path d='M50 50.2 C51.8 53.6 53.2 56.7 53.2 57.8 A3.2 3.2 0 0 1 46.8 57.8 C46.8 56.7 48.2 53.6 50 50.2 Z' fill='%23A8E4FF'/><circle cx='50' cy='57.8' r='2.9' fill='%23F2FBFF'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
   :root {
-    /* palette: coal, bone, one accent (heat). Amber only marks "your call". */
-    --coal: #0B0A09;
-    --coal-2: #141210;
-    --bone: #F2EDE4;
-    --ash: #A39C92;
-    --ash-dim: #6F6961;
-    --line: rgba(242, 237, 228, 0.12);
-    --line-strong: rgba(242, 237, 228, 0.24);
-    --heat: #FF5A1F;
-    --heat-rgb: 255, 90, 31;
-    --amber: #FFB020;
+    /* palette: coal, bone, one accent (heat: the blue flame, as in the launch film).
+       "Amber" (now ice blue) only marks "your call". */
+    --coal: #03060C;
+    --coal-2: #0A1019;
+    --bone: #EAF0F7;
+    --ash: #A3ADBA;
+    --ash-dim: #6B7686;
+    --line: rgba(234, 240, 247, 0.12);
+    --line-strong: rgba(234, 240, 247, 0.24);
+    --heat: #3D8BFF;
+    --heat-rgb: 61, 139, 255;
+    --amber: #A8E4FF;
     --ok: #6EE7A8;
 
     /* type: one sans, one mono. Four sizes carry the whole page. */
@@ -240,7 +241,7 @@
 <header class="nav">
   <div class="wrap">
     <a class="brand" href="#top" aria-label="Furnace home">
-      <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="var(--coal-2)"/><path d="M30 70 L50 25 L70 70 Z" fill="none" stroke="var(--heat)" stroke-width="8" stroke-linejoin="round"/><circle cx="50" cy="56" r="6" fill="var(--amber)"/></svg>
+      <svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="bft" gradientUnits="userSpaceOnUse" x1="0" y1="70" x2="0" y2="25"><stop offset="0" stop-color="#1450C8"/><stop offset=".55" stop-color="#2D7BFF"/><stop offset="1" stop-color="#A8E4FF"/></linearGradient><linearGradient id="bff" gradientUnits="userSpaceOnUse" x1="0" y1="64" x2="0" y2="42"><stop offset="0" stop-color="#2D7BFF"/><stop offset="1" stop-color="#5FB2FF"/></linearGradient></defs><rect width="100" height="100" rx="22" fill="var(--coal-2)"/><path d="M30 70 L50 25 L70 70 Z" fill="none" stroke="url(#bft)" stroke-width="8" stroke-linejoin="round"/><path d="M50 41.8 C53.5 49 56.4 55.6 56.4 57.8 A6.4 6.4 0 0 1 43.6 57.8 C43.6 55.6 46.5 49 50 41.8 Z" fill="url(#bff)"/><path d="M50 50.2 C51.8 53.6 53.2 56.7 53.2 57.8 A3.2 3.2 0 0 1 46.8 57.8 C46.8 56.7 48.2 53.6 50 50.2 Z" fill="#A8E4FF"/><circle cx="50" cy="57.8" r="2.9" fill="#F2FBFF"/></svg>
       furnace
     </a>
     <ul class="nav-links">
