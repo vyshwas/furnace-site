@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Furnace — AI wrote it. Furnace checks it.</title>
-<meta name="description" content="Run Furnace before you merge AI-written code. It fixes what is safe, flags what is not, and never fakes a pass.">
+<meta name="description" content="Furnace checks AI-written apps before launch. It finds the security holes, shows you how to fix each one, and only passes what it can prove.">
 <meta property="og:title" content="Furnace — AI wrote it. Furnace checks it.">
-<meta property="og:description" content="Run it before you merge. It fixes what is safe, flags what is not, and never fakes a pass.">
+<meta property="og:description" content="Run it before you launch. It finds the security holes, shows you how to fix each one, and only passes what it can prove.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#03060C">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='it' gradientUnits='userSpaceOnUse' x1='0' y1='70' x2='0' y2='25'><stop offset='0' stop-color='%231450C8'/><stop offset='.55' stop-color='%232D7BFF'/><stop offset='1' stop-color='%23A8E4FF'/></linearGradient><linearGradient id='if' gradientUnits='userSpaceOnUse' x1='0' y1='64' x2='0' y2='42'><stop offset='0' stop-color='%232D7BFF'/><stop offset='1' stop-color='%235FB2FF'/></linearGradient></defs><rect width='100' height='100' rx='20' fill='%2303060C'/><path d='M30 70 L50 25 L70 70 Z' fill='none' stroke='url(%23it)' stroke-width='8' stroke-linejoin='round'/><path d='M50 41.8 C53.5 49 56.4 55.6 56.4 57.8 A6.4 6.4 0 0 1 43.6 57.8 C43.6 55.6 46.5 49 50 41.8 Z' fill='url(%23if)'/><path d='M50 50.2 C51.8 53.6 53.2 56.7 53.2 57.8 A3.2 3.2 0 0 1 46.8 57.8 C46.8 56.7 48.2 53.6 50 50.2 Z' fill='%23A8E4FF'/><circle cx='50' cy='57.8' r='2.9' fill='%23F2FBFF'/></svg>">
@@ -268,11 +268,11 @@
     <div class="wrap">
       <p class="eyebrow">v0.6.2 alpha · paid per project · <a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.6.2-alpha.1" target="_blank" rel="noopener">release notes ↗</a></p>
       <h1 id="hero-title"><span class="dim">AI wrote it.</span><br>Furnace <span class="accent">checks</span> it.</h1>
-      <p class="lede">Run it before you launch. It finds the holes, <b>tells you how to fix each one</b>, and never fakes a pass.</p>
+      <p class="lede">Run it before you launch. It finds the security holes, <b>shows you how to fix each one</b>, and only passes what it can prove.</p>
 
       <div class="install" data-install>
         <div class="install-top">
-          <span class="install-meta">Runs on your machine · paid per project · Node 24+</span>
+          <span class="install-meta">Runs on your computer · paid per project · needs Node 24+</span>
           <div class="tabs" role="tablist" aria-label="Install for">
             <button class="tab" role="tab" aria-selected="true" data-mode="terminal">Terminal</button>
             <button class="tab" role="tab" aria-selected="false" data-mode="agent">AI assistant</button>
@@ -307,8 +307,8 @@
             </div>
             <div class="callout">
               <span class="sev">CRITICAL · LINE 2</span>
-              <p>A signed-in user can change the id in the address and open other people's records.</p>
-              <p><b>Fix:</b> look the record up by its id AND the signed-in user's id.</p>
+              <p>Any signed-in user can change the ID in the web address and open someone else's records.</p>
+              <p><b>Fix:</b> look up the record by its ID and the signed-in user's ID together.</p>
             </div>
           </div>
           <div class="pane">
@@ -326,7 +326,7 @@
           </div>
         </div>
       </figure>
-      <p class="demo-note">Real output from Furnace v0.5.0 on a small test app with a planted bug. Paths trimmed.</p>
+      <p class="demo-note">Real output from Furnace v0.5.0 on a small test app with a bug added on purpose. File paths shortened.</p>
     </div>
   </section>
 
@@ -339,9 +339,9 @@
       </div>
       <ul class="answers">
         <li><h3>Proven</h3><p><b>It works.</b> Checked in a real browser.</p></li>
-        <li><h3>Repaired</h3><p><b>Fixed,</b> then re-checked by a separate verifier.</p></li>
-        <li><h3>Needs you</h3><p><b>A judgment call.</b> Flagged, never guessed.</p></li>
-        <li><h3>Unknown</h3><p><b>Can't prove it?</b> Then it's not a pass.</p></li>
+        <li><h3>Repaired</h3><p><b>Fixed,</b> then checked again by a separate step.</p></li>
+        <li><h3>Needs you</h3><p><b>A decision only you can make.</b> Flagged, never guessed.</p></li>
+        <li><h3>Unknown</h3><p><b>Not proven,</b> so it doesn't pass.</p></li>
       </ul>
     </div>
   </section>
@@ -357,19 +357,19 @@
         <li>
           <span class="step-n">01</span>
           <h3>Install</h3>
-          <p>One line. Stays on your machine.</p>
+          <p>One command. Everything stays on your computer.</p>
           <code>$ ./install.sh</code>
         </li>
         <li>
           <span class="step-n">02</span>
           <h3>Point it at your app</h3>
-          <p>It reads every route and page.</p>
+          <p>It reads every page and every server route.</p>
           <code>$ node furnace/bin/furnace.js launch-check --workspace=./my-app</code>
         </li>
         <li>
           <span class="step-n">03</span>
-          <h3>Get a straight answer</h3>
-          <p>BLOCKERS FOUND, NO BLOCKERS FOUND, or NOT SURE YET. Each problem comes with a fix you can paste into your AI assistant.</p>
+          <h3>Get a clear answer</h3>
+          <p>One of three results: BLOCKERS FOUND, NO BLOCKERS FOUND or NOT SURE YET. Every problem comes with a fix you can paste into your AI assistant.</p>
         </li>
       </ol>
     </div>
@@ -379,25 +379,25 @@
   <section class="section" id="proof" aria-labelledby="proof-title">
     <div class="wrap">
       <div class="section-head">
-        <p class="eyebrow">Proof, not promises</p>
+        <p class="eyebrow">Proof</p>
         <h2 id="proof-title">We ran it on 24 real apps. None came back clean.</h2>
       </div>
       <div class="numbers">
         <div>
           <div class="num-v">24<small> → </small>0</div>
-          <p><b>Real apps → with no blockers.</b> Each had open questions for its owner.</p>
+          <p><b>Apps checked → apps with nothing to fix.</b> Every one had questions for its owner.</p>
         </div>
         <div>
           <div class="num-v">644<small>/647</small></div>
-          <p><b>Checks green</b> for this release. 3 skipped on purpose.</p>
+          <p><b>Tests passing</b> in this release. 3 skipped on purpose.</p>
         </div>
         <div>
           <div class="num-v">0.4<small>s</small></div>
-          <p><b>One repair run,</b> checked and re-checked, on a laptop.</p>
+          <p><b>For one repair,</b> both checks included, on a laptop.</p>
         </div>
         <div>
           <div class="num-v">0<small> files</small></div>
-          <p><b>Of yours on our servers.</b> The code check sends nothing; sign-in sends 3 project hashes, never code.</p>
+          <p><b>Of your code on our servers.</b> The check sends nothing. Signing in sends three project fingerprints, never code.</p>
         </div>
       </div>
     </div>
@@ -409,15 +409,15 @@
       <div class="section-head">
         <p class="eyebrow">Furnace or an AI review?</p>
         <h2 id="why-title">Why not just ask Claude Code to check it?</h2>
-        <p class="lede">Ask it too. An AI assistant is great at writing the fix. Furnace is for the moment before launch, when "probably fine" is not good enough.</p>
+        <p class="lede">Use both. An AI assistant is good at writing fixes. Furnace is the check before launch, when "probably fine" isn't enough.</p>
       </div>
       <ul class="vs">
-        <li><h3>Same code, same answer.</h3><p><b>Furnace checks with fixed rules, not a language model.</b> Run it twice and you get the same verdict. An AI review can change from one run to the next.</p></li>
-        <li><h3>It never fakes a pass.</h3><p><b>When it can't prove a part is safe, it says NOT SURE YET</b> and asks you. It has no "ready" verdict at all. An AI reviewer can sound sure about code it never fully traced.</p></li>
-        <li><h3>Tested on known holes.</h3><p><b>Every release is run against 231 test cases with planted security holes</b> and must not pass a single one. An AI review has no score you can check.</p></li>
-        <li><h3>Your code stays put.</h3><p><b>The code check runs on your machine and sends nothing.</b> An AI review reads your code on the AI provider's servers.</p></li>
-        <li><h3>A record you can show.</h3><p><b>Every report lists what passed and what it couldn't reach.</b> Pro adds our countersignature, which shows that exact report existed on that date. A chat transcript proves neither.</p></li>
-        <li><h3>Better together.</h3><p><b>Each finding comes with a fix prompt to paste into Claude Code or Cursor,</b> and Furnace plugs straight into both (MCP). Your assistant writes the fix; Furnace checks it again.</p></li>
+        <li><h3>Same code, same answer.</h3><p><b>Furnace uses fixed rules, not an AI model.</b> Run it twice and you get the same result. An AI review can give a different answer each time.</p></li>
+        <li><h3>It never fakes a pass.</h3><p><b>If it can't prove something is safe, it says NOT SURE YET</b> and asks you. It never calls your app "ready". An AI can sound confident about code it didn't fully check.</p></li>
+        <li><h3>Tested on known holes.</h3><p><b>Every release is tested on 231 cases with security holes added on purpose,</b> and it must not pass any of them. An AI review has no score you can check.</p></li>
+        <li><h3>Your code stays with you.</h3><p><b>The check runs on your computer and sends nothing.</b> An AI review sends your code to the AI company's servers.</p></li>
+        <li><h3>A record you can show.</h3><p><b>Every report lists what passed and what it couldn't check.</b> With Pro, we countersign it, which shows that exact report existed on that date. A chat log shows neither.</p></li>
+        <li><h3>Works with your AI tools.</h3><p><b>Every problem comes with a prompt you can paste into Claude Code or Cursor,</b> and Furnace connects to both directly. Your assistant writes the fix; Furnace checks it again.</p></li>
       </ul>
     </div>
   </section>
@@ -434,13 +434,13 @@
           <summary>What it doesn't do</summary>
           <div class="fine-body">
             <ul>
-              <li>Page checks need your app running. Furnace doesn't start it for you.</li>
-              <li>Fixes are verified on the changed file, not by re-rendering the page.</li>
-              <li>Login screens and payments need a human. Flagged, never guessed.</li>
-              <li>Gradients and live keyboard behaviour come back unknown, not passing.</li>
-              <li>Receipt fingerprints show edits. They are not signatures.</li>
-              <li>Tested on Windows for this release. Linux last tested on v0.1.0. macOS not tested.</li>
-              <li>Code-reading checks look for patterns. Anything they can't establish is a question for you.</li>
+              <li>It doesn't start your app. Page checks need it already running.</li>
+              <li>Fixes are checked in the changed file, not by reloading the page.</li>
+              <li>Login screens and payments need a person to check. Furnace flags them and never guesses.</li>
+              <li>Gradients and live keyboard behaviour are marked unknown, not passed.</li>
+              <li>Receipt fingerprints show whether a file was edited. They are not signatures.</li>
+              <li>Tested on Windows for this release. Linux was last tested on v0.1.0. Not yet tested on macOS.</li>
+              <li>Code checks look for known patterns. Anything they can't confirm becomes a question for you.</li>
             </ul>
           </div>
         </details>
@@ -448,18 +448,18 @@
           <summary>What else it checks</summary>
           <div class="fine-body">
             <ul>
-              <li>Login and ownership checks on every server route, admin limits, rate limits on paid AI or email calls.</li>
-              <li>Supabase row-level security, Firebase rules, secrets in code and git history.</li>
-              <li>Your live site with <code>--url</code>: headers, cookies, CORS, exposed files.</li>
-              <li><code>furnace blocks --since=HEAD</code> reviews only what your AI assistant just changed.</li>
-              <li>Compliance signals: third-party fonts, trackers before consent, unsubscribe links, renewal terms, report buttons. Signals only — not legal advice.</li>
+              <li>Every server route: does it need a login, and does it check who owns the data? Also admin limits, and usage limits on paid AI or email calls.</li>
+              <li>Supabase row-level security, Firebase rules, and passwords or keys left in your code or git history.</li>
+              <li><span>Your live site, with <code>--url</code>: security headers, cookies, cross-site settings (CORS) and files left open to the public.</span></li>
+              <li><span><code>furnace blocks --since=HEAD</code> checks only what your AI assistant just changed.</span></li>
+              <li>Privacy and legal signals: third-party fonts, trackers that load before consent, unsubscribe links, renewal terms, report buttons. Signals only, not legal advice.</li>
             </ul>
           </div>
         </details>
         <details>
           <summary>What a repair receipt looks like</summary>
           <div class="fine-body">
-            <p>Every fix leaves a receipt: what changed, what was checked, and a fingerprint taken before the fix, so the bar can't quietly drop. A real one, trimmed.</p>
+            <p>Every fix leaves a receipt: what changed, what was checked, and a fingerprint of the file from before the fix, so the standard can't quietly slip. A real one, shortened:</p>
             <pre>FURNACE · repair receipt · local run
 FILE    src/Checkout.jsx
 RULE    target-size · line 4
@@ -482,9 +482,9 @@ sample component · v0.2.0-alpha.1</pre>
           </div>
         </details>
         <details>
-          <summary>Check the download is ours</summary>
+          <summary>Check the download is genuine</summary>
           <div class="fine-body">
-            <p>Each release ships <code>release.signed.json</code>, signed with this key. After installing, run the command below. Exit 0 means intact and signed by this key.</p>
+            <p>Each release includes <code>release.signed.json</code>, signed with the key below. After installing, run this command. If it finishes with exit code 0, the download is complete and signed by us.</p>
             <pre>node furnace/bin/furnace.js verify-receipt --file=release.signed.json --trusted-key=furnace-release-key.pub.pem</pre>
             <pre>Ed25519 · id 39d945dc02ce99f0
 archive  furnace-v0.6.2-alpha.1.tgz
@@ -505,20 +505,20 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
       <div class="section-head">
         <p class="eyebrow">Plans</p>
         <h2 id="pricing-title">Paid from the first project.</h2>
-        <p class="lede">There is no free tier and no trial. You pay for each project you want Furnace to check, or for an audit where a person checks every finding by hand and puts their name to the report. If the audit finds nothing you need to fix before launch, you get your money back. A countersignature means a Pro account submitted that exact report on that date; it does not mean the report was checked. You pay on Gumroad, which handles card payment and sales tax; nothing on this page charges you.</p>
+        <p class="lede">No free tier, no trial. Pay monthly for each project you want Furnace to check, or book an audit: a person checks every finding by hand and signs the report. If the audit finds nothing you need to fix before launch, you get your money back. Payment goes through Gumroad, which also handles sales tax. Nothing on this page charges you.</p>
       </div>
       <ul class="plans">
         <li class="plan">
           <h3>Launch Audit <span class="tag tag--on">Available</span></h3>
           <p class="price">$99<small>one time · founding price, then $299</small></p>
-          <p class="plan-for">Founding price for the first 10 audits, then $299. A person runs Furnace on your project, checks every finding by hand, and sends you a signed report with what to fix first. Includes 30 days of Pro on that project. Paid before the audit starts; if it finds nothing you need to fix before launch, you get your money back.</p>
+          <p class="plan-for">Founding price for the first 10 audits, then $299. A person runs Furnace on your project, checks every finding by hand, and sends you a signed report that says what to fix first. Includes 30 days of Pro for that project. You pay before the audit starts. If it finds nothing you need to fix before launch, you get your money back.</p>
           <button class="btn btn--primary" type="button" data-plan="audit">Book an audit for $99</button>
           <a class="plan-link" href="sample-report.html">See a sample audit report →</a>
         </li>
         <li class="plan">
           <h3>Pro <span class="tag tag--on">Available</span></h3>
           <p class="price">$19<small>/ project / month</small></p>
-          <p class="plan-for">The scan, the verdict and the list of problems in plain English, run on your own machine; live checks against your running app; block review; a fix prompt for your AI coding tool on every finding; a check on every pull request; and a receipt we countersign. A countersignature means a Pro account submitted that exact report on that date; it does not mean the report was checked. Paid monthly, before use. Cancel any time; your plan runs to the end of the month you paid for. Full refund within 14 days of your first payment if Furnace cannot check your app.</p>
+          <p class="plan-for">The scan, the verdict and a plain-English list of problems, all on your own computer. Also live checks on your running app, a review of each new block of code, a fix prompt for your AI tool on every problem, a check on every pull request, and a receipt we countersign. Our countersignature shows that a Pro account submitted this exact report on this date. It does not mean we checked the report. Billed monthly, in advance. Cancel any time; your plan runs to the end of the month you paid for. Full refund within 14 days of your first payment if Furnace can't check your app.</p>
           <button class="btn" type="button" data-plan="pro">Buy Pro at $19</button>
         </li>
       </ul>
@@ -537,7 +537,7 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
           <p>No problem. What is the main reason?</p>
           <div class="reasons">
             <button class="btn" type="button" data-reason="too_expensive">Too expensive</button>
-            <button class="btn" type="button" data-reason="not_needed">I do not need it</button>
+            <button class="btn" type="button" data-reason="not_needed">I don't need it</button>
             <button class="btn" type="button" data-reason="just_looking">Just looking</button>
           </div>
         </div>
@@ -553,7 +553,7 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
       <h2 id="get-title">Put it through the fire.</h2>
       <div class="install" data-install>
         <div class="install-top">
-          <span class="install-meta">Paid per project · v0.6.2-alpha.1 · Node 24+</span>
+          <span class="install-meta">Paid per project · v0.6.2-alpha.1 · needs Node 24+</span>
           <div class="tabs" role="tablist" aria-label="Install for">
             <button class="tab" role="tab" aria-selected="true" data-mode="terminal">Terminal</button>
             <button class="tab" role="tab" aria-selected="false" data-mode="agent">AI assistant</button>
@@ -571,7 +571,7 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
       </div>
 
       <footer class="foot">
-        <span>furnace · paid licence per project (not open source) · code check sends nothing</span>
+        <span>furnace · paid licence per project · not open source · checks run on your computer</span>
         <ul>
           <li><a href="https://github.com/vyshwas/furnace-dist" target="_blank" rel="noopener">GitHub</a></li>
           <li><a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.6.2-alpha.1" target="_blank" rel="noopener">Release</a></li>
@@ -639,14 +639,14 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
     pro: {
       label: "Pro", price: 19, per: "per project per month", payLink: "https://vyomster77.gumroad.com/l/furnace-pro",
       title: "Buy Pro for one project ($19 a month).",
-      text: "You pay on Gumroad. Enter your GitHub username at checkout and your plan is switched on within 24 hours. Cancel any time; full refund within 14 days of your first payment if Furnace cannot check your app.",
+      text: "You pay on Gumroad. Enter your GitHub username at checkout and we switch on your plan within 24 hours. Cancel any time. Full refund within 14 days of your first payment if Furnace can't check your app.",
       subject: "Furnace Pro for 1 project",
       body: "Hi, I have a question about Furnace Pro ($19 per project per month).",
     },
     audit: {
       label: "Launch Audit", price: 99, per: "one time", payLink: "https://vyomster77.gumroad.com/l/furnace-launch-audit",
       title: "Book a Launch Audit ($99 founding price).",
-      text: "You pay on Gumroad. Enter your GitHub username and your app's link at checkout, then reply to the receipt with how to share your code. Founding price for the first 10 audits, then $299. If the audit finds nothing you need to fix before launch, you get your money back.",
+      text: "You pay on Gumroad. At checkout, enter your GitHub username and your app's link. Then reply to the receipt email to tell us how to share your code. Founding price for the first 10 audits, then $299. If the audit finds nothing you need to fix before launch, you get your money back.",
       subject: "Launch Audit request",
       body: "Hi, I have a question about the Launch Audit ($99 founding price).\n\nWhat the app does:\nLaunch date:\nHow to share the code:\nMy GitHub name:",
     },
