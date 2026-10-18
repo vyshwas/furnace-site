@@ -152,6 +152,11 @@
   .answers li:nth-child(4) h3 { color: var(--ash); }
   .answers p { color: var(--ash); }
   .answers p b { color: var(--bone); font-weight: 500; }
+  .vs { list-style: none; border-top: 1px solid var(--line); }
+  .vs li { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 24px; align-items: baseline; padding: 24px 0; border-bottom: 1px solid var(--line); }
+  .vs h3 { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; }
+  .vs p { color: var(--ash); line-height: 1.55; }
+  .vs p b { color: var(--bone); font-weight: 500; }
 
   /* ===== steps ===== */
   .steps { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 4vw, 48px); }
@@ -218,7 +223,7 @@
   /* ===== responsive ===== */
   @media (max-width: 860px) {
     .nav-links li.hide-sm { display: none; }
-    .win-body, .answers li, .steps, .numbers, .plans { grid-template-columns: minmax(0, 1fr); }
+    .win-body, .answers li, .vs li, .steps, .numbers, .plans { grid-template-columns: minmax(0, 1fr); }
     .pane + .pane { border-left: 0; border-top: 1px solid var(--line); }
     .answers li { gap: 6px; }
     .numbers { gap: 32px; }
@@ -393,6 +398,25 @@
           <p><b>Of yours on our servers.</b> The code check sends nothing; sign-in sends 3 project hashes, never code.</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- 5b. VERSUS AN AI REVIEW -->
+  <section class="section" id="why" aria-labelledby="why-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Furnace or an AI review?</p>
+        <h2 id="why-title">Why not just ask Claude Code to check it?</h2>
+        <p class="lede">Ask it too. An AI assistant is great at writing the fix. Furnace is for the moment before launch, when "probably fine" is not good enough.</p>
+      </div>
+      <ul class="vs">
+        <li><h3>Same code, same answer.</h3><p><b>Furnace checks with fixed rules, not a language model.</b> Run it twice and you get the same verdict. An AI review can change from one run to the next.</p></li>
+        <li><h3>It never fakes a pass.</h3><p><b>When it can't prove a part is safe, it says NOT SURE YET</b> and asks you. It has no "ready" verdict at all. An AI reviewer can sound sure about code it never fully traced.</p></li>
+        <li><h3>Tested on known holes.</h3><p><b>Every release is run against 231 test cases with planted security holes</b> and must not pass a single one. An AI review has no score you can check.</p></li>
+        <li><h3>Your code stays put.</h3><p><b>The code check runs on your machine and sends nothing.</b> An AI review reads your code on the AI provider's servers.</p></li>
+        <li><h3>A record you can show.</h3><p><b>Every report lists what passed and what it couldn't reach.</b> Pro adds our countersignature, which shows that exact report existed on that date. A chat transcript proves neither.</p></li>
+        <li><h3>Better together.</h3><p><b>Each finding comes with a fix prompt to paste into Claude Code or Cursor,</b> and Furnace plugs straight into both (MCP). Your assistant writes the fix; Furnace checks it again.</p></li>
+      </ul>
     </div>
   </section>
 
