@@ -186,7 +186,7 @@
 
   /* ===== plans (price test) ===== */
   [hidden] { display: none !important; }
-  .plans { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2vw, 24px); }
+  .plans { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 2vw, 24px); }
   .plan { display: flex; flex-direction: column; gap: 14px; padding: 28px; border-radius: var(--r-md); border: 1px solid var(--line-strong); background: var(--coal-2); }
   .plan h3 { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; }
   .plan .tag { font: 600 0.68rem var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); }
@@ -247,7 +247,8 @@
       <li class="hide-sm"><a href="#how">How it works</a></li>
       <li class="hide-sm"><a href="#proof">Proof</a></li>
       <li class="hide-sm"><a href="https://github.com/vyshwas/furnace-dist" target="_blank" rel="noopener">GitHub ↗</a></li>
-      <li><a class="btn btn--primary" href="#get">Install</a></li>
+      <li class="hide-sm"><a href="#get">Install</a></li>
+      <li><a class="btn btn--primary" href="#pricing">Pricing</a></li>
     </ul>
   </div>
 </header>
@@ -257,13 +258,13 @@
   <!-- 1. PROMISE -->
   <section class="hero" id="top" aria-labelledby="hero-title">
     <div class="wrap">
-      <p class="eyebrow">v0.4.0 alpha · free · <a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.4.0-alpha.1" target="_blank" rel="noopener">release notes ↗</a></p>
+      <p class="eyebrow">v0.6.0 alpha · paid per project · <a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.6.0-alpha.1" target="_blank" rel="noopener">release notes ↗</a></p>
       <h1 id="hero-title"><span class="dim">AI wrote it.</span><br>Furnace <span class="accent">checks</span> it.</h1>
       <p class="lede">Run it before you launch. It finds the holes, <b>tells you how to fix each one</b>, and never fakes a pass.</p>
 
       <div class="install" data-install>
         <div class="install-top">
-          <span class="install-meta">Runs on your machine · No signup · Node 24+</span>
+          <span class="install-meta">Runs on your machine · paid per project · Node 24+</span>
           <div class="tabs" role="tablist" aria-label="Install for">
             <button class="tab" role="tab" aria-selected="true" data-mode="terminal">Terminal</button>
             <button class="tab" role="tab" aria-selected="false" data-mode="agent">AI assistant</button>
@@ -285,7 +286,7 @@
   <!-- 2. SEE IT -->
   <section class="demo" aria-label="Example run">
     <div class="wrap">
-      <figure class="win" aria-label="Furnace checking a small app. It finds 1 problem, 1 question and 1 improvement, and says NOT READY.">
+      <figure class="win" aria-label="Furnace checking a small app. It finds 1 problem, 1 question and 1 improvement, and says BLOCKERS FOUND.">
         <div class="win-bar"><span>my-app — furnace launch-check</span><span>done</span></div>
         <div class="win-body">
           <div class="pane">
@@ -305,7 +306,7 @@
           <div class="pane">
             <p class="pane-label">terminal</p>
             <div class="out">
-              <div class="verdict">NOT READY: 1 problem to fix · 1 question for you · 1 improvement.</div>
+              <div class="verdict">BLOCKERS FOUND: 1 problem to fix · 1 question for you · 1 improvement.</div>
               <div class="sec">PROBLEMS (fix before launch)</div>
               <div class="row"><span class="crit">CRITICAL</span><span>Records are fetched by id without checking who owns them</span></div>
               <div class="sec">QUESTIONS (only you can answer these)</div>
@@ -317,7 +318,7 @@
           </div>
         </div>
       </figure>
-      <p class="demo-note">Real output from Furnace v0.4.0 on a small test app with a planted bug. Paths trimmed.</p>
+      <p class="demo-note">Real output from Furnace v0.5.0 on a small test app with a planted bug. Paths trimmed.</p>
     </div>
   </section>
 
@@ -360,7 +361,7 @@
         <li>
           <span class="step-n">03</span>
           <h3>Get a straight answer</h3>
-          <p>READY, NOT READY, or NOT SURE YET. Each problem comes with a fix you can paste into your AI assistant.</p>
+          <p>BLOCKERS FOUND, NO BLOCKERS FOUND, or NOT SURE YET. Each problem comes with a fix you can paste into your AI assistant.</p>
         </li>
       </ol>
     </div>
@@ -371,24 +372,24 @@
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow">Proof, not promises</p>
-        <h2 id="proof-title">We ran it on 24 real apps. None were ready.</h2>
+        <h2 id="proof-title">We ran it on 24 real apps. None came back clean.</h2>
       </div>
       <div class="numbers">
         <div>
           <div class="num-v">24<small> → </small>0</div>
-          <p><b>Real apps → ready to launch.</b> Each had about 2.4 open questions.</p>
+          <p><b>Real apps → with no blockers.</b> Each had open questions for its owner.</p>
         </div>
         <div>
-          <div class="num-v">490<small>/492</small></div>
-          <p><b>Tests passing</b> for this release. 2 skipped on purpose.</p>
+          <div class="num-v">644<small>/647</small></div>
+          <p><b>Checks green</b> for this release. 3 skipped on purpose.</p>
         </div>
         <div>
           <div class="num-v">0.4<small>s</small></div>
           <p><b>One repair run,</b> checked and re-checked, on a laptop.</p>
         </div>
         <div>
-          <div class="num-v">0<small> bytes</small></div>
-          <p><b>Sent to us.</b> No telemetry. Your code never leaves.</p>
+          <div class="num-v">0<small> files</small></div>
+          <p><b>Of yours on our servers.</b> The code check sends nothing; sign-in sends 3 project hashes, never code.</p>
         </div>
       </div>
     </div>
@@ -459,8 +460,8 @@ sample component · v0.2.0-alpha.1</pre>
             <p>Each release ships <code>release.signed.json</code>, signed with this key. After installing, run the command below. Exit 0 means intact and signed by this key.</p>
             <pre>node furnace/bin/furnace.js verify-receipt --file=release.signed.json --trusted-key=furnace-release-key.pub.pem</pre>
             <pre>Ed25519 · id 39d945dc02ce99f0
-archive  furnace-v0.4.0-alpha.1.tgz
-sha256   9b1cfa3b27f0598200d9cc1e80b72fd4b970dd46cd7d778c0cea4a033035fb44
+archive  furnace-v0.6.0-alpha.1.tgz
+sha256   5424890ecaf0a68ca0f62e80c91559691a8559d4b188e03acaa210487da02d97
 
 -----BEGIN PUBLIC KEY-----
 MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
@@ -471,32 +472,26 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
     </div>
   </section>
 
-  <!-- 6b. PLANS: one price, and only emails count. Pro is not on sale; the audit is. See the script at the bottom. -->
+  <!-- 6b. PLANS: paid from day one. No free tier, no trial. Payment by link (email until links are set). See the script at the bottom. -->
   <section class="section" id="pricing" aria-labelledby="pricing-title">
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow">Plans</p>
-        <h2 id="pricing-title">Free on your machine. Paid when you want us to watch.</h2>
-        <p class="lede">Everything that runs on your computer or in your own CI stays free. We would charge only for things that need our servers. Today, only the audit is on sale.</p>
+        <h2 id="pricing-title">Paid from the first project.</h2>
+        <p class="lede">There is no free tier and no trial. You pay for each project you want Furnace to check, or for an audit where a person checks every finding by hand and puts their name to the report. If the audit finds nothing you need to fix before launch, you get your money back. A countersignature means a Pro account submitted that exact report on that date; it does not mean the report was checked. You pay through a payment link sent by email; nothing on this page charges you.</p>
       </div>
       <ul class="plans">
         <li class="plan">
-          <h3>Free</h3>
-          <p class="price">$0</p>
-          <p class="plan-for">The full checks, on your machine or in your own CI. No account.</p>
-          <a class="btn" href="#get" data-plan-free>Install it</a>
-        </li>
-        <li class="plan">
-          <h3>Pro <span class="tag">Planned</span></h3>
-          <p class="price">$19<small>/ project / month</small></p>
-          <p class="plan-for">Comments on every pull request, alerts when a new weakness is found in a package you use, and a saved history of what changed.</p>
-          <button class="btn btn--primary" type="button" data-plan="pro">Get Pro</button>
-        </li>
-        <li class="plan">
           <h3>Launch Audit <span class="tag tag--on">Available</span></h3>
           <p class="price">$299<small>one time</small></p>
-          <p class="plan-for">A person runs Furnace on your project, checks every finding by hand, and sends you a signed report with what to fix first.</p>
-          <button class="btn btn--primary" type="button" data-plan="audit">Request an audit</button>
+          <p class="plan-for">A person runs Furnace on your project, checks every finding by hand, and sends you a signed report with what to fix first. Includes 30 days of Pro on that project. Paid before the audit starts; if it finds nothing you need to fix before launch, you get your money back.</p>
+          <button class="btn btn--primary" type="button" data-plan="audit">Book an audit for $299</button>
+        </li>
+        <li class="plan">
+          <h3>Pro <span class="tag tag--on">Available</span></h3>
+          <p class="price">$19<small>/ project / month</small></p>
+          <p class="plan-for">The scan, the verdict and the list of problems in plain English, run on your own machine; live checks against your running app; block review; a fix prompt for your AI coding tool on every finding; a check on every pull request; and a receipt we countersign. A countersignature means a Pro account submitted that exact report on that date; it does not mean the report was checked. Paid monthly, before use. Stop any time; your project keeps working until the end of the month you paid for.</p>
+          <button class="btn" type="button" data-plan="pro">Buy Pro at $19</button>
         </li>
       </ul>
 
@@ -504,6 +499,7 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
         <h3 data-hold-title></h3>
         <p data-hold-text></p>
         <div class="hold-actions">
+          <a class="btn btn--primary" href="#" data-pay target="_blank" rel="noopener" hidden>Pay now</a>
           <a class="btn btn--primary" href="#" data-mail hidden>Send the email</a>
           <button class="btn" type="button" data-copy-mail hidden>Copy the address</button>
           <button class="btn" type="button" data-hold-close>Not for me</button>
@@ -517,7 +513,7 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
             <button class="btn" type="button" data-reason="just_looking">Just looking</button>
           </div>
         </div>
-        <p data-thanks hidden>Thank you. That helps us decide what to build.</p>
+        <p data-thanks hidden>Thank you. That helps us set the price.</p>
       </div>
       <p class="plans-note" data-plans-note hidden>This page counts which plan you click, and nothing else. No cookies, no personal data.</p>
     </div>
@@ -529,7 +525,7 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
       <h2 id="get-title">Put it through the fire.</h2>
       <div class="install" data-install>
         <div class="install-top">
-          <span class="install-meta">Free beta · v0.4.0-alpha.1 · Node 24+</span>
+          <span class="install-meta">Paid per project · v0.6.0-alpha.1 · Node 24+</span>
           <div class="tabs" role="tablist" aria-label="Install for">
             <button class="tab" role="tab" aria-selected="true" data-mode="terminal">Terminal</button>
             <button class="tab" role="tab" aria-selected="false" data-mode="agent">AI assistant</button>
@@ -547,10 +543,10 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
       </div>
 
       <footer class="foot">
-        <span>furnace · free beta licence (not open source) · zero telemetry</span>
+        <span>furnace · paid licence per project (not open source) · code check sends nothing</span>
         <ul>
           <li><a href="https://github.com/vyshwas/furnace-dist" target="_blank" rel="noopener">GitHub</a></li>
-          <li><a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.4.0-alpha.1" target="_blank" rel="noopener">Release</a></li>
+          <li><a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.6.0-alpha.1" target="_blank" rel="noopener">Release</a></li>
           <li><a href="https://github.com/vyshwas/furnace-dist/issues" target="_blank" rel="noopener">Feedback</a></li>
         </ul>
       </footer>
@@ -561,8 +557,8 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
 <script>
 (() => {
   const CMDS = {
-    terminal: "mkdir furnace-alpha && cd furnace-alpha && curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.4.0-alpha.1/furnace-v0.4.0-alpha.1.tgz | tar xz && ./install.sh",
-    agent: "Install Furnace v0.4.0-alpha.1 in its own folder OUTSIDE this codebase (never extract it into this repo: the archive contains its own package.json, README.md and src/), then run a reality verification pass on this codebase: mkdir -p ../furnace-alpha && cd ../furnace-alpha && curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.4.0-alpha.1/furnace-v0.4.0-alpha.1.tgz | tar xz && ./install.sh"
+    terminal: "mkdir furnace-alpha && cd furnace-alpha && curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.6.0-alpha.1/furnace-v0.6.0-alpha.1.tgz | tar xz && ./install.sh",
+    agent: "Install Furnace v0.6.0-alpha.1 in its own folder OUTSIDE this codebase (never extract it into this repo: the archive contains its own package.json, README.md and src/), then run a reality verification pass on this codebase: mkdir -p ../furnace-alpha && cd ../furnace-alpha && curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.6.0-alpha.1/furnace-v0.6.0-alpha.1.tgz | tar xz && ./install.sh"
   };
   let mode = 'terminal';
   const bars = [...document.querySelectorAll('[data-install]')];
@@ -607,21 +603,24 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
      study    the id of a Vantage study made for this page
    Only emails count as real interest; clicks are a side signal. */
 (() => {
-  const CONFIG = { email: "vyshwas.work@gmail.com", vantage: "https://wan-attorney-softball-win.trycloudflare.com", study: "9MML545tgx" };
+  // vantage is empty: the old tunnel address is dead. Put a live one back to count clicks.
+  const CONFIG = { email: "vyshwas.work@gmail.com", vantage: "", study: "9MML545tgx" };
   const PLANS = {
+    // payLink: a payment page (Razorpay, Lemon Squeezy, PayPal...). Empty = ask by email,
+    // and the link is sent back by reply. Keep in step with furnace/src/pricing.js.
     pro: {
-      label: "Pro", price: 19, per: "per project per month",
-      title: "Pro is not open yet.",
-      text: "That is the price we are considering: $19 per project per month. If you would pay it, send one email and we will keep that founding price for you and tell you when it opens. Nothing is charged.",
-      subject: "Hold Pro at $19 per project per month",
-      body: "Hi, I would pay $19 per project per month for Furnace Pro. Please hold the founding price and tell me when it opens.",
+      label: "Pro", price: 19, per: "per project per month", payLink: "",
+      title: "Buy Pro for one project.",
+      text: "Send one email with your GitHub name. We reply with a payment link for $19 per project per month, and your project is switched on as soon as it is paid.",
+      subject: "Furnace Pro for 1 project",
+      body: "Hi, I would like Furnace Pro ($19 per project per month) for 1 project.\n\nMy GitHub name:",
     },
     audit: {
-      label: "Launch Audit", price: 299, per: "one time",
-      title: "Request a Launch Audit.",
-      text: "Send one email with a line on what your app does, when you launch, and a link to the project or how to share the code. We reply with what we need and a fixed scope. Nothing is charged until you agree.",
+      label: "Launch Audit", price: 299, per: "one time", payLink: "",
+      title: "Book a Launch Audit.",
+      text: "Send one email with a line on what your app does, when you launch, and how to share the code. We reply with a fixed scope and a payment link for $299. The audit starts once it is paid; if it finds nothing you need to fix before launch, you get your money back.",
       subject: "Launch Audit request",
-      body: "Hi, I would like a Launch Audit ($299).\n\nWhat the app does:\nLaunch date:\nHow to share the code:",
+      body: "Hi, I would like a Launch Audit ($299).\n\nWhat the app does:\nLaunch date:\nHow to share the code:\nMy GitHub name:",
     },
   };
 
@@ -664,6 +663,7 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
 
   const hold = document.querySelector("[data-hold]");
   const mail = hold.querySelector("[data-mail]");
+  const pay = hold.querySelector("[data-pay]");
   const copyMail = hold.querySelector("[data-copy-mail]");
   const address = hold.querySelector("[data-address]");
   const closeBtn = hold.querySelector("[data-hold-close]");
@@ -680,6 +680,8 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
     reasons.hidden = true;
     thanks.hidden = true;
     closeBtn.hidden = false;
+    pay.hidden = !plan.payLink;
+    if (plan.payLink) pay.href = plan.payLink;
     if (CONFIG.email) {
       mail.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent(plan.subject)}&body=${encodeURIComponent(plan.body + `\n\n(ref: ${src})`)}`;
       mail.hidden = false;
@@ -698,6 +700,7 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
   }));
 
   mail.addEventListener("click", () => { if (chosen) track("plan_email_click", chosen); });
+  pay.addEventListener("click", () => { if (chosen) track("plan_pay_click", chosen); });
 
   copyMail.addEventListener("click", async () => {
     try { await navigator.clipboard.writeText(CONFIG.email); }
@@ -713,6 +716,7 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
   closeBtn.addEventListener("click", () => {
     if (chosen) track("plan_dismiss", chosen);
     closeBtn.hidden = true;
+    pay.hidden = true;
     mail.hidden = true;
     copyMail.hidden = true;
     address.hidden = true;
