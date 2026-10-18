@@ -201,6 +201,8 @@
   .plan .price { font-size: clamp(2rem, 3.4vw, 2.75rem); font-weight: 600; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums; }
   .plan .price small { margin-left: 4px; font-size: 0.4em; font-weight: 500; letter-spacing: 0; color: var(--ash-dim); }
   .plan-for { flex: 1; color: var(--ash); font-size: 0.95rem; }
+  .plan-link { align-self: center; color: var(--ash); font-size: 0.9rem; text-underline-offset: 3px; }
+  .plan-link:hover { color: var(--bone); }
   .plan .btn { justify-content: center; }
   .hold { margin-top: 24px; padding: 28px; border-radius: var(--r-md); border: 1px solid rgba(var(--heat-rgb), 0.45); }
   .hold h3 { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; }
@@ -511,6 +513,7 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
           <p class="price">$99<small>one time · founding price, then $299</small></p>
           <p class="plan-for">Founding price for the first 10 audits, then $299. A person runs Furnace on your project, checks every finding by hand, and sends you a signed report with what to fix first. Includes 30 days of Pro on that project. Paid before the audit starts; if it finds nothing you need to fix before launch, you get your money back.</p>
           <button class="btn btn--primary" type="button" data-plan="audit">Book an audit for $99</button>
+          <a class="plan-link" href="sample-report.html">See a sample audit report →</a>
         </li>
         <li class="plan">
           <h3>Pro <span class="tag tag--on">Available</span></h3>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample Launch Audit report · Furnace</title>
+<meta name="description" content="What a paid Furnace Launch Audit looks like: a real, hand-checked report on a public open-source app, before you pay.">
+<meta property="og:title" content="Sample Launch Audit report · Furnace">
+<meta property="og:description" content="A real, hand-checked report on a public open-source app: one confirmed problem, one false alarm dropped, the fix, and what was not checked.">
+<meta property="og:type" content="article">
+<meta name="theme-color" content="#03060C">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='it' gradientUnits='userSpaceOnUse' x1='0' y1='70' x2='0' y2='25'><stop offset='0' stop-color='%231450C8'/><stop offset='.55' stop-color='%232D7BFF'/><stop offset='1' stop-color='%23A8E4FF'/></linearGradient><linearGradient id='if' gradientUnits='userSpaceOnUse' x1='0' y1='64' x2='0' y2='42'><stop offset='0' stop-color='%232D7BFF'/><stop offset='1' stop-color='%235FB2FF'/></linearGradient></defs><rect width='100' height='100' rx='20' fill='%2303060C'/><path d='M30 70 L50 25 L70 70 Z' fill='none' stroke='url(%23it)' stroke-width='8' stroke-linejoin='round'/><path d='M50 41.8 C53.5 49 56.4 55.6 56.4 57.8 A6.4 6.4 0 0 1 43.6 57.8 C43.6 55.6 46.5 49 50 41.8 Z' fill='url(%23if)'/><path d='M50 50.2 C51.8 53.6 53.2 56.7 53.2 57.8 A3.2 3.2 0 0 1 46.8 57.8 C46.8 56.7 48.2 53.6 50 50.2 Z' fill='%23A8E4FF'/><circle cx='50' cy='57.8' r='2.9' fill='%23F2FBFF'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --coal: #03060C; --coal-2: #0A1019; --bone: #EAF0F7; --ash: #A3ADBA; --ash-dim: #6B7686;
+    --line: rgba(234, 240, 247, 0.12); --line-strong: rgba(234, 240, 247, 0.24);
+    --heat: #3D8BFF; --heat-rgb: 61, 139, 255; --amber: #A8E4FF; --ok: #6EE7A8;
+    --sans: "Geist", -apple-system, "Segoe UI", sans-serif; --mono: "Geist Mono", ui-monospace, Menlo, Consolas, monospace;
+    --r-pill: 999px; --r-sm: 8px; --r-md: 14px;
+    --gutter: clamp(20px, 5vw, 56px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { background: var(--coal); color: var(--bone); font: 400 1.0625rem/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
+  ::selection { background: var(--heat); color: var(--coal); }
+  :focus-visible { outline: 2px solid var(--heat); outline-offset: 3px; border-radius: 4px; }
+  a { color: var(--bone); text-underline-offset: 3px; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 var(--gutter); }
+  .nav { border-bottom: 1px solid var(--line); }
+  .nav .wrap { max-width: 1080px; display: flex; align-items: center; justify-content: space-between; min-height: 68px; gap: 16px; }
+  .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -0.03em; font-size: 1.15rem; text-decoration: none; }
+  .brand svg { width: 28px; height: 28px; }
+  .btn { display: inline-flex; align-items: center; min-height: 42px; padding: 0 20px; border-radius: var(--r-pill); border: 1px solid var(--line-strong); color: var(--bone); font: 600 0.9rem var(--sans); text-decoration: none; }
+  .btn--primary { background: var(--heat); border-color: var(--heat); color: var(--coal); }
+  header.doc { padding: clamp(48px, 8vw, 88px) 0 32px; }
+  .eyebrow { font: 500 0.75rem var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ash); }
+  h1 { margin-top: 12px; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.05; letter-spacing: -0.045em; font-weight: 700; }
+  .note { margin-top: 24px; padding: 18px 20px; border-radius: var(--r-sm); border: 1px solid rgba(var(--heat-rgb), 0.45); color: var(--ash); font-size: 0.95rem; }
+  .note b { color: var(--bone); font-weight: 500; }
+  dl.meta { margin-top: 28px; display: grid; grid-template-columns: max-content 1fr; gap: 6px 20px; font: 400 0.85rem/1.5 var(--mono); color: var(--ash); }
+  dl.meta dt { color: var(--ash-dim); }
+  section { padding: 36px 0; border-top: 1px solid var(--line); }
+  h2 { font-size: 1.5rem; letter-spacing: -0.03em; font-weight: 600; margin-bottom: 14px; }
+  h3 { font-size: 1.15rem; letter-spacing: -0.02em; font-weight: 600; margin: 22px 0 10px; }
+  p, li { color: var(--ash); }
+  p + p { margin-top: 12px; }
+  p b, li b { color: var(--bone); font-weight: 500; }
+  ul { padding-left: 1.2em; }
+  li + li { margin-top: 8px; }
+  code { font: 400 0.88em var(--mono); color: var(--bone); background: var(--coal-2); padding: 1px 6px; border-radius: 4px; }
+  pre { margin: 14px 0; padding: 18px 20px; border-radius: var(--r-sm); background: var(--coal-2); border: 1px solid var(--line); overflow-x: auto; font: 400 0.85rem/1.6 var(--mono); color: var(--bone); }
+  pre code { background: none; padding: 0; }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-variant-numeric: tabular-nums; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  th { font: 500 0.75rem var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ash-dim); }
+  td { font-size: 1.4rem; font-weight: 600; color: var(--bone); }
+  .finding { margin-top: 18px; padding: 22px 22px 18px; border-radius: var(--r-md); border: 1px solid var(--line-strong); background: var(--coal-2); }
+  .finding .sev { font: 600 0.72rem var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--heat); }
+  .finding h3 { margin-top: 8px; }
+  .finding dl { display: grid; grid-template-columns: max-content 1fr; gap: 8px 16px; margin-top: 12px; }
+  .finding dt { font: 500 0.78rem/1.7 var(--mono); color: var(--ash-dim); text-transform: uppercase; letter-spacing: 0.06em; }
+  .finding dd { color: var(--ash); }
+  .cta { padding: 48px 0 72px; }
+  .cta p { margin-bottom: 20px; }
+  .cta .row { display: flex; flex-wrap: wrap; gap: 12px; }
+  footer { border-top: 1px solid var(--line); padding: 24px 0 40px; font: 400 0.8rem var(--mono); color: var(--ash-dim); }
+  @media (max-width: 640px) {
+    .finding dl, dl.meta { grid-template-columns: minmax(0, 1fr); }
+    .finding dt { margin-top: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="./" aria-label="Furnace home">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="bft" gradientUnits="userSpaceOnUse" x1="0" y1="70" x2="0" y2="25"><stop offset="0" stop-color="#1450C8"/><stop offset=".55" stop-color="#2D7BFF"/><stop offset="1" stop-color="#A8E4FF"/></linearGradient><linearGradient id="bff" gradientUnits="userSpaceOnUse" x1="0" y1="64" x2="0" y2="42"><stop offset="0" stop-color="#2D7BFF"/><stop offset="1" stop-color="#5FB2FF"/></linearGradient></defs><rect width="100" height="100" rx="22" fill="var(--coal-2)"/><path d="M30 70 L50 25 L70 70 Z" fill="none" stroke="url(#bft)" stroke-width="8" stroke-linejoin="round"/><path d="M50 41.8 C53.5 49 56.4 55.6 56.4 57.8 A6.4 6.4 0 0 1 43.6 57.8 C43.6 55.6 46.5 49 50 41.8 Z" fill="url(#bff)"/><path d="M50 50.2 C51.8 53.6 53.2 56.7 53.2 57.8 A3.2 3.2 0 0 1 46.8 57.8 C46.8 56.7 48.2 53.6 50 50.2 Z" fill="#A8E4FF"/><circle cx="50" cy="57.8" r="2.9" fill="#F2FBFF"/></svg>
+      furnace
+    </a>
+    <a class="btn btn--primary" href="./#pricing">Book an audit</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <header class="doc">
+    <p class="eyebrow">Sample report</p>
+    <h1>Launch Audit report: an open-source Next.js app</h1>
+    <div class="note">
+      <p><b>This is a sample</b>, published so you can see exactly what a paid Launch Audit gives you before you pay. It is a real audit of a <b>public open-source project</b> (MIT licence), not a customer's app. Nobody paid for it, and nobody's live site was touched: the code was read on my machine only.</p>
+      <p><b>Why the project is not named:</b> the problem below is still in the project's code and has not been fixed yet. Many people have copied it into their own apps, so the project name, file paths and exact code are left out until its maintainer has been told and has had time to fix it.</p>
+    </div>
+    <dl class="meta">
+      <dt>Prepared by</dt><dd>Vishwas, Furnace</dd>
+      <dt>Date</dt><dd>18 October 2026</dd>
+      <dt>Stack</dt><dd>Next.js, Prisma, a sign-in library, Stripe</dd>
+      <dt>Tools</dt><dd>Furnace launch-check --details, then a hand check</dd>
+    </dl>
+  </header>
+
+  <section aria-labelledby="is-title">
+    <h2 id="is-title">What this report is, and is not</h2>
+    <p>An automated check of one commit of the code, with <b>every finding checked by hand by a person</b>, at one point in time. It is not a penetration test, a certification, or a guarantee. It does not say the app is secure. Anything not listed under "What was checked" was not looked at.</p>
+  </section>
+
+  <section aria-labelledby="sum-title">
+    <h2 id="sum-title">Summary</h2>
+    <p><b>A signed-out visitor who has a post's id can delete or rewrite that post.</b> Furnace found it, and reading the code confirms it. Fix it before anything else: it is a few lines of code (below). Everything else is an improvement, not a blocker.</p>
+    <table>
+      <thead><tr><th scope="col">Confirmed</th><th scope="col">Likely</th><th scope="col">Questions for you</th></tr></thead>
+      <tbody><tr><td>1</td><td>0</td><td>0</td></tr></tbody>
+    </table>
+    <h3>What the hand check changed (this is what you pay a person for)</h3>
+    <ul>
+      <li>Furnace listed <b>1 problem, 3 questions and 3 improvements</b>. After checking by hand: <b>1 confirmed problem, 0 open questions, 3 improvements, and 1 finding dropped as a false alarm.</b></li>
+      <li>Furnace's two questions about the post endpoints ("is there a login check?", "is there an ownership check?") have the same answer as F1, so they are folded into it.</li>
+      <li>Furnace's "4 submitted values have no visible validation" was <b>wrong</b>: each one is checked with a schema on the next line, and the Stripe webhook checks Stripe's signature. Dropped. (A false alarm in Furnace, since fixed in Furnace.)</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="find-title">
+    <h2 id="find-title">Findings</h2>
+    <article class="finding">
+      <p class="sev">F1 · High (Critical if post ids are ever visible to others) · Confirmed</p>
+      <h3>Anyone with a post's id, signed in or not, can delete or rewrite it</h3>
+      <dl>
+        <dt>Where</dt><dd>The post API's delete and update handlers, through the shared "does this user own this post?" helper.</dd>
+        <dt>What happens</dt><dd>The helper counts posts matching the post's id <b>and</b> the signed-in user's id. With nobody signed in, the user id is <code>undefined</code>, and Prisma leaves out a filter whose value is <code>undefined</code>. The check then matches the post by its id alone and says "yes". So a request with no login can delete any post, or replace its title and content. The attacker needs the post's id. Ids are long random strings, so they are hard to guess, but they show up in links, browser history, screenshots and logs. An id is not a password, and the code treats it as one.</dd>
+        <dt>How I checked</dt><dd>Read the handlers and the helper. A signed-in user asking for another user's post is refused correctly (the filter uses their own id and finds nothing); only the signed-out case slips through. Prisma's documented behaviour for <code>undefined</code> in a filter is to ignore that field.</dd>
+        <dt>Fix</dt><dd>Refuse when there is no session, before the query, and use the non-optional id. Both handlers already turn <code>false</code> into a 403.</dd>
+      </dl>
+<pre><code>async function verifyAccess(postId: string) {
+  const session = await getServerSession(authOptions)
+  if (!session?.user?.id) return false
+  const count = await db.post.count({
+    where: { id: postId, authorId: session.user.id },
+  })
+  return count > 0
+}</code></pre>
+      <dl>
+        <dt>Check it's fixed</dt><dd>Signed out, send a delete request for a real post id: it must answer 403 and the post must still exist. Signed in as another user: also 403.</dd>
+      </dl>
+    </article>
+  </section>
+
+  <section aria-labelledby="imp-title">
+    <h2 id="imp-title">Worth improving (does not block launch)</h2>
+    <h3>I1. No security headers in the code or host config · Medium</h3>
+    <p>The Next.js config sets none. Your host may add some; check the live site's response headers. Add <code>Strict-Transport-Security</code>, <code>X-Content-Type-Options</code>, <code>X-Frame-Options</code> and <code>Referrer-Policy</code> in the config's <code>headers()</code> (Furnace's report has the code).</p>
+    <h3>I2. No rate limit on the post write endpoints · Low once F1 is fixed</h3>
+    <p>After the fix they need a login. Before it they are open to everyone, which makes F1 worse: a script could empty the posts table quickly.</p>
+    <h3>I3. No rate limit on the billing endpoint · Low</h3>
+    <p>It needs a login and creates a Stripe checkout or billing-portal session per call. Stripe sessions cost nothing, but a signed-in script can create many; a per-user limit (10 a minute) is enough.</p>
+  </section>
+
+  <section aria-labelledby="q-title">
+    <h2 id="q-title">Questions for you</h2>
+    <p>None open. (Furnace asked two; both are answered by F1.)</p>
+  </section>
+
+  <section aria-labelledby="chk-title">
+    <h2 id="chk-title">What was checked</h2>
+    <ul>
+      <li><b>Logins on server endpoints:</b> 9 endpoints. Problem found: F1. No other endpoint lets a signed-out visitor change data within these checks.</li>
+      <li><b>Who owns what (one user reaching another's records):</b> post and user endpoints. Signed-in users cannot reach each other's posts or profiles. Only the signed-out case in F1.</li>
+      <li><b>Secrets in the code and its git history:</b> no problems found within these checks.</li>
+      <li><b>Payment webhooks:</b> the Stripe webhook verifies Stripe's signature before acting.</li>
+      <li><b>Dangerous input (code execution, SQL text, file paths):</b> no problems found within these checks.</li>
+      <li><b>Rate limits and paid services:</b> see I2 and I3.</li>
+      <li><b>Deployment settings and security headers:</b> see I1.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="not-title">
+    <h2 id="not-title">What was not checked</h2>
+    <p>The live site, hosting and network settings, the database itself, Stripe and email account settings, the 14 server pages Furnace lists as "not checked for login" (who may see each dashboard page was not reviewed one by one in this sample), packages with known weaknesses (not run for this sample), and anything newer than the audited commit.</p>
+  </section>
+
+  <section aria-labelledby="hon-title">
+    <h2 id="hon-title">What I did to keep this honest</h2>
+    <ul>
+      <li>The finding above was traced in the code; nothing was passed on without being read.</li>
+      <li>One Furnace finding was dropped as wrong, with the reason above.</li>
+      <li>The code is a public repository; nothing private was used.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="re-title">
+    <h2 id="re-title">Re-check and signature</h2>
+    <p><b>Re-check:</b> a paid audit includes one free re-check within 14 days of delivery. You send the new commit when you have fixed things, and each finding is marked Closed, Still open or Changed, with how it was checked.</p>
+    <p><b>Signature:</b> in a paid audit, the report's fingerprint is signed with Furnace (Ed25519) and sent with the signature file and the public key, so you can check it has not changed since it was signed. <b>This sample is not signed.</b></p>
+  </section>
+
+  <section class="cta" aria-labelledby="cta-title">
+    <h2 id="cta-title">Want this for your app?</h2>
+    <p>Founding price: <b>$99 for the first 10 audits</b>, then $299. Paid before the audit starts. If it finds nothing you need to fix before launch, you get your money back.</p>
+    <div class="row">
+      <a class="btn btn--primary" href="https://vyomster77.gumroad.com/l/furnace-launch-audit" target="_blank" rel="noopener">Book an audit for $99</a>
+      <a class="btn" href="./">Back to Furnace</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">furnace · sample report · not a certification or a guarantee</div>
+</footer>
+</body>
+</html>
