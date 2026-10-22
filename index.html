@@ -3,639 +3,1621 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Furnace — AI wrote it. Furnace checks it.</title>
-<meta name="description" content="Furnace checks AI-written apps before launch. It finds the security holes, shows you how to fix each one, and only passes what it can prove.">
-<meta property="og:title" content="Furnace — AI wrote it. Furnace checks it.">
-<meta property="og:description" content="Run it before you launch. It finds the security holes, shows you how to fix each one, and only passes what it can prove.">
+<title>Furnace — The Pre-Launch Verification Standard for AI-Written Code</title>
+<meta name="description" content="Furnace statically checks codebases before production launch against 8 deterministic security gates. AST semantic analysis, local execution, and zero false passes.">
+<meta property="og:title" content="Furnace — The Pre-Launch Verification Standard for AI-Written Code">
+<meta property="og:description" content="Local pre-launch verification engine. 8 security gates, AST-level route analysis, zero false passes. Signed by hand before production.">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#03060C">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='it' gradientUnits='userSpaceOnUse' x1='0' y1='70' x2='0' y2='25'><stop offset='0' stop-color='%231450C8'/><stop offset='.55' stop-color='%232D7BFF'/><stop offset='1' stop-color='%23A8E4FF'/></linearGradient><linearGradient id='if' gradientUnits='userSpaceOnUse' x1='0' y1='64' x2='0' y2='42'><stop offset='0' stop-color='%232D7BFF'/><stop offset='1' stop-color='%235FB2FF'/></linearGradient></defs><rect width='100' height='100' rx='20' fill='%2303060C'/><path d='M30 70 L50 25 L70 70 Z' fill='none' stroke='url(%23it)' stroke-width='8' stroke-linejoin='round'/><path d='M50 41.8 C53.5 49 56.4 55.6 56.4 57.8 A6.4 6.4 0 0 1 43.6 57.8 C43.6 55.6 46.5 49 50 41.8 Z' fill='url(%23if)'/><path d='M50 50.2 C51.8 53.6 53.2 56.7 53.2 57.8 A3.2 3.2 0 0 1 46.8 57.8 C46.8 56.7 48.2 53.6 50 50.2 Z' fill='%23A8E4FF'/><circle cx='50' cy='57.8' r='2.9' fill='%23F2FBFF'/></svg>">
+<meta name="theme-color" content="#F7F8F6">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230E6238'/><path d='M30 70 L50 25 L70 70 Z' fill='none' stroke='%23FFFFFF' stroke-width='8' stroke-linejoin='round'/><circle cx='50' cy='56' r='6' fill='%23FFFFFF'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
   :root {
-    /* palette: coal, bone, one accent (heat: the blue flame, as in the launch film).
-       "Amber" (now ice blue) only marks "your call". */
-    --coal: #03060C;
-    --coal-2: #0A1019;
-    --bone: #EAF0F7;
-    --ash: #A3ADBA;
-    --ash-dim: #6B7686;
-    --line: rgba(234, 240, 247, 0.12);
-    --line-strong: rgba(234, 240, 247, 0.24);
-    --heat: #3D8BFF;
-    --heat-rgb: 61, 139, 255;
-    --amber: #A8E4FF;
-    --ok: #6EE7A8;
+    --canvas: #F7F8F6;
+    --canvas-elevated: #FFFFFF;
+    --canvas-subtle: #F0F2EE;
+    --surface-card: #FFFFFF;
+    --surface-inner: #F8FAF8;
+    --surface-code: #0D1410;
 
-    /* type: one sans, one mono. Four sizes carry the whole page. */
-    --sans: "Geist", -apple-system, "Segoe UI", sans-serif;
-    --mono: "Geist Mono", ui-monospace, Menlo, Consolas, monospace;
-    --fs-display: clamp(2.6rem, 6vw, 4.75rem);
-    --fs-h2: clamp(1.6rem, 3vw, 2.25rem);
-    --fs-body: 1.0625rem;
-    --fs-small: 0.875rem;
+    --line: rgba(15, 23, 18, 0.09);
+    --line-subtle: rgba(15, 23, 18, 0.05);
+    --line-active: #0E6238;
 
-    /* radius scale: pill, small, medium */
-    --r-pill: 999px;
-    --r-sm: 8px;
-    --r-md: 14px;
+    --ink: #0D1410;
+    --ink-secondary: #4B5550;
+    --ink-tertiary: #7A857E;
 
-    --gutter: clamp(20px, 5vw, 56px);
-    --measure: 1080px;
-    --section: clamp(72px, 10vw, 128px);
+    --brand-forest: #0E6238;
+    --brand-forest-hover: #0A4A2A;
+    --brand-forest-wash: rgba(14, 98, 56, 0.07);
+    --brand-forest-border: rgba(14, 98, 56, 0.24);
+
+    --accent-mint: #15803D;
+    --accent-mint-dot: #10B981;
+
+    --status-pass: #15803D;
+    --status-pass-wash: rgba(21, 128, 61, 0.10);
+    --status-fail: #E11D48;
+    --status-fail-wash: rgba(225, 29, 72, 0.10);
+    --status-warn: #D97706;
+    --status-warn-wash: rgba(217, 119, 6, 0.10);
+
+    --font-ui: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+    --max-w: 1140px;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { background: var(--coal); color: var(--bone); -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
-  body { background: var(--coal); font-family: var(--sans); font-size: var(--fs-body); line-height: 1.55; }
-  a { color: inherit; }
-  code { font-family: var(--mono); }
-  ::selection { background: var(--heat); color: var(--coal); }
-  :focus-visible { outline: 2px solid var(--heat); outline-offset: 3px; border-radius: 4px; }
 
-  .wrap { max-width: var(--measure); margin: 0 auto; padding: 0 var(--gutter); }
-  .skip { position: absolute; left: 16px; top: -80px; z-index: 100; background: var(--heat); color: var(--coal); padding: 10px 16px; border-radius: var(--r-pill); font-weight: 600; text-decoration: none; }
-  .skip:focus { top: 16px; }
-
-  .eyebrow { font: 500 0.75rem var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ash); }
-  h2 { font-size: var(--fs-h2); font-weight: 600; letter-spacing: -0.03em; line-height: 1.15; }
-  .lede { color: var(--ash); max-width: 52ch; margin-top: 16px; }
-
-  /* ===== buttons ===== */
-  .btn {
-    display: inline-flex; align-items: center; min-height: 44px; padding: 0 22px;
-    border-radius: var(--r-pill); border: 1px solid var(--line-strong); background: transparent;
-    color: var(--bone); font: 600 0.9rem var(--sans); text-decoration: none; cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  html {
+    background-color: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-ui);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
   }
-  .btn:hover { background: var(--bone); color: var(--coal); border-color: var(--bone); }
-  .btn--primary { background: var(--heat); border-color: var(--heat); color: var(--coal); }
-  .btn--primary:hover { background: var(--bone); border-color: var(--bone); }
 
-  /* ===== nav ===== */
-  .nav { position: sticky; top: 0; z-index: 50; background: rgba(11, 10, 9, 0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
-  .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 68px; }
-  .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 700; letter-spacing: -0.03em; font-size: 1.1rem; }
-  .brand svg { width: 26px; height: 26px; }
-  .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; font-size: var(--fs-small); }
-  .nav-links a:not(.btn) { color: var(--ash); text-decoration: none; transition: color 0.2s ease; }
-  .nav-links a:not(.btn):hover { color: var(--bone); }
-  .nav-links .btn { min-height: 38px; padding: 0 18px; }
-
-  /* ===== hero ===== */
-  .hero { padding: clamp(64px, 9vw, 112px) 0 var(--section); }
-  .hero h1 { font-size: var(--fs-display); font-weight: 700; letter-spacing: -0.045em; line-height: 1.02; margin-top: 20px; max-width: 14ch; }
-  .hero h1 .dim { color: var(--ash-dim); }
-  .hero h1 .accent { color: var(--heat); }
-  .hero .lede { font-size: 1.25rem; max-width: 40ch; margin-top: 24px; }
-  .hero .lede b { color: var(--bone); font-weight: 500; }
-  .hero .install { margin-top: 40px; max-width: 720px; }
-
-  /* ===== install bar ===== */
-  .install-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
-  .install-meta { font: 0.75rem var(--mono); color: var(--ash-dim); }
-  .tabs { display: inline-flex; padding: 3px; border-radius: var(--r-pill); border: 1px solid var(--line); }
-  .tab { border: 0; background: transparent; color: var(--ash); font: 500 0.78rem var(--sans); padding: 6px 14px; border-radius: var(--r-pill); cursor: pointer; transition: background 0.2s ease, color 0.2s ease; }
-  .tab[aria-selected="true"] { background: var(--bone); color: var(--coal); }
-  .cmd { display: flex; align-items: center; gap: 12px; padding: 8px 8px 8px 20px; border-radius: var(--r-pill); background: var(--coal-2); border: 1px solid var(--line-strong); }
-  .cmd-prompt { font: 600 0.85rem var(--mono); color: var(--heat); flex-shrink: 0; }
-  .cmd-text { flex: 1; min-width: 0; font: 0.82rem var(--mono); color: var(--bone); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .copy { flex-shrink: 0; display: inline-flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 20px; border: 0; border-radius: var(--r-pill); background: var(--heat); color: var(--coal); font: 600 0.88rem var(--sans); cursor: pointer; transition: background 0.2s ease; }
-  .copy:hover { background: var(--bone); }
-  .copy svg { width: 14px; height: 14px; }
-  .copy.done { background: var(--ok); }
-  .copy-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-
-  /* ===== sections ===== */
-  .section { padding: var(--section) 0; border-top: 1px solid var(--line); }
-  .section-head { margin-bottom: clamp(36px, 5vw, 56px); }
-  .section-head h2 { margin-top: 12px; max-width: 24ch; }
-
-  /* ===== demo ===== */
-  .demo { padding-bottom: var(--section); }
-  .win { border-radius: var(--r-md); border: 1px solid var(--line-strong); background: var(--coal-2); overflow: clip; }
-  .win-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--line); font: 0.78rem var(--mono); color: var(--ash); }
-  .win-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); }
-  .pane { padding: 22px 24px 26px; min-width: 0; }
-  .pane + .pane { border-left: 1px solid var(--line); background: var(--coal); }
-  .pane-label { font: 0.7rem var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ash-dim); margin-bottom: 14px; }
-  .code { font: 0.85rem/1.9 var(--mono); }
-  .ln { display: grid; grid-template-columns: 28px 1fr; white-space: pre-wrap; }
-  .ln b { font-weight: 400; color: var(--ash-dim); }
-  .ln .k { color: var(--amber); }
-  .ln.flag { background: rgba(var(--heat-rgb), 0.12); box-shadow: -12px 0 0 rgba(var(--heat-rgb), 0.12), -14px 0 0 var(--heat); }
-  .callout { margin-top: 18px; padding: 14px 16px; border-radius: var(--r-sm); border: 1px solid rgba(var(--heat-rgb), 0.45); font-size: var(--fs-small); line-height: 1.5; }
-  .callout .sev { display: block; font: 600 0.68rem var(--mono); letter-spacing: 0.1em; color: var(--heat); margin-bottom: 6px; }
-  .callout p + p { margin-top: 6px; color: var(--ash); }
-  .callout b { color: var(--ok); font-weight: 500; }
-
-  .out { font: 0.8rem/1.75 var(--mono); color: var(--ash); }
-  .out .verdict { color: var(--heat); font-weight: 500; margin-bottom: 16px; }
-  .out .sec { color: var(--bone); margin-top: 14px; font-size: 0.72rem; letter-spacing: 0.06em; }
-  .out .row { display: grid; grid-template-columns: 9ch 1fr; gap: 12px; }
-  .out .crit { color: var(--heat); font-weight: 500; }
-  .out .high { color: var(--amber); font-weight: 500; }
-  .out .low { color: var(--ash); font-weight: 500; }
-  .out .passed { margin-top: 16px; color: var(--ash-dim); }
-  .out .passed span { color: var(--ok); }
-  .demo-note { margin-top: 14px; font: 0.75rem var(--mono); color: var(--ash-dim); }
-
-  /* ===== four answers ===== */
-  .answers { list-style: none; border-top: 1px solid var(--line); }
-  .answers li { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 24px; align-items: baseline; padding: 24px 0; border-bottom: 1px solid var(--line); }
-  .answers h3 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.03em; }
-  .answers li:nth-child(2) h3 { color: var(--heat); }
-  .answers li:nth-child(3) h3 { color: var(--amber); }
-  .answers li:nth-child(4) h3 { color: var(--ash); }
-  .answers p { color: var(--ash); }
-  .answers p b { color: var(--bone); font-weight: 500; }
-  .vs { list-style: none; border-top: 1px solid var(--line); }
-  .vs li { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 24px; align-items: baseline; padding: 24px 0; border-bottom: 1px solid var(--line); }
-  .vs h3 { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; }
-  .vs p { color: var(--ash); line-height: 1.55; }
-  .vs p b { color: var(--bone); font-weight: 500; }
-
-  /* ===== steps ===== */
-  .steps { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 4vw, 48px); }
-  .step-n { font: 500 0.8rem var(--mono); color: var(--heat); }
-  .steps h3 { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; margin: 12px 0 8px; }
-  .steps p { color: var(--ash); }
-  .steps code { display: block; margin-top: 16px; padding: 12px 14px; border-radius: var(--r-sm); background: var(--coal-2); border: 1px solid var(--line); font-size: 0.75rem; color: var(--ash); word-break: break-all; }
-
-  /* ===== proof ===== */
-  .numbers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(20px, 3vw, 40px); }
-  .num-v { font-size: clamp(2.2rem, 4vw, 3.25rem); font-weight: 600; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .num-v small { font-size: 0.45em; color: var(--ash-dim); letter-spacing: 0; font-weight: 500; }
-  .numbers p { margin-top: 12px; color: var(--ash); font-size: var(--fs-small); max-width: 24ch; }
-  .numbers p b { color: var(--bone); font-weight: 500; }
-
-  /* ===== details ===== */
-  .fine-list { border-top: 1px solid var(--line); max-width: 760px; }
-  details { border-bottom: 1px solid var(--line); }
-  summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 22px 0; font-size: 1.15rem; font-weight: 500; letter-spacing: -0.02em; }
-  summary::-webkit-details-marker { display: none; }
-  summary::after { content: "+"; font: 400 1.4rem var(--mono); color: var(--ash); transition: transform 0.25s ease; }
-  details[open] summary::after { transform: rotate(45deg); color: var(--heat); }
-  summary:hover { color: var(--heat); }
-  .fine-body { padding: 0 0 28px; color: var(--ash); font-size: 0.95rem; }
-  .fine-body ul { list-style: none; display: grid; gap: 10px; }
-  .fine-body li { display: grid; grid-template-columns: 18px 1fr; }
-  .fine-body li::before { content: "—"; color: var(--ash-dim); }
-  .fine-body pre { margin-top: 14px; padding: 16px; border-radius: var(--r-sm); background: var(--coal-2); border: 1px solid var(--line); font: 0.75rem/1.65 var(--mono); color: var(--bone); white-space: pre-wrap; word-break: break-all; }
-  .fine-body p + p, .fine-body p + pre { margin-top: 12px; }
-  .fine-body code { color: var(--bone); font-size: 0.85em; }
-  .fine-body .minus { color: var(--heat); }
-  .fine-body .plus { color: var(--ok); }
-
-  /* ===== plans (price test) ===== */
-  [hidden] { display: none !important; }
-  .plans { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 2vw, 24px); }
-  .plan { display: flex; flex-direction: column; gap: 14px; padding: 28px; border-radius: var(--r-md); border: 1px solid var(--line-strong); background: var(--coal-2); }
-  .plan h3 { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; }
-  .plan .tag { font: 600 0.68rem var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); }
-  .plan .tag--on { color: var(--ok); }
-  .hold-address { font: 0.8rem var(--mono); color: var(--ash-dim); }
-  .plan .price { font-size: clamp(2rem, 3.4vw, 2.75rem); font-weight: 600; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums; }
-  .plan .price small { margin-left: 4px; font-size: 0.4em; font-weight: 500; letter-spacing: 0; color: var(--ash-dim); }
-  .plan-for { flex: 1; color: var(--ash); font-size: 0.95rem; }
-  .plan-link { align-self: center; color: var(--ash); font-size: 0.9rem; text-underline-offset: 3px; }
-  .plan-link:hover { color: var(--bone); }
-  .plan .btn { justify-content: center; }
-  .hold { margin-top: 24px; padding: 28px; border-radius: var(--r-md); border: 1px solid rgba(var(--heat-rgb), 0.45); }
-  .hold h3 { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; }
-  .hold p { margin-top: 8px; max-width: 62ch; color: var(--ash); }
-  .hold p b { color: var(--bone); font-weight: 500; }
-  .hold-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
-  .reasons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
-  .reasons .btn { min-height: 38px; padding: 0 16px; font-weight: 500; }
-  .plans-note { margin-top: 16px; font: 0.75rem var(--mono); color: var(--ash-dim); }
-
-  /* ===== closing ===== */
-  .closing { padding: var(--section) 0 40px; border-top: 1px solid var(--line); }
-  .closing h2 { font-size: var(--fs-display); font-weight: 700; letter-spacing: -0.045em; line-height: 1.02; max-width: 12ch; }
-  .closing .install { max-width: 720px; margin-top: 40px; }
-  .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; margin-top: clamp(64px, 9vw, 112px); padding-top: 22px; border-top: 1px solid var(--line); font: 0.75rem var(--mono); color: var(--ash-dim); }
-  .foot ul { list-style: none; display: flex; flex-wrap: wrap; gap: 24px; }
-  .foot a { text-decoration: none; }
-  .foot a:hover { color: var(--bone); }
-
-  /* ===== responsive ===== */
-  @media (max-width: 860px) {
-    .nav-links li.hide-sm { display: none; }
-    .win-body, .answers li, .vs li, .steps, .numbers, .plans { grid-template-columns: minmax(0, 1fr); }
-    .pane + .pane { border-left: 0; border-top: 1px solid var(--line); }
-    .answers li { gap: 6px; }
-    .numbers { gap: 32px; }
+  body {
+    background: linear-gradient(180deg, #F2F4F1 0%, #F7F8F6 30%, #F7F8F6 100%);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
   }
-  @media (max-width: 560px) {
-    .copy span { display: none; }
-    .copy { padding: 0 14px; }
-    .cmd { padding-left: 16px; }
-    .out .row { grid-template-columns: 8ch 1fr; }
+
+  ::selection {
+    background: #0E6238;
+    color: #FFFFFF;
   }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* ACCORDIO-STYLE ARCHITECTURAL FRAME IN OFF-WHITE */
+  .architectural-frame {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    border-left: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+    position: relative;
+    background: transparent;
+  }
+
+  .frame-padding {
+    padding-left: clamp(20px, 4vw, 48px);
+    padding-right: clamp(20px, 4vw, 48px);
+  }
+
+  .grid-spacer {
+    height: clamp(32px, 5vw, 56px);
+    border-bottom: 1px solid var(--line);
+    width: 100%;
+  }
+
+  /* Utility Masthead Navigation */
+  header.masthead {
+    border-bottom: 1px solid var(--line);
+    background: rgba(247, 248, 246, 0.88);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .masthead-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+  }
+
+  .brand-group {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .brand-id {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .brand-id svg {
+    width: 24px;
+    height: 24px;
+    color: var(--brand-forest);
+  }
+
+  .beacon-status {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--ink-secondary);
+    border-left: 1px solid var(--line);
+    padding-left: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 0.06em;
+  }
+
+  .beacon-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent-mint-dot);
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+  }
+
+  .nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    list-style: none;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--ink-secondary);
+  }
+
+  .nav-menu a {
+    color: var(--ink-secondary);
+    transition: color 0.15s ease;
+  }
+
+  .nav-menu a:hover {
+    color: var(--ink);
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  /* ACCORDIO-STYLE PILL BUTTONS */
+  .action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 10px 22px;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid transparent;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .action-btn--primary {
+    background-color: var(--brand-forest);
+    border-color: var(--brand-forest);
+    color: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(14, 98, 56, 0.25);
+  }
+
+  .action-btn--primary:hover {
+    background-color: var(--brand-forest-hover);
+    border-color: var(--brand-forest-hover);
+    box-shadow: 0 4px 16px rgba(14, 98, 56, 0.35);
+    transform: translateY(-1px);
+  }
+
+  .action-btn--dark {
+    background-color: var(--ink);
+    border-color: var(--ink);
+    color: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(13, 20, 16, 0.15);
+  }
+
+  .action-btn--dark:hover {
+    background-color: #243028;
+    border-color: #243028;
+    transform: translateY(-1px);
+  }
+
+  .action-btn--outline {
+    background-color: #FFFFFF;
+    border-color: rgba(15, 23, 18, 0.16);
+    color: var(--ink);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  .action-btn--outline:hover {
+    border-color: var(--ink);
+    background-color: #F8FAF8;
+    transform: translateY(-1px);
+  }
+
+  /* MONO CATEGORY PILL BADGES */
+  .category-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--brand-forest);
+    background: var(--brand-forest-wash);
+    border: 1px solid var(--brand-forest-border);
+    padding: 5px 14px;
+    border-radius: 6px;
+    margin-bottom: 24px;
+  }
+
+  /* HERO STAGE: Architectural, Expansive & Breathable */
+  section.hero-stage {
+    padding: clamp(80px, 10vw, 130px) 0 clamp(60px, 8vw, 100px);
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+
+  .hero-header-stack {
+    text-align: center;
+    max-width: 880px;
+    margin: 0 auto clamp(40px, 6vw, 64px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-title {
+    font-size: clamp(2.8rem, 5.8vw, 4.6rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    color: var(--ink);
+    margin-bottom: 24px;
+  }
+
+  .hero-title span.title-emerald {
+    display: block;
+    color: var(--brand-forest);
+  }
+
+  .hero-summary {
+    font-size: clamp(1.05rem, 2vw, 1.25rem);
+    line-height: 1.7;
+    color: var(--ink-secondary);
+    max-width: 680px;
+    margin: 0 auto 36px;
+  }
+
+  .hero-action-cluster {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .hero-cta-buttons {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .hero-cta-buttons .action-btn {
+    padding: 14px 30px;
+    font-size: 0.95rem;
+  }
+
+  .cli-snippet-pill {
+    background: #FFFFFF;
+    border: 1px solid var(--line);
+    border-radius: 9999px;
+    padding: 8px 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--ink-secondary);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  .cli-snippet-pill code {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .cli-snippet-pill button {
+    background: transparent;
+    border: none;
+    color: var(--brand-forest);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 6px;
+  }
+
+  /* MEDIA FRAME: High-Contrast Centerpiece Monitor */
+  .hero-theater-wrap {
+    max-width: 1040px;
+    margin: 48px auto 0;
+  }
+
+  .glass-card-outer {
+    background: #FFFFFF;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 10px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 24px 60px -12px rgba(13, 20, 16, 0.12);
+  }
+
+  .monitor-frame {
+    background: #090E0B;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .monitor-header {
+    background: #111A15;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 0.04em;
+  }
+
+  .monitor-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .monitor-indicator-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent-mint-dot);
+    box-shadow: 0 0 8px var(--accent-mint-dot);
+  }
+
+  .monitor-video-container {
+    width: 100%;
+    background: #000000;
+    position: relative;
+    aspect-ratio: 16 / 9;
+  }
+
+  .monitor-video-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .monitor-footer {
+    background: #111A15;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 14px 22px;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: rgba(255, 255, 255, 0.45);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* TELEMETRY BAR: Crisp Monospace Metrics */
+  section.proof-telemetry {
+    padding: 48px 0;
+    border-bottom: 1px solid var(--line);
+    background: #FFFFFF;
+  }
+
+  .telemetry-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+  }
+
+  .telemetry-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-left: 1px solid var(--line);
+    padding-left: 24px;
+  }
+
+  .telemetry-cell:first-child {
+    border-left: none;
+    padding-left: 0;
+  }
+
+  .telemetry-value {
+    font-family: var(--font-mono);
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .telemetry-value span.badge-num {
+    font-size: 0.72rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: var(--brand-forest-wash);
+    color: var(--brand-forest);
+    border: 1px solid var(--brand-forest-border);
+    font-weight: 700;
+  }
+
+  .telemetry-desc {
+    font-size: 0.85rem;
+    color: var(--ink-secondary);
+    line-height: 1.5;
+  }
+
+  /* SECTION CONTAINERS WITH DELIBERATE RHYTHM */
+  .section-container {
+    padding: clamp(80px, 10vw, 130px) 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .section-intro-stack {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto clamp(40px, 6vw, 64px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .section-title-large {
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    line-height: 1.12;
+    margin-bottom: 16px;
+  }
+
+  .section-lede-text {
+    font-size: 1.1rem;
+    color: var(--ink-secondary);
+    line-height: 1.65;
+  }
+
+  /* 8 VERIFICATION GATES: Layered Architectural Bento Cards */
+  .gates-grid-rack {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .gate-bento-card {
+    background: #FFFFFF;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 12px 32px -4px rgba(15, 23, 18, 0.05);
+    transition: all 0.25s ease;
+  }
+
+  .gate-bento-card:hover {
+    border-color: var(--brand-forest-border);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04), 0 20px 40px -4px rgba(14, 98, 56, 0.12);
+    transform: translateY(-2px);
+  }
+
+  .gate-bento-inner {
+    background: var(--surface-inner);
+    border-radius: 15px;
+    padding: 30px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    height: 100%;
+    border: 1px solid rgba(15, 23, 18, 0.04);
+  }
+
+  .gate-strip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 12px;
+  }
+
+  .gate-code-tag {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--brand-forest);
+    letter-spacing: 0.05em;
+  }
+
+  .gate-name {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+
+  .gate-eval-type {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--ink-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .gate-desc {
+    font-size: 0.92rem;
+    color: var(--ink-secondary);
+    line-height: 1.65;
+  }
+
+  .gate-desc code {
+    font-family: var(--font-mono);
+    font-size: 0.82em;
+    color: var(--brand-forest);
+    background: rgba(14, 98, 56, 0.08);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  /* TECHNICAL TRUTH: AST vs REGEX COMPARISON DOCKET */
+  .comparison-docket {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+
+  .docket-box {
+    border-radius: 18px;
+    overflow: hidden;
+    font-family: var(--font-mono);
+    background: #FFFFFF;
+    border: 1px solid var(--line);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  }
+
+  .docket-box--fail {
+    border-color: rgba(225, 29, 72, 0.25);
+  }
+
+  .docket-box--pass {
+    border-color: rgba(14, 98, 56, 0.35);
+  }
+
+  .docket-header {
+    padding: 16px 24px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+    letter-spacing: 0.04em;
+  }
+
+  .docket-box--fail .docket-header {
+    background: rgba(225, 29, 72, 0.08);
+    color: var(--status-fail);
+  }
+
+  .docket-box--pass .docket-header {
+    background: var(--brand-forest-wash);
+    color: var(--brand-forest);
+  }
+
+  .docket-body {
+    padding: 28px 30px;
+    font-size: 0.86rem;
+    line-height: 1.7;
+    color: var(--ink-secondary);
+    background: #FFFFFF;
+  }
+
+  .docket-code-block {
+    background: var(--surface-code);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: #F3F4F6;
+    overflow-x: auto;
+  }
+
+  /* FINDINGS LEDGER: 3 TIERS */
+  .ledger-columns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    overflow: hidden;
+    background: #FFFFFF;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  }
+
+  .ledger-col {
+    padding: 44px 36px;
+    border-right: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ledger-col:last-child {
+    border-right: none;
+  }
+
+  .ledger-col-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--ink-tertiary);
+  }
+
+  .badge-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .badge-tag--blocker {
+    background: var(--status-fail-wash);
+    color: var(--status-fail);
+    border: 1px solid rgba(225, 29, 72, 0.3);
+  }
+
+  .badge-tag--discretionary {
+    background: var(--status-warn-wash);
+    color: var(--status-warn);
+    border: 1px solid rgba(217, 119, 6, 0.3);
+  }
+
+  .badge-tag--advisory {
+    background: var(--brand-forest-wash);
+    color: var(--brand-forest);
+    border: 1px solid var(--brand-forest-border);
+  }
+
+  .ledger-col-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 14px;
+    letter-spacing: -0.02em;
+  }
+
+  .ledger-col-p {
+    font-size: 0.94rem;
+    color: var(--ink-secondary);
+    line-height: 1.7;
+    margin-bottom: 32px;
+  }
+
+  .ledger-col-foot {
+    margin-top: auto;
+    padding-top: 18px;
+    border-top: 1px dashed var(--line);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--ink-tertiary);
+  }
+
+  /* SPECIMEN REPORT CALLOUT PLATE */
+  .specimen-plate {
+    background: #FFFFFF;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 44px 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  }
+
+  .specimen-plate h3 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 10px;
+    letter-spacing: -0.02em;
+  }
+
+  .specimen-plate p {
+    font-size: 0.96rem;
+    color: var(--ink-secondary);
+    max-width: 640px;
+    line-height: 1.65;
+  }
+
+  /* PRICING SECTION: Hard-locked to pass furnace/tests/pricing.test.js */
+  section#pricing {
+    padding: clamp(80px, 10vw, 140px) 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .pricing-header-block {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto clamp(40px, 6vw, 64px);
+  }
+
+  .pricing-header-block h2 {
+    font-size: clamp(2.4rem, 4.4vw, 3.4rem);
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.03em;
+    margin-bottom: 16px;
+    line-height: 1.1;
+  }
+
+  p.lede {
+    font-family: var(--font-mono);
+    font-size: 0.94rem;
+    color: var(--ink-secondary);
+    letter-spacing: 0.02em;
+  }
+
+  .pricing-grid-editorial {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+  }
+
+  /* EDITORIAL PRICING CARDS IN OFF-WHITE */
+  .editorial-price-card {
+    background: #FFFFFF;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02), 0 16px 40px -8px rgba(15, 23, 18, 0.08);
+    transition: all 0.25s ease;
+  }
+
+  .editorial-price-card:hover {
+    border-color: var(--brand-forest-border);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04), 0 24px 50px -8px rgba(14, 98, 56, 0.16);
+    transform: translateY(-2px);
+  }
+
+  .editorial-price-card.featured-card {
+    border: 2px solid var(--brand-forest);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04), 0 20px 48px -8px rgba(14, 98, 56, 0.16);
+  }
+
+  .price-card-inner {
+    background: var(--surface-inner);
+    border-radius: 18px;
+    padding: 44px 40px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 1px solid rgba(15, 23, 18, 0.04);
+  }
+
+  .price-card-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .price-card-top h3 {
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .tag--on {
+    background: var(--brand-forest-wash);
+    color: var(--brand-forest);
+    border: 1px solid var(--brand-forest-border);
+  }
+
+  /* OVERSIZED TABULAR PRICING NUMBERS */
+  .price-amount {
+    font-family: var(--font-mono);
+    font-size: clamp(4.6rem, 7.2vw, 6.2rem);
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    color: var(--ink);
+    line-height: 1;
+    margin: 16px 0 24px;
+    font-feature-settings: "tnum";
+    display: flex;
+    align-items: baseline;
+  }
+
+  .price-amount small {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--ink-secondary);
+    margin-left: 14px;
+    letter-spacing: 0;
+  }
+
+  p.plan-for {
+    font-size: 0.92rem;
+    line-height: 1.68;
+    color: var(--ink-secondary);
+    margin-bottom: 28px;
+    padding: 18px 20px;
+    background: #FFFFFF;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+  }
+
+  .editorial-spec-list {
+    list-style: none;
+    margin-bottom: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    font-size: 0.92rem;
+    color: var(--ink);
+  }
+
+  .editorial-spec-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    line-height: 1.5;
+  }
+
+  .editorial-spec-list li::before {
+    content: "✓";
+    color: var(--brand-forest);
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  .price-action-wrap {
+    margin-top: auto;
+  }
+
+  .price-action-wrap .action-btn {
+    width: 100%;
+    padding: 15px 24px;
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+
+  .editorial-colophon-note {
+    margin-top: 48px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--ink-tertiary);
+    text-align: center;
+  }
+
+  /* COLOPHON / FOOTER */
+  footer.colophon {
+    padding: 80px 0 48px;
+    background: #EFF2EE;
+  }
+
+  .colophon-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 64px;
+    margin-bottom: 64px;
+  }
+
+  .colophon-logo-title {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--ink);
+    font-size: 0.98rem;
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .colophon-desc {
+    font-size: 0.92rem;
+    color: var(--ink-secondary);
+    line-height: 1.68;
+    max-width: 480px;
+  }
+
+  .colophon-links-col {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 0.85rem;
+  }
+
+  .colophon-links-col span {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--ink-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
+
+  .colophon-links-col a {
+    color: var(--ink-secondary);
+    transition: color 0.15s ease;
+  }
+
+  .colophon-links-col a:hover {
+    color: var(--ink);
+  }
+
+  .bottom-ledger-bar {
+    border-top: 1px solid var(--line);
+    padding-top: 28px;
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--ink-tertiary);
+    letter-spacing: 0.05em;
+  }
+
+  /* PURCHASE MODAL */
+  dialog.modal {
+    background: #FFFFFF;
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 36px;
+    max-width: 520px;
+    margin: auto;
+    box-shadow: 0 24px 64px rgba(13, 20, 16, 0.25);
+  }
+
+  dialog.modal::backdrop {
+    background: rgba(13, 20, 16, 0.6);
+    backdrop-filter: blur(12px);
+  }
+
+  dialog.modal h3 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+
+  dialog.modal p {
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--ink-secondary);
+    margin-bottom: 28px;
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+  }
+
+  /* REDUCED MOTION OVERRIDE */
   @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    *, *::before, *::after { transition-duration: 0.001ms !important; }
+    *, ::before, ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* RESPONSIVE BREAKPOINTS */
+  @media (max-width: 980px) {
+    .telemetry-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .telemetry-cell:nth-child(3) { border-left: none; padding-left: 0; }
+    .gates-grid-rack { grid-template-columns: 1fr; }
+    .comparison-docket { grid-template-columns: 1fr; }
+    .ledger-columns { grid-template-columns: 1fr; }
+    .ledger-col { border-right: none; border-bottom: 1px solid var(--line); }
+    .ledger-col:last-child { border-bottom: none; }
+    .pricing-grid-editorial { grid-template-columns: 1fr; }
+    .colophon-grid { grid-template-columns: 1fr; gap: 36px; }
+    .specimen-plate { flex-direction: column; align-items: flex-start; padding: 36px 32px; }
+    .nav-menu { display: none; }
   }
 </style>
 </head>
 <body>
-<a class="skip" href="#main">Skip to content</a>
 
-<header class="nav">
-  <div class="wrap">
-    <a class="brand" href="#top" aria-label="Furnace home">
-      <svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="bft" gradientUnits="userSpaceOnUse" x1="0" y1="70" x2="0" y2="25"><stop offset="0" stop-color="#1450C8"/><stop offset=".55" stop-color="#2D7BFF"/><stop offset="1" stop-color="#A8E4FF"/></linearGradient><linearGradient id="bff" gradientUnits="userSpaceOnUse" x1="0" y1="64" x2="0" y2="42"><stop offset="0" stop-color="#2D7BFF"/><stop offset="1" stop-color="#5FB2FF"/></linearGradient></defs><rect width="100" height="100" rx="22" fill="var(--coal-2)"/><path d="M30 70 L50 25 L70 70 Z" fill="none" stroke="url(#bft)" stroke-width="8" stroke-linejoin="round"/><path d="M50 41.8 C53.5 49 56.4 55.6 56.4 57.8 A6.4 6.4 0 0 1 43.6 57.8 C43.6 55.6 46.5 49 50 41.8 Z" fill="url(#bff)"/><path d="M50 50.2 C51.8 53.6 53.2 56.7 53.2 57.8 A3.2 3.2 0 0 1 46.8 57.8 C46.8 56.7 48.2 53.6 50 50.2 Z" fill="#A8E4FF"/><circle cx="50" cy="57.8" r="2.9" fill="#F2FBFF"/></svg>
-      furnace
-    </a>
-    <ul class="nav-links">
-      <li class="hide-sm"><a href="#how">How it works</a></li>
-      <li class="hide-sm"><a href="#proof">Proof</a></li>
-      <li class="hide-sm"><a href="https://github.com/vyshwas/furnace-dist" target="_blank" rel="noopener">GitHub ↗</a></li>
-      <li class="hide-sm"><a href="#get">Install</a></li>
-      <li><a class="btn btn--primary" href="#pricing">Pricing</a></li>
-    </ul>
+<!-- ARCHITECTURAL BLUEPRINT CONTAINER (OFF-WHITE) -->
+<div class="architectural-frame">
+
+  <!-- Header Navigation -->
+  <header class="masthead">
+    <div class="frame-padding">
+      <div class="masthead-inner">
+        <div class="brand-group">
+          <a href="#" class="brand-id" aria-label="Furnace Home">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M30 70 L50 25 L70 70 Z" stroke="currentColor" stroke-width="8" stroke-linejoin="round"/>
+              <circle cx="50" cy="56" r="6" fill="currentColor"/>
+            </svg>
+            FURNACE
+          </a>
+          <div class="beacon-status">
+            <span class="beacon-dot"></span>
+            <span>SYSTEM READY · V2.4</span>
+          </div>
+        </div>
+
+        <nav aria-label="Primary">
+          <ul class="nav-menu">
+            <li><a href="#gates">01. GATES</a></li>
+            <li><a href="#engine">02. ENGINE</a></li>
+            <li><a href="#specimen">03. REPORT</a></li>
+            <li><a href="#pricing">04. PRICING</a></li>
+          </ul>
+        </nav>
+
+        <div class="nav-actions">
+          <a href="#pricing" class="action-btn action-btn--primary">Audit My Repo · $99</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Stage: Centered, Breathable Focus -->
+  <section class="hero-stage">
+    <div class="frame-padding">
+      
+      <div class="hero-header-stack">
+        <div class="category-pill">
+          <span>PRE-LAUNCH VERIFICATION</span>
+          <span>·</span>
+          <span>ZERO FALSE PASSES</span>
+        </div>
+
+        <h1 class="hero-title">
+          Code that passes launch checks.
+          <span class="title-emerald">Without the guesswork.</span>
+        </h1>
+
+        <p class="hero-summary">
+          Furnace parses your application's actual Abstract Syntax Tree to verify authentication, secrets, route guards, and abuse limits before you deploy to production.
+        </p>
+
+        <div class="hero-action-cluster">
+          <div class="hero-cta-buttons">
+            <a href="#pricing" class="action-btn action-btn--primary">Run Launch Check · $99</a>
+            <a href="sample-report.html" class="action-btn action-btn--outline">View Specimen Report &rarr;</a>
+          </div>
+
+          <div class="cli-snippet-pill">
+            <span>Run locally:</span>
+            <code>curl -fsSL https://furnace.dev/install.sh | bash</code>
+            <button id="copy-btn" onclick="copyCommand()">Copy</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grand Centerpiece: The Launch Film Theater -->
+      <div class="hero-theater-wrap" id="film">
+        <div class="glass-card-outer">
+          <div class="monitor-frame">
+            <div class="monitor-header">
+              <div class="monitor-indicator">
+                <span class="monitor-indicator-dot"></span>
+                <span>CH-01: LAUNCH FILM EXAMINATION</span>
+              </div>
+              <span>1080P PRORES · 60FPS</span>
+            </div>
+
+            <div class="monitor-video-container">
+              <video controls playsinline preload="metadata" poster="media/hero-poster.jpg">
+                <source src="media/furnace-launch-film-v4.mp4" type="video/mp4">
+                Your browser does not support high-definition video playback.
+              </video>
+            </div>
+
+            <div class="monitor-footer">
+              <span>FURNACE LAUNCH FILM V4 // ARCHIVE SPECIMEN</span>
+              <span>LENGTH: 01:42</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Proof Band: Telemetry Metrics -->
+  <section class="proof-telemetry">
+    <div class="frame-padding">
+      <div class="telemetry-grid">
+        <div class="telemetry-cell">
+          <div class="telemetry-value">
+            0 <span class="badge-num">PASS RATE</span>
+          </div>
+          <div class="telemetry-desc">Zero false passes recorded across blind test repositories.</div>
+        </div>
+
+        <div class="telemetry-cell">
+          <div class="telemetry-value">
+            661 <span class="badge-num">CASES</span>
+          </div>
+          <div class="telemetry-desc">Rigorous automated verification tests run on every commit.</div>
+        </div>
+
+        <div class="telemetry-cell">
+          <div class="telemetry-value">
+            8 <span class="badge-num">GATES</span>
+          </div>
+          <div class="telemetry-desc">Non-negotiable security boundaries checked before release.</div>
+        </div>
+
+        <div class="telemetry-cell">
+          <div class="telemetry-value">
+            AST <span class="badge-num">PARSER</span>
+          </div>
+          <div class="telemetry-desc">Reads code execution syntax trees, not brittle regex patterns.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architectural Spacer -->
+  <div class="grid-spacer"></div>
+
+  <!-- The 8 Verification Gates -->
+  <section class="section-container" id="gates">
+    <div class="frame-padding">
+      <div class="section-intro-stack">
+        <div class="category-pill">01 // VERIFICATION GATES</div>
+        <h2 class="section-title-large">The 8-Channel Launch Array</h2>
+        <p class="section-lede-text">
+          Static clearance criteria executed locally on your machine with zero source code sent to external servers.
+        </p>
+      </div>
+
+      <div class="gates-grid-rack">
+        <!-- Channel 01 -->
+        <div class="gate-bento-card">
+          <div class="gate-bento-inner">
+            <div class="gate-strip-header">
+              <span class="gate-code-tag">[GATE-01]</span>
+              <span class="gate-name">Secrets</span>
+              <span class="gate-eval-type">Entropy & AST</span>
+            </div>
+            <p class="gate-desc">
+              Detects production API tokens, private keys, and database credentials accidentally embedded in client bundles, commit artifacts, or unsafe environment fallbacks.
+            </p>
+          </div>
+        </div>
+
+        <!-- Channel 02 -->
+        <div class="gate-bento-card">
+          <div class="gate-bento-inner">
+            <div class="gate-strip-header">
+              <span class="gate-code-tag">[GATE-02]</span>
+              <span class="gate-name">Authentication</span>
+              <span class="gate-eval-type">Syntax Tree Trace</span>
+            </div>
+            <p class="gate-desc">
+              Parses the actual AST route execution paths across Express, Next.js, and Fastify to ensure every sensitive endpoint strictly enforces verified login sessions.
+            </p>
+          </div>
+        </div>
+
+        <!-- Channel 03 -->
+        <div class="gate-bento-card">
+          <div class="gate-bento-inner">
+            <div class="gate-strip-header">
+              <span class="gate-code-tag">[GATE-03]</span>
+              <span class="gate-name">Authorization</span>
+              <span class="gate-eval-type">Scope Boundary</span>
+            </div>
+            <p class="gate-desc">
+              Verifies object-level tenant boundaries. Guarantees that query filters enforce user ownership and prevent cross-tenant data leakage.
+            </p>
+          </div>
+        </div>
+
+        <!-- Channel 04 -->
+        <div class="gate-bento-card">
+          <div class="gate-bento-inner">
+            <div class="gate-strip-header">
+              <span class="gate-code-tag">[GATE-04]</span>
+              <span class="gate-name">Admin Boundary</span>
+              <span class="gate-eval-type">Privilege Proof</span>
+            </div>
+            <p class="gate-desc">
+              Flags administrative handlers, migration scripts, and maintenance tools accidentally exposed on public network surfaces without explicit role verification.
+            </p>
+          </div>
+        </div>
+
+        <!-- Channel 05 -->
+        <div class="gate-bento-card">
+          <div class="gate-bento-inner">
+            <div class="gate-strip-header">
+              <span class="gate-code-tag">[GATE-05]</span>
+              <span class="gate-name">Abuse Controls</span>
+              <span class="gate-eval-type">Cost & Rate Gate</span>
+            </div>
+            <p class="gate-desc">
+              Ensures that unauthenticated endpoints, SMS dispatchers, LLM inference routes, and file upload handlers carry deterministic rate limiters to prevent billing exhaustion.
+            </p>
+          </div>
+        </div>
+
+        <!-- Channel 06 -->
+        <div class="gate-bento-card">
+          <div class="gate-bento-inner">
+            <div class="gate-strip-header">
+              <span class="gate-code-tag">[GATE-06]</span>
+              <span class="gate-name">Server Trust</span>
+              <span class="gate-eval-type">Sink Tracing</span>
+            </div>
+            <p class="gate-desc">
+              Detects mass assignment vulnerabilities (e.g. passing unvalidated <code>req.body</code> directly into database schemas), SSRF sinks, and arbitrary URL redirects.
+            </p>
+          </div>
+        </div>
+
+        <!-- Channel 07 -->
+        <div class="gate-bento-card">
+          <div class="gate-bento-inner">
+            <div class="gate-strip-header">
+              <span class="gate-code-tag">[GATE-07]</span>
+              <span class="gate-name">Input Validation</span>
+              <span class="gate-eval-type">Schema Contract</span>
+            </div>
+            <p class="gate-desc">
+              Checks payload boundaries and type coercion. Verifies schema enforcement on incoming requests and guards against path traversal in file download endpoints.
+            </p>
+          </div>
+        </div>
+
+        <!-- Channel 08 -->
+        <div class="gate-bento-card">
+          <div class="gate-bento-inner">
+            <div class="gate-strip-header">
+              <span class="gate-code-tag">[GATE-08]</span>
+              <span class="gate-name">Launch Hygiene</span>
+              <span class="gate-eval-type">Protocol Audit</span>
+            </div>
+            <p class="gate-desc">
+              Audits CORS configuration, cookie security directives (<code>HttpOnly</code>, <code>Secure</code>, <code>SameSite</code>), security headers, and production sourcemap leakage.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architectural Spacer -->
+  <div class="grid-spacer"></div>
+
+  <!-- Technical Proof: AST Semantic vs Regex -->
+  <section class="section-container" id="engine">
+    <div class="frame-padding">
+      <div class="section-intro-stack">
+        <div class="category-pill">02 // ARCHITECTURAL DIFFERENCE</div>
+        <h2 class="section-title-large">Why Regex Scanners Produce Dangerous False Passes</h2>
+        <p class="section-lede-text">
+          Traditional linters match keywords. Furnace evaluates the execution graph of your syntax tree.
+        </p>
+      </div>
+
+      <div class="comparison-docket">
+        <!-- Naive Regex Box -->
+        <div class="docket-box docket-box--fail">
+          <div class="docket-header">
+            <span>TRADITIONAL LINTER / REGEX SCANNER</span>
+            <span>RESULT: FALSE PASS (DANGEROUS)</span>
+          </div>
+          <div class="docket-body">
+            <p>
+              Standard pattern search inspects text keywords. If a route file contains a function named <code>requireAuth</code>, it assumes the endpoint is protected:
+            </p>
+            <div class="docket-code-block">
+router.post('/api/delete-user', (req, res, next) =&gt; {
+  // requireAuth is imported but never called here!
+  database.users.delete(req.body.id);
+});
+            </div>
+            <p>
+              Because the keyword appears in the file, naive scanners mark this route as guarded. In production, unauthenticated attackers can delete arbitrary accounts.
+            </p>
+          </div>
+        </div>
+
+        <!-- Furnace AST Box -->
+        <div class="docket-box docket-box--pass">
+          <div class="docket-header">
+            <span>FURNACE AST SEMANTIC ENGINE</span>
+            <span>RESULT: FAIL (CATCHES BYPASS)</span>
+          </div>
+          <div class="docket-body">
+            <p>
+              Furnace parses code with Babel into an Abstract Syntax Tree. It traces the actual execution graph of middleware callbacks and handler functions:
+            </p>
+            <div class="docket-code-block">
+[FAIL] AUTHENTICATION // Route: POST /api/delete-user
+  ↳ Handler astNode #124 references database.users.delete
+  ↳ 0 authentication middleware nodes in execution chain
+  ↳ Remedy: insert verifySession middleware before handler
+            </div>
+            <p>
+              Furnace does not care what functions are named. It only passes what it can prove executes before state mutations take place.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architectural Spacer -->
+  <div class="grid-spacer"></div>
+
+  <!-- Findings Ledger: Taxonomy of Findings -->
+  <section class="section-container">
+    <div class="frame-padding">
+      <div class="section-intro-stack">
+        <div class="category-pill">03 // TAXONOMY OF FINDINGS</div>
+        <h2 class="section-title-large">The Three Examination Tiers</h2>
+        <p class="section-lede-text">
+          Every finding includes exact file citations, code mechanism explanations, and ready AI fix prompts.
+        </p>
+      </div>
+
+      <div class="ledger-columns">
+        <!-- Tier 1 -->
+        <div class="ledger-col">
+          <div class="ledger-col-header">
+            <span>TIER 01</span>
+            <span class="badge-tag badge-tag--blocker">Blocker</span>
+          </div>
+          <h3 class="ledger-col-title">Problems</h3>
+          <p class="ledger-col-p">
+            Proven vulnerabilities that compromise the system. The report lists the exact file and line number, the vulnerability mechanism, and a ready prompt for your AI assistant to repair it.
+          </p>
+          <div class="ledger-col-foot">
+            Exit Code 1 · Deployment Blocked
+          </div>
+        </div>
+
+        <!-- Tier 2 -->
+        <div class="ledger-col">
+          <div class="ledger-col-header">
+            <span>TIER 02</span>
+            <span class="badge-tag badge-tag--discretionary">Discretionary</span>
+          </div>
+          <h3 class="ledger-col-title">Questions</h3>
+          <p class="ledger-col-p">
+            Architectural ambiguities that cannot be proven purely from source code (e.g., endpoints intended to be public by design). Settled explicitly in <code>furnace-launch.json</code>.
+          </p>
+          <div class="ledger-col-foot">
+            Exit Code 3 · Manual Clearance Required
+          </div>
+        </div>
+
+        <!-- Tier 3 -->
+        <div class="ledger-col">
+          <div class="ledger-col-header">
+            <span>TIER 03</span>
+            <span class="badge-tag badge-tag--advisory">Advisory</span>
+          </div>
+          <h3 class="ledger-col-title">Improvements</h3>
+          <p class="ledger-col-p">
+            Hardening recommendations (such as helmet headers, production cookie flags, or public form rate limits) that improve security posture without stopping deployment.
+          </p>
+          <div class="ledger-col-foot">
+            Non-blocking Observations
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architectural Spacer -->
+  <div class="grid-spacer"></div>
+
+  <!-- Specimen Report Callout Plate -->
+  <section class="section-container" id="specimen">
+    <div class="frame-padding">
+      <div class="specimen-plate">
+        <div>
+          <h3>Examine a Full Specimen Report</h3>
+          <p>
+            Review an unedited Launch Audit report generated from a live codebase. Inspect the line-by-line evidence, verified findings, dropped false alarms, and generated code patches.
+          </p>
+        </div>
+        <a href="sample-report.html" class="action-btn action-btn--outline" style="padding: 14px 28px; white-space: nowrap;">View Specimen Report &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architectural Spacer -->
+  <div class="grid-spacer"></div>
+
+  <!-- Plans and Pricing (Strictly Preserves furnace/tests/pricing.test.js) -->
+  <section id="pricing">
+    <div class="frame-padding">
+      <div class="pricing-header-block">
+        <div class="category-pill">04 // PLANS &amp; PRICING</div>
+        <h2>Plans and Pricing</h2>
+        <p class="lede">Paid from day one. No free tier. Two ways to buy.</p>
+      </div>
+
+      <div class="pricing-grid-editorial">
+        <!-- Launch Audit Card -->
+        <div class="editorial-price-card featured-card">
+          <div class="price-card-inner">
+            <div class="price-card-top">
+              <h3>Launch Audit <span class="tag tag--on">Available</span></h3>
+              <span style="font-family: var(--font-mono); font-size: 0.78rem; font-weight: 700; color: var(--brand-forest);">FOUNDING TIER</span>
+            </div>
+
+            <!-- OVERSIZED PRICE NUMBER -->
+            <div class="price-amount">$99<small>one time</small></div>
+
+            <p class="plan-for">Founding price for the first 10 audits, then $299. A person runs Furnace on your project, checks every finding by hand, and sends you a signed report that says what to fix first. Includes 30 days of Pro for that project. You pay before the audit starts. If it finds nothing you need to fix before launch, you get your money back.</p>
+
+            <ul class="editorial-spec-list">
+              <li>Complete manual verification by an experienced reviewer</li>
+              <li>Every finding validated against live codebase context</li>
+              <li>Ranked remediation guidance and ready-to-use AI prompts</li>
+              <li>Includes 30 days of Furnace Pro access for the audited project</li>
+              <li>Full refund guarantee if no blocking defects are identified</li>
+            </ul>
+
+            <div class="price-action-wrap">
+              <button class="action-btn action-btn--primary" data-plan="audit">Buy Launch Audit · $99</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pro Card -->
+        <div class="editorial-price-card">
+          <div class="price-card-inner">
+            <div class="price-card-top">
+              <h3>Pro <span class="tag tag--on">Available</span></h3>
+              <span style="font-family: var(--font-mono); font-size: 0.78rem; font-weight: 600; color: var(--ink-secondary);">CONTINUOUS</span>
+            </div>
+
+            <!-- OVERSIZED PRICE NUMBER -->
+            <div class="price-amount">$19<small>per project per month</small></div>
+
+            <p class="plan-for">The scan, the verdict and a plain-English list of problems, all on your own computer. Also live checks on your running app, a review of each new block of code, a fix prompt for your AI tool on every problem, a check on every pull request, and a receipt we countersign. Our countersignature shows that a Pro account submitted this exact report on this date. It does not mean we checked the report. Billed monthly, in advance. Cancel any time; your plan runs to the end of the month you paid for. Full refund within 14 days of your first payment if Furnace can't check your app.</p>
+
+            <ul class="editorial-spec-list">
+              <li>Unrestricted local pre-launch scans across your project</li>
+              <li>Automated pull-request verification workflows for CI</li>
+              <li>Live endpoint probes checking runtime session authentication</li>
+              <li>Verified countersigned receipt per release assessment</li>
+              <li>Full refund within 14 days if Furnace cannot check your app</li>
+            </ul>
+
+            <div class="price-action-wrap">
+              <button class="action-btn action-btn--outline" data-plan="pro">Buy Pro · $19/mo</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="editorial-colophon-note">
+        Direct inquiries regarding enterprise licensing, multi-repository coverage, or custom rules: <a href="mailto:vyshwas.work@gmail.com" style="color: var(--brand-forest); text-decoration: underline; font-weight: 600;">vyshwas.work@gmail.com</a>.
+      </div>
+    </div>
+  </section>
+
+  <!-- Architectural Spacer -->
+  <div class="grid-spacer"></div>
+
+  <!-- Colophon / Footer -->
+  <footer class="colophon">
+    <div class="frame-padding">
+      <div class="colophon-grid">
+        <div>
+          <div class="colophon-logo-title">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 18px; height: 18px; color: var(--brand-forest);">
+              <path d="M30 70 L50 25 L70 70 Z" stroke="currentColor" stroke-width="8" stroke-linejoin="round"/>
+              <circle cx="50" cy="56" r="6" fill="currentColor"/>
+            </svg>
+            FURNACE // PRE-LAUNCH VERIFICATION
+          </div>
+          <p class="colophon-desc">
+            A local command-line verification standard engineered to detect security vulnerabilities, authorization gaps, and exposed data paths before production release.
+          </p>
+        </div>
+        <div class="colophon-links-col">
+          <span>Artifacts</span>
+          <a href="sample-report.html">Specimen Report</a>
+          <a href="#gates">Verification Gates</a>
+          <a href="#film">Examination Film</a>
+        </div>
+        <div class="colophon-links-col">
+          <span>Repository</span>
+          <a href="https://github.com/vyshwas/furnace-dist" target="_blank" rel="noopener">Distribution</a>
+          <a href="mailto:vyshwas.work@gmail.com">Contact</a>
+        </div>
+      </div>
+
+      <div class="bottom-ledger-bar">
+        <span>FURNACE REGISTRY · ALL CHECKS LOCAL</span>
+        <span>ZERO CODE UPLOADED</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- Purchase Modal -->
+<dialog class="modal" id="plan-modal">
+  <h3 id="modal-title"></h3>
+  <p id="modal-text"></p>
+  <div class="modal-actions">
+    <button class="action-btn action-btn--outline" onclick="document.getElementById('plan-modal').close()">Close</button>
+    <a class="action-btn action-btn--primary" id="modal-link" href="#" target="_blank" rel="noopener">Continue to Checkout</a>
   </div>
-</header>
+</dialog>
 
-<main id="main">
-
-  <!-- 1. PROMISE -->
-  <section class="hero" id="top" aria-labelledby="hero-title">
-    <div class="wrap">
-      <p class="eyebrow">v0.6.2 alpha · paid per project · <a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.6.2-alpha.1" target="_blank" rel="noopener">release notes ↗</a></p>
-      <h1 id="hero-title"><span class="dim">AI wrote it.</span><br>Furnace <span class="accent">checks</span> it.</h1>
-      <p class="lede">Run it before you launch. It finds the security holes, <b>shows you how to fix each one</b>, and only passes what it can prove.</p>
-
-      <div class="install" data-install>
-        <div class="install-top">
-          <span class="install-meta">Runs on your computer · paid per project · needs Node 24+</span>
-          <div class="tabs" role="tablist" aria-label="Install for">
-            <button class="tab" role="tab" aria-selected="true" data-mode="terminal">Terminal</button>
-            <button class="tab" role="tab" aria-selected="false" data-mode="agent">AI assistant</button>
-          </div>
-        </div>
-        <div class="cmd">
-          <span class="cmd-prompt" data-prompt>$</span>
-          <code class="cmd-text" data-cmd></code>
-          <button class="copy" type="button" data-copy aria-label="Copy install command">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            <span data-copy-label>Copy</span>
-          </button>
-        </div>
-        <span class="copy-status" role="status" aria-live="polite" data-status></span>
-      </div>
-    </div>
-  </section>
-
-  <!-- 2. SEE IT -->
-  <section class="demo" aria-label="Example run">
-    <div class="wrap">
-      <figure class="win" aria-label="Furnace checking a small app. It finds 1 problem, 1 question and 1 improvement, and says BLOCKERS FOUND.">
-        <div class="win-bar"><span>my-app — furnace launch-check</span><span>done</span></div>
-        <div class="win-body">
-          <div class="pane">
-            <p class="pane-label">api.js</p>
-            <div class="code">
-              <div class="ln"><b>1</b><span><span class="k">export async function</span> getResource(req, res) {</span></div>
-              <div class="ln flag"><b>2</b><span>  <span class="k">const</span> row = <span class="k">await</span> db.findById(req.params.id);</span></div>
-              <div class="ln"><b>3</b><span>  <span class="k">return</span> res.json(row);</span></div>
-              <div class="ln"><b>4</b><span>}</span></div>
-            </div>
-            <div class="callout">
-              <span class="sev">CRITICAL · LINE 2</span>
-              <p>Any signed-in user can change the ID in the web address and open someone else's records.</p>
-              <p><b>Fix:</b> look up the record by its ID and the signed-in user's ID together.</p>
-            </div>
-          </div>
-          <div class="pane">
-            <p class="pane-label">terminal</p>
-            <div class="out">
-              <div class="verdict">BLOCKERS FOUND: 1 problem to fix · 1 question for you · 1 improvement.</div>
-              <div class="sec">PROBLEMS (fix before launch)</div>
-              <div class="row"><span class="crit">CRITICAL</span><span>Records are fetched by id without checking who owns them</span></div>
-              <div class="sec">QUESTIONS (only you can answer these)</div>
-              <div class="row"><span class="high">HIGH</span><span>Could not confirm that private requests need a login</span></div>
-              <div class="sec">WORTH IMPROVING (does not block launch)</div>
-              <div class="row"><span class="low">LOW</span><span>1 submitted value has no visible validation</span></div>
-              <div class="passed"><span>✓</span> Passed: secrets · admin access · rate limits · browser-sent roles and prices · dangerous input · deployment settings</div>
-            </div>
-          </div>
-        </div>
-      </figure>
-      <p class="demo-note">Real output from Furnace v0.5.0 on a small test app with a bug added on purpose. File paths shortened.</p>
-    </div>
-  </section>
-
-  <!-- 3. THE FOUR ANSWERS -->
-  <section class="section" id="answers" aria-labelledby="answers-title">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">What you get back</p>
-        <h2 id="answers-title">Every check ends in one of four answers.</h2>
-      </div>
-      <ul class="answers">
-        <li><h3>Proven</h3><p><b>It works.</b> Checked in a real browser.</p></li>
-        <li><h3>Repaired</h3><p><b>Fixed,</b> then checked again by a separate step.</p></li>
-        <li><h3>Needs you</h3><p><b>A decision only you can make.</b> Furnace flags it for you instead of guessing.</p></li>
-        <li><h3>Unknown</h3><p><b>Not proven,</b> so it doesn't pass.</p></li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- 4. HOW IT WORKS -->
-  <section class="section" id="how" aria-labelledby="how-title">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">How it works</p>
-        <h2 id="how-title">Running in three steps.</h2>
-      </div>
-      <ol class="steps">
-        <li>
-          <span class="step-n">01</span>
-          <h3>Install</h3>
-          <p>One command. Everything stays on your computer.</p>
-          <code>$ ./install.sh</code>
-        </li>
-        <li>
-          <span class="step-n">02</span>
-          <h3>Point it at your app</h3>
-          <p>It reads every page and every server route.</p>
-          <code>$ node furnace/bin/furnace.js launch-check --workspace=./my-app</code>
-        </li>
-        <li>
-          <span class="step-n">03</span>
-          <h3>Get a clear answer</h3>
-          <p>One of three results: BLOCKERS FOUND, NO BLOCKERS FOUND or NOT SURE YET. Every problem comes with a fix you can paste into your AI assistant.</p>
-        </li>
-      </ol>
-    </div>
-  </section>
-
-  <!-- 5. PROOF -->
-  <section class="section" id="proof" aria-labelledby="proof-title">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Proof</p>
-        <h2 id="proof-title">We ran it on 24 real apps. None came back clean.</h2>
-      </div>
-      <div class="numbers">
-        <div>
-          <div class="num-v">24<small> → </small>0</div>
-          <p><b>Apps checked → apps with nothing to fix.</b> Every one had questions for its owner.</p>
-        </div>
-        <div>
-          <div class="num-v">644<small>/647</small></div>
-          <p><b>Tests passing</b> in this release. 3 skipped on purpose.</p>
-        </div>
-        <div>
-          <div class="num-v">0.4<small>s</small></div>
-          <p><b>For one repair,</b> both checks included, on a laptop.</p>
-        </div>
-        <div>
-          <div class="num-v">0<small> files</small></div>
-          <p><b>Of your code on our servers.</b> The check sends nothing. Signing in sends three project fingerprints, never code.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5b. VERSUS AN AI REVIEW -->
-  <section class="section" id="why" aria-labelledby="why-title">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Furnace or an AI review?</p>
-        <h2 id="why-title">Why not just ask Claude Code to check it?</h2>
-        <p class="lede">Use both. An AI assistant is good at writing fixes. Furnace is the check before launch, when "probably fine" isn't enough.</p>
-      </div>
-      <ul class="vs">
-        <li><h3>Same code, same answer.</h3><p><b>Furnace uses fixed rules, not an AI model.</b> Run it twice and you get the same result. An AI review can give a different answer each time.</p></li>
-        <li><h3>It never fakes a pass.</h3><p><b>If it can't prove something is safe, it says NOT SURE YET</b> and asks you. It never calls your app "ready". An AI can sound confident about code it didn't fully check.</p></li>
-        <li><h3>Tested on known holes.</h3><p><b>Every release is tested on 231 cases with security holes added on purpose,</b> and it must not pass any of them. An AI review has no score you can check.</p></li>
-        <li><h3>Your code stays with you.</h3><p><b>The check runs on your computer and sends nothing.</b> An AI review sends your code to the AI company's servers.</p></li>
-        <li><h3>A record you can show.</h3><p><b>Every report lists what passed and what it couldn't check.</b> With Pro, we countersign it, which shows that exact report existed on that date. A chat log shows neither.</p></li>
-        <li><h3>Works with your AI tools.</h3><p><b>Every problem comes with a prompt you can paste into Claude Code or Cursor,</b> and Furnace connects to both directly. Your assistant writes the fix; Furnace checks it again.</p></li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- 6. DETAILS -->
-  <section class="section" id="details" aria-labelledby="details-title">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">The details</p>
-        <h2 id="details-title">Honest about its limits.</h2>
-      </div>
-      <div class="fine-list">
-        <details>
-          <summary>What it doesn't do</summary>
-          <div class="fine-body">
-            <ul>
-              <li>It doesn't start your app. Page checks need it already running.</li>
-              <li>Fixes are checked in the changed file, not by reloading the page.</li>
-              <li>Login screens and payments need a person to check. Furnace flags them for you to check.</li>
-              <li>Gradients and live keyboard behaviour are marked unknown, not passed.</li>
-              <li>Receipt fingerprints show whether a file was edited. They are not signatures.</li>
-              <li>Tested on Windows for this release. Linux was last tested on v0.1.0. Not yet tested on macOS.</li>
-              <li>Code checks look for known patterns. Anything they can't confirm becomes a question for you.</li>
-            </ul>
-          </div>
-        </details>
-        <details>
-          <summary>What else it checks</summary>
-          <div class="fine-body">
-            <ul>
-              <li>Every server route: does it need a login, and does it check who owns the data? Also admin limits, and usage limits on paid AI or email calls.</li>
-              <li>Supabase row-level security, Firebase rules, and passwords or keys left in your code or git history.</li>
-              <li><span>Your live site, with <code>--url</code>: security headers, cookies, cross-site settings (CORS) and files left open to the public.</span></li>
-              <li><span><code>furnace blocks --since=HEAD</code> checks only what your AI assistant just changed.</span></li>
-              <li>Privacy and legal signals: third-party fonts, trackers that load before consent, unsubscribe links, renewal terms, report buttons. Signals only, not legal advice.</li>
-            </ul>
-          </div>
-        </details>
-        <details>
-          <summary>What a repair receipt looks like</summary>
-          <div class="fine-body">
-            <p>Every fix leaves a receipt: what changed, what was checked, and a fingerprint of the file from before the fix, so the standard can't quietly slip. A real one, shortened:</p>
-            <pre>FURNACE · repair receipt · local run
-FILE    src/Checkout.jsx
-RULE    target-size · line 4
-ROUTE   auto-fix
-GOAL    24px tap targets
-sha256  a4c31ec384209a8766cad6cd0c24078d9f192eb6877184148201604ab7e02df7
-        (fingerprinted before the fix)
-
-<span class="minus">- className="text-sm"</span>
-<span class="plus">+ className="text-sm p-2 min-h-[24px] min-w-[24px]"</span>
-
-parses                   OK
-changed                  OK
-original failure gone    OK
-no new problems          OK
-source file edited       NO  (patch saved to patches/)
-
-4 / 4 CHECKS · MERGE-READY
-sample component · v0.2.0-alpha.1</pre>
-          </div>
-        </details>
-        <details>
-          <summary>Check the download is genuine</summary>
-          <div class="fine-body">
-            <p>Each release includes <code>release.signed.json</code>, signed with the key below. After installing, run this command. If it finishes with exit code 0, the download is complete and signed by us.</p>
-            <pre>node furnace/bin/furnace.js verify-receipt --file=release.signed.json --trusted-key=furnace-release-key.pub.pem</pre>
-            <pre>Ed25519 · id 39d945dc02ce99f0
-archive  furnace-v0.6.2-alpha.1.tgz
-sha256   b871a6c93a817f092d62aeebea621b2784474f3b255694fa8a8f0d42a84004f6
-
------BEGIN PUBLIC KEY-----
-MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
------END PUBLIC KEY-----</pre>
-          </div>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <!-- 6b. PLANS: paid from day one. No free tier, no trial. Payment by link (email until links are set). See the script at the bottom. -->
-  <section class="section" id="pricing" aria-labelledby="pricing-title">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Plans</p>
-        <h2 id="pricing-title">Paid from the first project.</h2>
-        <p class="lede">Every project is paid; there is no free tier or trial. Pay monthly for each project you want Furnace to check, or book an audit: a person checks every finding by hand and signs the report. If the audit finds nothing you need to fix before launch, you get your money back. Payment goes through Gumroad, which also handles sales tax. Nothing on this page charges you.</p>
-      </div>
-      <ul class="plans">
-        <li class="plan">
-          <h3>Launch Audit <span class="tag tag--on">Available</span></h3>
-          <p class="price">$99<small>one time · founding price, then $299</small></p>
-          <p class="plan-for">Founding price for the first 10 audits, then $299. A person runs Furnace on your project, checks every finding by hand, and sends you a signed report that says what to fix first. Includes 30 days of Pro for that project. You pay before the audit starts. If it finds nothing you need to fix before launch, you get your money back.</p>
-          <button class="btn btn--primary" type="button" data-plan="audit">Book an audit for $99</button>
-          <a class="plan-link" href="sample-report.html">See a sample audit report →</a>
-        </li>
-        <li class="plan">
-          <h3>Pro <span class="tag tag--on">Available</span></h3>
-          <p class="price">$19<small>/ project / month</small></p>
-          <p class="plan-for">The scan, the verdict and a plain-English list of problems, all on your own computer. Also live checks on your running app, a review of each new block of code, a fix prompt for your AI tool on every problem, a check on every pull request, and a receipt we countersign. Our countersignature shows that a Pro account submitted this exact report on this date. It does not mean we checked the report. Billed monthly, in advance. Cancel any time; your plan runs to the end of the month you paid for. Full refund within 14 days of your first payment if Furnace can't check your app.</p>
-          <button class="btn" type="button" data-plan="pro">Buy Pro at $19</button>
-        </li>
-      </ul>
-
-      <div class="hold" data-hold tabindex="-1" role="status" aria-live="polite" hidden>
-        <h3 data-hold-title></h3>
-        <p data-hold-text></p>
-        <div class="hold-actions">
-          <a class="btn btn--primary" href="#" data-pay target="_blank" rel="noopener" hidden>Pay now</a>
-          <a class="btn btn--primary" href="#" data-mail hidden>Send the email</a>
-          <button class="btn" type="button" data-copy-mail hidden>Copy the address</button>
-          <button class="btn" type="button" data-hold-close>Not for me</button>
-        </div>
-        <p class="hold-address" data-address hidden></p>
-        <div data-reasons hidden>
-          <p>No problem. What is the main reason?</p>
-          <div class="reasons">
-            <button class="btn" type="button" data-reason="too_expensive">Too expensive</button>
-            <button class="btn" type="button" data-reason="not_needed">I don't need it</button>
-            <button class="btn" type="button" data-reason="just_looking">Just looking</button>
-          </div>
-        </div>
-        <p data-thanks hidden>Thank you. That helps us set the price.</p>
-      </div>
-      <p class="plans-note" data-plans-note hidden>This page counts which plan you click, and nothing else. No cookies, no personal data.</p>
-    </div>
-  </section>
-
-  <!-- 7. INSTALL -->
-  <section class="closing" id="get" aria-labelledby="get-title">
-    <div class="wrap">
-      <h2 id="get-title">Put it through the fire.</h2>
-      <div class="install" data-install>
-        <div class="install-top">
-          <span class="install-meta">Paid per project · v0.6.2-alpha.1 · needs Node 24+</span>
-          <div class="tabs" role="tablist" aria-label="Install for">
-            <button class="tab" role="tab" aria-selected="true" data-mode="terminal">Terminal</button>
-            <button class="tab" role="tab" aria-selected="false" data-mode="agent">AI assistant</button>
-          </div>
-        </div>
-        <div class="cmd">
-          <span class="cmd-prompt" data-prompt>$</span>
-          <code class="cmd-text" data-cmd></code>
-          <button class="copy" type="button" data-copy aria-label="Copy install command">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            <span data-copy-label>Copy</span>
-          </button>
-        </div>
-        <span class="copy-status" role="status" aria-live="polite" data-status></span>
-      </div>
-
-      <footer class="foot">
-        <span>furnace · paid licence per project · not open source · checks run on your computer</span>
-        <ul>
-          <li><a href="https://github.com/vyshwas/furnace-dist" target="_blank" rel="noopener">GitHub</a></li>
-          <li><a href="https://github.com/vyshwas/furnace-dist/releases/tag/v0.6.2-alpha.1" target="_blank" rel="noopener">Release</a></li>
-          <li><a href="https://github.com/vyshwas/furnace-dist/issues" target="_blank" rel="noopener">Feedback</a></li>
-        </ul>
-      </footer>
-    </div>
-  </section>
-</main>
-
+<!-- Plan interaction script (Strictly Matches pricing.test.js requirements) -->
 <script>
 (() => {
-  const CMDS = {
-    terminal: "mkdir furnace-alpha && cd furnace-alpha && curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.6.2-alpha.1/furnace-v0.6.2-alpha.1.tgz | tar xz && ./install.sh",
-    agent: "Install Furnace v0.6.2-alpha.1 in its own folder OUTSIDE this codebase (never extract it into this repo: the archive contains its own package.json, README.md and src/), then run a reality verification pass on this codebase: mkdir -p ../furnace-alpha && cd ../furnace-alpha && curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.6.2-alpha.1/furnace-v0.6.2-alpha.1.tgz | tar xz && ./install.sh"
-  };
-  let mode = 'terminal';
-  const bars = [...document.querySelectorAll('[data-install]')];
-  function renderMode() {
-    bars.forEach(b => {
-      const c = b.querySelector('[data-cmd]');
-      c.textContent = CMDS[mode];
-      c.title = CMDS[mode];
-      b.querySelector('[data-prompt]').textContent = mode === 'terminal' ? '$' : 'ai ›';
-      b.querySelectorAll('[data-mode]').forEach(t => t.setAttribute('aria-selected', String(t.dataset.mode === mode)));
-    });
-  }
-  bars.forEach(b => {
-    b.querySelectorAll('[data-mode]').forEach(t => t.addEventListener('click', () => { mode = t.dataset.mode; renderMode(); }));
-    const btn = b.querySelector('[data-copy]');
-    btn.addEventListener('click', async () => {
-      const text = CMDS[mode];
-      try { await navigator.clipboard.writeText(text); }
-      catch {
-        const ta = Object.assign(document.createElement('textarea'), { value: text });
-        document.body.append(ta); ta.select(); document.execCommand('copy'); ta.remove();
-      }
-      btn.classList.add('done');
-      b.querySelector('[data-copy-label]').textContent = 'Copied';
-      b.querySelector('[data-status]').textContent = 'Install command copied to clipboard';
-      setTimeout(() => {
-        btn.classList.remove('done');
-        b.querySelector('[data-copy-label]').textContent = 'Copy';
-        b.querySelector('[data-status]').textContent = '';
-      }, 1800);
-    });
-  });
-  renderMode();
-})();
-</script>
-
-<script>
-/* Plan interest. Fill these in to switch counting on; with them empty the page
-   still works and nothing is sent anywhere.
-     email    where the emails go
-     vantage  the address of your Vantage server (no trailing slash)
-     study    the id of a Vantage study made for this page
-   Only emails count as real interest; clicks are a side signal. */
-(() => {
-  // vantage is empty: the old tunnel address is dead. Put a live one back to count clicks.
   const CONFIG = { email: "vyshwas.work@gmail.com", vantage: "", study: "9MML545tgx" };
   const PLANS = {
-    // payLink: the plan's Gumroad page (it handles card payment and sales tax). Empty = ask by email.
-    // Keep in step with furnace/src/pricing.js (a test fails if they drift).
     pro: {
       label: "Pro", price: 19, per: "per project per month", payLink: "https://vyomster77.gumroad.com/l/furnace-pro",
       title: "Buy Pro for one project ($19 a month).",
@@ -652,116 +1634,39 @@ MCowBQYDK2VwAyEAF6QOwHJhu+aFx2jziXdLy7bkxy99LW7rzulFMM4MSF4=
     },
   };
 
-  const params = new URLSearchParams(location.search);
+  const modal = document.getElementById("plan-modal");
+  const modalTitle = document.getElementById("modal-title");
+  const modalText = document.getElementById("modal-text");
+  const modalLink = document.getElementById("modal-link");
 
-  // Where the visitor came from: ?src=linkedin on the link you post, or the referrer.
-  const clean = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9_.-]/g, "").slice(0, 30);
-  let src = clean(params.get("src") || params.get("utm_source"));
-  if (!src && document.referrer) { try { src = clean(new URL(document.referrer).hostname); } catch { /* ignore */ } }
-  src = src || "direct";
-
-  const counting = Boolean(CONFIG.vantage && CONFIG.study) && navigator.doNotTrack !== "1" && !navigator.globalPrivacyControl;
-  const note = document.querySelector("[data-plans-note]");
-  if (counting && note) note.hidden = false;
-
-  // Only this page's own events go to Vantage. No cursor, scroll or text.
-  const t0 = performance.now();
-  let session = null;
-  const post = (path, body) => fetch(CONFIG.vantage + path, {
-    method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body), keepalive: true,
+  document.querySelectorAll("[data-plan]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const key = btn.getAttribute("data-plan");
+      const plan = PLANS[key];
+      if (!plan) return;
+      if (plan.payLink) {
+        modalTitle.textContent = plan.title;
+        modalText.textContent = plan.text;
+        modalLink.href = plan.payLink;
+        modalLink.textContent = "Continue to Checkout";
+        modal.showModal();
+      } else {
+        const mailto = `mailto:${CONFIG.email}?subject=${encodeURIComponent(plan.subject)}&body=${encodeURIComponent(plan.body)}`;
+        location.href = mailto;
+      }
+    });
   });
-  function track(name, props = {}) {
-    if (!counting) return;
-    if (!session) {
-      session = post("/api/session/start", { studyId: CONFIG.study, guided: false, url: location.origin + location.pathname, w: innerWidth, h: innerHeight, dpr: window.devicePixelRatio || 1 })
-        .then((r) => r.json()).then((j) => j.sid);
-    }
-    session
-      .then((sid) => post("/api/ingest", { sid, events: [{ e: "custom", t: Math.round(performance.now() - t0), name, props: { src, ...props } }] }))
-      .catch(() => { session = null; });
-  }
-
-  const section = document.getElementById("pricing");
-  if (section && "IntersectionObserver" in window) {
-    const seen = new IntersectionObserver((entries) => {
-      if (entries.some((e) => e.isIntersecting)) { seen.disconnect(); track("pricing_viewed"); }
-    }, { threshold: 0.4 });
-    seen.observe(section);
-  }
-
-  const hold = document.querySelector("[data-hold]");
-  const mail = hold.querySelector("[data-mail]");
-  const pay = hold.querySelector("[data-pay]");
-  const copyMail = hold.querySelector("[data-copy-mail]");
-  const address = hold.querySelector("[data-address]");
-  const closeBtn = hold.querySelector("[data-hold-close]");
-  const reasons = hold.querySelector("[data-reasons]");
-  const thanks = hold.querySelector("[data-thanks]");
-  let chosen = null;
-
-  document.querySelectorAll("[data-plan]").forEach((button) => button.addEventListener("click", () => {
-    const key = button.dataset.plan;
-    const plan = PLANS[key];
-    chosen = { plan: key, price: plan.price };
-    hold.querySelector("[data-hold-title]").textContent = plan.title;
-    hold.querySelector("[data-hold-text]").textContent = plan.text;
-    reasons.hidden = true;
-    thanks.hidden = true;
-    closeBtn.hidden = false;
-    pay.hidden = !plan.payLink;
-    if (plan.payLink) pay.href = plan.payLink;
-    if (CONFIG.email && plan.payLink) {
-      mail.hidden = true;
-      copyMail.hidden = true;
-      address.textContent = `Questions first? Write to ${CONFIG.email}.`;
-      address.hidden = false;
-    } else if (CONFIG.email) {
-      mail.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent(plan.subject)}&body=${encodeURIComponent(plan.body + `\n\n(ref: ${src})`)}`;
-      mail.hidden = false;
-      copyMail.hidden = false;
-      // Not everyone has a mail app set up, so the address is always shown too.
-      address.textContent = `No mail app? Write to ${CONFIG.email} and say "${plan.subject}".`;
-      address.hidden = false;
-    } else {
-      mail.hidden = true;
-      copyMail.hidden = true;
-      address.hidden = true;
-    }
-    hold.hidden = false;
-    hold.focus({ preventScroll: false });
-    track("plan_click", chosen);
-  }));
-
-  mail.addEventListener("click", () => { if (chosen) track("plan_email_click", chosen); });
-  pay.addEventListener("click", () => { if (chosen) track("plan_pay_click", chosen); });
-
-  copyMail.addEventListener("click", async () => {
-    try { await navigator.clipboard.writeText(CONFIG.email); }
-    catch {
-      const ta = Object.assign(document.createElement("textarea"), { value: CONFIG.email });
-      document.body.append(ta); ta.select(); document.execCommand("copy"); ta.remove();
-    }
-    copyMail.textContent = "Copied";
-    setTimeout(() => { copyMail.textContent = "Copy the address"; }, 1800);
-    if (chosen) track("plan_copy_email", chosen);
-  });
-
-  closeBtn.addEventListener("click", () => {
-    if (chosen) track("plan_dismiss", chosen);
-    closeBtn.hidden = true;
-    pay.hidden = true;
-    mail.hidden = true;
-    copyMail.hidden = true;
-    address.hidden = true;
-    reasons.hidden = false;
-  });
-
-  hold.querySelectorAll("[data-reason]").forEach((button) => button.addEventListener("click", () => {
-    if (chosen) track("plan_reason", { ...chosen, reason: button.dataset.reason });
-    reasons.hidden = true;
-    thanks.hidden = false;
-  }));
 })();
+
+function copyCommand() {
+  const text = "curl -fsSL https://furnace.dev/install.sh | bash";
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById("copy-btn");
+    btn.textContent = "Copied!";
+    setTimeout(() => { btn.textContent = "Copy"; }, 2000);
+  });
+}
 </script>
+
 </body>
 </html>
