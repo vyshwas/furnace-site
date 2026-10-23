@@ -947,6 +947,24 @@
     font-weight: 600;
   }
 
+  .price-terms-micro {
+    margin-top: 10px;
+    font-size: 0.76rem;
+    color: var(--ink-tertiary);
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  .price-terms-micro a {
+    color: var(--ink-secondary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .price-terms-micro a:hover {
+    color: var(--brand-forest);
+  }
+
   .editorial-colophon-note {
     margin-top: 48px;
     padding-top: 28px;
@@ -1054,7 +1072,49 @@
     font-size: 0.92rem;
     line-height: 1.65;
     color: var(--ink-secondary);
-    margin-bottom: 28px;
+    margin-bottom: 20px;
+  }
+
+  .modal-legal-callout {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: #F8FAF8;
+    border: 1px solid rgba(14, 98, 56, 0.2);
+    border-left: 3px solid var(--brand-forest);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 24px;
+    text-align: left;
+  }
+
+  .modal-legal-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--brand-forest);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .modal-legal-text {
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: var(--ink-secondary);
+  }
+
+  .modal-legal-text strong {
+    color: var(--ink);
+  }
+
+  .modal-legal-text a {
+    color: var(--brand-forest);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .modal-legal-text a:hover {
+    color: var(--brand-forest-hover);
   }
 
   .modal-actions {
@@ -1543,6 +1603,7 @@ router.post('/api/delete-user', (req, res, next) =&gt; {
 
             <div class="price-action-wrap">
               <button class="action-btn action-btn--primary" data-plan="audit">Buy Launch Audit · $99</button>
+              <div class="price-terms-micro">By purchasing, you agree to our <a href="terms.html" target="_blank" rel="noopener">Terms &amp; Liability Cap</a></div>
             </div>
           </div>
         </div>
@@ -1570,6 +1631,7 @@ router.post('/api/delete-user', (req, res, next) =&gt; {
 
             <div class="price-action-wrap">
               <button class="action-btn action-btn--outline" data-plan="pro">Buy Pro · $19/mo</button>
+              <div class="price-terms-micro">By purchasing, you agree to our <a href="terms.html" target="_blank" rel="noopener">Terms &amp; Liability Cap</a></div>
             </div>
           </div>
         </div>
@@ -1669,6 +1731,14 @@ router.post('/api/delete-user', (req, res, next) =&gt; {
 <dialog class="modal" id="plan-modal">
   <h3 id="modal-title"></h3>
   <p id="modal-text"></p>
+  <div class="modal-legal-callout">
+    <svg viewBox="0 0 20 20" fill="currentColor" class="modal-legal-icon">
+      <path fill-rule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM11 14a1 1 0 11-2 0 1 1 0 012 0zm0-7a1 1 0 10-2 0v3a1 1 0 102 0V7z" clip-rule="evenodd"/>
+    </svg>
+    <div class="modal-legal-text">
+      By clicking <strong>Continue to Checkout</strong>, you agree to our <a href="terms.html" target="_blank" rel="noopener">Terms of Service &amp; Limitation of Liability</a> (covering diagnostic scope, fees-paid liability cap, and 14-day refund guarantee).
+    </div>
+  </div>
   <div class="modal-actions">
     <button class="action-btn action-btn--outline" onclick="document.getElementById('plan-modal').close()">Close</button>
     <a class="action-btn action-btn--primary" id="modal-link" href="#" target="_blank" rel="noopener">Continue to Checkout</a>
