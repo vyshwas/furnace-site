@@ -3,11 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Furnace — The Pre-Launch Verification Standard for AI-Written Code</title>
-<meta name="description" content="Furnace statically checks codebases before production launch against 8 deterministic security gates. AST semantic analysis, local execution, and zero false passes.">
-<meta property="og:title" content="Furnace — The Pre-Launch Verification Standard for AI-Written Code">
-<meta property="og:description" content="Local pre-launch verification engine. 8 security gates, AST-level route analysis, zero false passes. Signed by hand before production.">
+<title>Furnace — Launch-Readiness Checker for AI-Built Apps</title>
+<meta name="description" content="Furnace is a launch-readiness checker for apps built with AI (Cursor, Lovable, Bolt, Claude Code). It reads your code and tells you what is unsafe or unfinished before real users find it. It uses fixed rules instead of an AI model, so the same code always gets the same answer.">
+<meta property="og:title" content="Furnace — Launch-Readiness Checker for AI-Built Apps">
+<meta property="og:description" content="Furnace is a launch-readiness checker for apps built with AI (Cursor, Lovable, Bolt, Claude Code). It reads your code and tells you what is unsafe or unfinished before real users find it. It uses fixed rules instead of an AI model, so the same code always gets the same answer.">
 <meta property="og:type" content="website">
+<link rel="canonical" href="https://vyshwas.github.io/furnace-site/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Furnace", "applicationCategory": "DeveloperApplication", "operatingSystem": "Windows", "description": "Furnace is a launch-readiness checker for apps built with AI (Cursor, Lovable, Bolt, Claude Code). It reads your code and tells you what is unsafe or unfinished before real users find it. It uses fixed rules instead of an AI model, so the same code always gets the same answer.", "url": "https://vyshwas.github.io/furnace-site/", "offers": [{"@type": "Offer", "name": "Launch Audit (founding price, limited to 10)", "price": "99", "priceCurrency": "USD", "url": "https://vyomster77.gumroad.com/l/furnace-launch-audit"}, {"@type": "Offer", "name": "Furnace Pro (monthly)", "price": "19", "priceCurrency": "USD", "url": "https://vyomster77.gumroad.com/l/furnace-pro"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is AI-generated code safe to launch?", "acceptedAnswer": {"@type": "Answer", "text": "Not by default. AI tools often produce apps that work but have common holes: routes with no login check, missing ownership checks so one user can edit another user's data, fallback secrets in code, and database tables with no access rules. Check before real users arrive."}}, {"@type": "Question", "name": "How do I check if my Cursor or Lovable app is secure?", "acceptedAnswer": {"@type": "Answer", "text": "Run Furnace on the project folder. It reads the code and returns READY, NOT READY or NOT SURE YET, with each problem listed alongside a fix and a prompt you can paste into your AI coding tool."}}, {"@type": "Question", "name": "Why not just ask Claude or ChatGPT to review my code?", "acceptedAnswer": {"@type": "Answer", "text": "An AI review can change between runs and can miss problems with full confidence. Furnace's check uses fixed rules and no AI model, so the same code always gets the same answer, and when it cannot read something it says NOT SURE instead of passing it."}}, {"@type": "Question", "name": "Does Furnace send my code anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "No. The code check runs on your own machine and sends nothing off it."}}, {"@type": "Question", "name": "What does Furnace check?", "acceptedAnswer": {"@type": "Answer", "text": "Login and permission checks on every route, ownership checks on records, exposed secrets (including keys deleted from git history), database rules such as Supabase row rules, rate limits, and vulnerable dependencies."}}, {"@type": "Question", "name": "Which systems and languages does Furnace support?", "acceptedAnswer": {"@type": "Answer", "text": "It reads JavaScript, TypeScript and Python projects. It is an early alpha, tested on Windows; Linux is not verified yet."}}, {"@type": "Question", "name": "How much does Furnace cost?", "acceptedAnswer": {"@type": "Answer", "text": "The Launch Audit is $99 at the founding price (limited to 10), with your money back if there is nothing to fix. Furnace Pro is $19 per month."}}]}</script>
 <meta name="theme-color" content="#F7F8F6">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230E6238'/><path d='M30 70 L50 25 L70 70 Z' fill='none' stroke='%23FFFFFF' stroke-width='8' stroke-linejoin='round'/><circle cx='50' cy='56' r='6' fill='%23FFFFFF'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -332,12 +335,21 @@
     font-size: 0.8rem;
     color: var(--ink-secondary);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    max-width: min(100%, 760px);
+    border-radius: 18px;
+    text-align: left;
   }
 
   .cli-snippet-pill code {
     color: var(--ink);
     font-weight: 600;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    min-width: 0;
+    line-height: 1.5;
   }
+
+  @media (max-width: 600px) { .cli-snippet-pill { flex-direction: column; align-items: flex-start; gap: 8px; } }
 
   .cli-snippet-pill button {
     background: transparent;
@@ -1075,6 +1087,13 @@
     .specimen-plate { flex-direction: column; align-items: flex-start; padding: 36px 32px; }
     .nav-menu { display: none; }
   }
+
+  /* FAQ */
+  .faq-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .faq-item { background: var(--surface-card); border: 1px solid var(--line); border-radius: 20px; padding: 28px 30px; }
+  .faq-item h3 { font-size: 1.08rem; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); line-height: 1.35; margin-bottom: 10px; }
+  .faq-item p { font-size: 0.96rem; color: var(--ink-secondary); line-height: 1.65; }
+  @media (max-width: 780px) { .faq-grid { grid-template-columns: 1fr; } .faq-item { padding: 22px 20px; } }
 </style>
 </head>
 <body>
@@ -1143,8 +1162,8 @@
           </div>
 
           <div class="cli-snippet-pill">
-            <span>Run locally:</span>
-            <code>curl -fsSL https://furnace.dev/install.sh | bash</code>
+            <span>Install:</span>
+            <code title="Downloads the signed v0.6.2-alpha.1 release from GitHub. Pre-release; tested on Windows (Git Bash).">mkdir furnace-alpha &amp;&amp; cd furnace-alpha &amp;&amp; curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.6.2-alpha.1/furnace-v0.6.2-alpha.1.tgz | tar xz &amp;&amp; ./install.sh</code>
             <button id="copy-btn" onclick="copyCommand()">Copy</button>
           </div>
         </div>
@@ -1562,6 +1581,47 @@ router.post('/api/delete-user', (req, res, next) =&gt; {
     </div>
   </section>
 
+  <!-- FAQ -->
+  <section class="section-container" id="faq">
+    <div class="frame-padding">
+      <div class="section-intro-stack">
+        <div class="category-pill">05 // QUESTIONS</div>
+        <h2 class="section-title-large">Frequently Asked Questions</h2>
+        <p class="section-lede-text">Plain answers about what Furnace checks, what it doesn't, and what it costs.</p>
+      </div>
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h3>Is AI-generated code safe to launch?</h3>
+          <p>Not by default. AI tools often produce apps that work but have common holes: routes with no login check, missing ownership checks so one user can edit another user&#x27;s data, fallback secrets in code, and database tables with no access rules. Check before real users arrive.</p>
+        </div>
+        <div class="faq-item">
+          <h3>How do I check if my Cursor or Lovable app is secure?</h3>
+          <p>Run Furnace on the project folder. It reads the code and returns READY, NOT READY or NOT SURE YET, with each problem listed alongside a fix and a prompt you can paste into your AI coding tool.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Why not just ask Claude or ChatGPT to review my code?</h3>
+          <p>An AI review can change between runs and can miss problems with full confidence. Furnace&#x27;s check uses fixed rules and no AI model, so the same code always gets the same answer, and when it cannot read something it says NOT SURE instead of passing it.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Does Furnace send my code anywhere?</h3>
+          <p>No. The code check runs on your own machine and sends nothing off it.</p>
+        </div>
+        <div class="faq-item">
+          <h3>What does Furnace check?</h3>
+          <p>Login and permission checks on every route, ownership checks on records, exposed secrets (including keys deleted from git history), database rules such as Supabase row rules, rate limits, and vulnerable dependencies.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Which systems and languages does Furnace support?</h3>
+          <p>It reads JavaScript, TypeScript and Python projects. It is an early alpha, tested on Windows; Linux is not verified yet.</p>
+        </div>
+        <div class="faq-item">
+          <h3>How much does Furnace cost?</h3>
+          <p>The Launch Audit is $99 at the founding price (limited to 10), with your money back if there is nothing to fix. Furnace Pro is $19 per month.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Architectural Spacer -->
   <div class="grid-spacer"></div>
 
@@ -1586,10 +1646,12 @@ router.post('/api/delete-user', (req, res, next) =&gt; {
           <a href="sample-report.html">Specimen Report</a>
           <a href="#gates">Verification Gates</a>
           <a href="#film">Examination Film</a>
+          <a href="#faq">FAQ</a>
         </div>
         <div class="colophon-links-col">
           <span>Repository</span>
           <a href="https://github.com/vyshwas/furnace-dist" target="_blank" rel="noopener">Distribution</a>
+          <a href="terms.html">Terms &amp; Liability</a>
           <a href="mailto:vyshwas.work@gmail.com">Contact</a>
         </div>
       </div>
@@ -1659,7 +1721,7 @@ router.post('/api/delete-user', (req, res, next) =&gt; {
 })();
 
 function copyCommand() {
-  const text = "curl -fsSL https://furnace.dev/install.sh | bash";
+  const text = "mkdir furnace-alpha && cd furnace-alpha && curl -fsSL https://github.com/vyshwas/furnace-dist/releases/download/v0.6.2-alpha.1/furnace-v0.6.2-alpha.1.tgz | tar xz && ./install.sh";
   navigator.clipboard.writeText(text).then(() => {
     const btn = document.getElementById("copy-btn");
     btn.textContent = "Copied!";

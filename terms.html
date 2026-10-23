@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terms of Service &amp; Limitation of Liability · Furnace</title>
+<meta name="description" content="Terms of Service, acceptable use, warranty disclaimer, and strict limitation of liability for Furnace and Furnace Launch Audits.">
+<meta property="og:title" content="Terms of Service &amp; Limitation of Liability · Furnace">
+<meta property="og:description" content="Terms of Service, acceptable use, warranty disclaimer, and strict limitation of liability for Furnace and Furnace Launch Audits.">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://vyshwas.github.io/furnace-site/terms.html">
+<meta name="theme-color" content="#F7F8F6">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230E6238'/><path d='M30 70 L50 25 L70 70 Z' fill='none' stroke='%23FFFFFF' stroke-width='8' stroke-linejoin='round'/><circle cx='50' cy='56' r='6' fill='%23FFFFFF'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --canvas: #F7F8F6;
+    --canvas-elevated: #FFFFFF;
+    --canvas-subtle: #F0F2EE;
+    --surface-card: #FFFFFF;
+    --surface-inner: #F8FAF8;
+    --surface-code: #0D1410;
+
+    --line: rgba(15, 23, 18, 0.09);
+    --line-subtle: rgba(15, 23, 18, 0.05);
+    --line-active: #0E6238;
+
+    --ink: #0D1410;
+    --ink-secondary: #4B5550;
+    --ink-tertiary: #7A857E;
+
+    --brand-forest: #0E6238;
+    --brand-forest-hover: #0A4A2A;
+    --brand-forest-wash: rgba(14, 98, 56, 0.07);
+    --brand-forest-border: rgba(14, 98, 56, 0.24);
+
+    --accent-mint: #15803D;
+    --status-warn: #9A3412;
+    --status-warn-bg: #FFF7ED;
+    --status-warn-border: #FFEDD5;
+
+    --font-ui: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+    --max-w: 920px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    background-color: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-ui);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: linear-gradient(180deg, #F2F4F1 0%, #F7F8F6 30%, #F7F8F6 100%);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  ::selection {
+    background: #0E6238;
+    color: #FFFFFF;
+  }
+
+  a {
+    color: var(--brand-forest);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  a:hover {
+    color: var(--brand-forest-hover);
+  }
+
+  .nav-header {
+    border-bottom: 1px solid var(--line);
+    background: rgba(247, 248, 246, 0.92);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .nav-inner {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .brand-id {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .brand-id svg {
+    width: 24px;
+    height: 24px;
+    color: var(--brand-forest);
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 0.9rem;
+  }
+
+  .nav-links a {
+    color: var(--ink-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.15s;
+  }
+
+  .nav-links a:hover {
+    color: var(--ink);
+  }
+
+  .nav-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: #FFFFFF;
+    color: var(--ink) !important;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none !important;
+  }
+
+  .nav-btn:hover {
+    background: var(--canvas-subtle);
+  }
+
+  .page-container {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+
+  .doc-header {
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 40px;
+  }
+
+  .badge-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--brand-forest);
+    background: var(--brand-forest-wash);
+    border: 1px solid var(--brand-forest-border);
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+
+  .effective-date {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--ink-tertiary);
+  }
+
+  .legal-summary-card {
+    background: #FFFFFF;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--brand-forest);
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin-bottom: 44px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  }
+
+  .legal-summary-card h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+
+  .legal-summary-card p {
+    font-size: 0.95rem;
+    color: var(--ink-secondary);
+    line-height: 1.6;
+  }
+
+  .critical-clause-card {
+    background: var(--status-warn-bg);
+    border: 1px solid var(--status-warn-border);
+    border-left: 4px solid var(--status-warn);
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin: 28px 0;
+  }
+
+  .critical-clause-card h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--status-warn);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-family: var(--font-mono);
+  }
+
+  .critical-clause-card p, .critical-clause-card ul {
+    font-size: 0.95rem;
+    color: #7C2D12;
+    line-height: 1.65;
+  }
+
+  .critical-clause-card ul {
+    margin-top: 10px;
+    padding-left: 20px;
+  }
+
+  .toc {
+    background: var(--surface-inner);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 48px;
+  }
+
+  .toc-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-tertiary);
+    margin-bottom: 12px;
+    font-family: var(--font-mono);
+  }
+
+  .toc-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 8px 16px;
+  }
+
+  .toc-list a {
+    font-size: 0.9rem;
+    color: var(--ink-secondary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .toc-list a:hover {
+    color: var(--brand-forest);
+    text-decoration: underline;
+  }
+
+  .legal-section {
+    margin-bottom: 48px;
+  }
+
+  .legal-section h2 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 16px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+  }
+
+  .legal-section p {
+    font-size: 0.95rem;
+    color: var(--ink-secondary);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+
+  .legal-section ul {
+    margin: 12px 0 18px 24px;
+    color: var(--ink-secondary);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .legal-section li {
+    margin-bottom: 8px;
+  }
+
+  .caps-block {
+    text-transform: uppercase;
+    font-size: 0.88rem !important;
+    line-height: 1.6 !important;
+    font-weight: 600;
+    color: var(--ink) !important;
+    letter-spacing: 0.02em;
+  }
+
+  footer.legal-footer {
+    border-top: 1px solid var(--line);
+    padding-top: 32px;
+    margin-top: 64px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    font-size: 0.85rem;
+    color: var(--ink-tertiary);
+  }
+
+  footer.legal-footer a {
+    color: var(--ink-secondary);
+    text-decoration: none;
+  }
+
+  footer.legal-footer a:hover {
+    color: var(--ink);
+  }
+</style>
+</head>
+<body>
+
+<header class="nav-header">
+  <div class="nav-inner">
+    <a href="index.html" class="brand-id">
+      <svg viewBox="0 0 100 100" fill="currentColor">
+        <path d="M30 70 L50 25 L70 70 Z" fill="none" stroke="currentColor" stroke-width="8" stroke-linejoin="round"/>
+        <circle cx="50" cy="56" r="6" fill="currentColor"/>
+      </svg>
+      <span>Furnace</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html#gates">Gates</a>
+      <a href="index.html#pricing">Pricing</a>
+      <a href="sample-report.html">Sample Report</a>
+      <a href="index.html" class="nav-btn">← Back to Overview</a>
+    </div>
+  </div>
+</header>
+
+<main class="page-container">
+
+  <header class="doc-header">
+    <div class="badge-label">Legal Agreement · Binding Terms</div>
+    <h1>Terms of Service &amp; Limitation of Liability</h1>
+    <p class="effective-date">Last Updated &amp; Effective Date: October 23, 2026</p>
+  </header>
+
+  <div class="legal-summary-card">
+    <h3>Plain-English Summary (Not a substitute for full text)</h3>
+    <p>
+      Furnace is a pre-launch diagnostic tool and code review service created to help software developers spot common bugs, security oversights, and data exposure risks before shipping. Furnace is <strong>not</strong> an insurance policy, security guarantee, or regulatory certification. Because software security involves complex environments beyond any static analysis, <strong>our total legal liability to you is strictly capped at what you paid us</strong> (e.g. $99 for an audit, or your monthly subscription), and we are not liable for any business losses, data breaches, downtime, or lost revenue.
+    </p>
+  </div>
+
+  <nav class="toc" aria-label="Table of Contents">
+    <div class="toc-title">Sections</div>
+    <ul class="toc-list">
+      <li><a href="#acceptance">1. Acceptance &amp; Parties</a></li>
+      <li><a href="#nature-of-service">2. Nature of Service (Diagnostic Aid)</a></li>
+      <li><a href="#liability-limitation">3. Strict Limitation of Liability (Cap)</a></li>
+      <li><a href="#damages-exclusion">4. Exclusion of Consequential Damages</a></li>
+      <li><a href="#warranty-disclaimer">5. "AS IS" Warranty Disclaimer</a></li>
+      <li><a href="#authorization">6. Your Authority &amp; Acceptable Use</a></li>
+      <li><a href="#refunds">7. Pricing, Audits &amp; Money-Back Policy</a></li>
+      <li><a href="#privacy">8. Code Privacy &amp; Zero Cloud Uploads</a></li>
+      <li><a href="#governing-law">9. Governing Law &amp; Dispute Resolution</a></li>
+      <li><a href="#contact">10. Contact Information</a></li>
+    </ul>
+  </nav>
+
+  <section id="acceptance" class="legal-section">
+    <h2>1. Acceptance &amp; Parties</h2>
+    <p>
+      These Terms of Service ("Terms") constitute a legally binding agreement between you (whether an individual developer or an organization, referred to as "you" or "Customer") and Furnace ("Furnace", "we", "us", or "our", operated by Vishwas Mehta).
+    </p>
+    <p>
+      By accessing our website (<a href="https://vyshwas.github.io/furnace-site/">https://vyshwas.github.io/furnace-site/</a>), purchasing a Founding Launch Audit, downloading, installing, or running the Furnace command-line tool (CLI), or using any related audit reports or services, you agree to be bound by these Terms. If you do not agree to all terms and conditions, you must not access or use Furnace.
+    </p>
+  </section>
+
+  <section id="nature-of-service" class="legal-section">
+    <h2>2. Nature of Service: Diagnostic Aid, Not a Guarantee</h2>
+    <p>
+      Furnace provides automated static code checks (via the Furnace CLI and Furnace Pro) and human spot-check reviews (via the Founding Launch Audit) targeting common security pitfalls, missing authentication or authorization gates, exposed keys, and launch hygiene issues.
+    </p>
+    <p>
+      <strong>What Furnace is NOT:</strong>
+    </p>
+    <ul>
+      <li><strong>Not a Guarantee of Security:</strong> Furnace does NOT guarantee, warrant, or promise that your codebase, application, infrastructure, or deployment is bug-free, safe, secure, impervious to hackers, unhackable, or free from flaws.</li>
+      <li><strong>Not a Security Certification or Audit Opinion:</strong> A Furnace report or "READY" verdict is not a formal ISO, SOC 2, HIPAA, PCI-DSS, or regulatory compliance certification, nor is it a substitute for comprehensive penetration testing or manual code audits.</li>
+      <li><strong>Limited to Defined Scope:</strong> Automated checks evaluate code solely against specific deterministic static patterns. They cannot detect architecture-level logic exploits, social engineering vulnerabilities, supply-chain attacks, third-party hosting breaches, or zero-day exploits.</li>
+      <li><strong>Point-in-Time Assessment:</strong> A report or verdict reflects only the specific files and git commit provided on that specific date. Any subsequent change to code or dependencies alters your risk profile.</li>
+    </ul>
+    <p>
+      You acknowledge that you remain solely responsible for the architecture, security, deployment, and testing of your software.
+    </p>
+  </section>
+
+  <section id="liability-limitation" class="legal-section">
+    <h2>3. Strict Limitation of Liability (Monetary Cap)</h2>
+    <p>
+      This section establishes the maximum amount of money you can recover under any circumstances. Please read it carefully.
+    </p>
+
+    <div class="critical-clause-card">
+      <h3>Maximum Aggregate Monetary Cap</h3>
+      <p class="caps-block">
+        TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL FURNACE, ITS FOUNDER (VISHWAS MEHTA), OPERATORS, CONTRIBUTORS, CONTRACTORS, OR AGENTS BE LIABLE TO YOU OR ANY THIRD PARTY FOR ANY CLAIMS, LIABILITIES, LOSSES, COSTS, OR DAMAGES ARISING OUT OF OR IN CONNECTION WITH THE SERVICES, AUDIT REPORTS, CLI CHECKS, WEBSITE, OR THESE TERMS, UNDER ANY LEGAL THEORY (WHETHER CONTRACT, TORT INCLUDING NEGLIGENCE, STRICT LIABILITY, STATUTORY, OR OTHERWISE), IN AN AGGREGATE AMOUNT EXCEEDING:
+      </p>
+      <ul>
+        <li><strong>FOR PAID AUDITS OR SUBSCRIPTIONS:</strong> THE EXACT AMOUNT OF FEES ACTUALLY PAID BY YOU TO FURNACE FOR THE SPECIFIC SERVICE GIVING RISE TO THE CLAIM DURING THE TWELVE (12) MONTHS PRECEDING THE CLAIM (FOR EXAMPLE, EXACTLY $99.00 USD FOR A FOUNDING LAUNCH AUDIT, OR THE SUM OF MONTHLY PRO PAYMENTS PAID WITHIN THE LAST YEAR); OR</li>
+        <li><strong>FOR FREE OR TRIAL USE:</strong> AN AGGREGATE TOTAL OF TEN DOLLARS ($10.00 USD).</li>
+      </ul>
+      <p class="caps-block" style="margin-top: 12px;">
+        THIS LIMITATION OF LIABILITY IS CUMULATIVE AND NOT PER-INCIDENT. MULTIPLE CLAIMS WILL NOT ENLARGE THIS LIMIT.
+      </p>
+    </div>
+  </section>
+
+  <section id="damages-exclusion" class="legal-section">
+    <h2>4. Complete Exclusion of Consequential &amp; Financial Losses</h2>
+    <div class="critical-clause-card">
+      <h3>Exclusion of Lost Profits, Breaches, and Business Damages</h3>
+      <p class="caps-block">
+        UNDER NO CIRCUMSTANCES SHALL FURNACE OR ITS FOUNDER BE LIABLE FOR ANY INDIRECT, INCIDENTAL, CONSEQUENTIAL, SPECIAL, PUNITIVE, OR EXEMPLARY DAMAGES WHATSOEVER, REGARDLESS OF THE LEGAL CAUSE OF ACTION, INCLUDING WITHOUT LIMITATION:
+      </p>
+      <ul>
+        <li>ANY LOSS OF ACTUAL OR ANTICIPATED PROFITS, REVENUE, CONTRACTS, CLIENTS, OR BUSINESS OPPORTUNITIES;</li>
+        <li>ANY DATA LOSS, BREACH OF CUSTOMER DATA, UNAUTHORIZED DATABASE ACCESS, EXFILTRATION OF USER RECORDS, OR LEAKED CREDENTIALS;</li>
+        <li>ANY SYSTEM DOWNTIME, CORRUPTION, DESTRUCTION OF CODE, OR BUSINESS INTERRUPTION;</li>
+        <li>ANY RANSOMWARE, EXTORTION DEMANDS, FORENSIC INVESTIGATION EXPENSES, PR CONSULTING EXPENSES, OR LEGAL SETTLEMENT COSTS;</li>
+        <li>ANY CLAIMS, DEMANDS, OR LAWSUITS BROUGHT AGAINST YOU OR YOUR COMPANY BY YOUR END USERS, CUSTOMERS, INVESTORS, PARTNERS, OR GOVERNMENTAL REGULATORS.</li>
+      </ul>
+      <p class="caps-block" style="margin-top: 12px;">
+        THESE EXCLUSIONS APPLY EVEN IF FURNACE HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH LOSSES, AND EVEN IF ANY LIMITED REMEDY SPECIFIED HEREIN FAILS OF ITS ESSENTIAL PURPOSE.
+      </p>
+    </div>
+  </section>
+
+  <section id="warranty-disclaimer" class="legal-section">
+    <h2>5. "AS IS" and "AS AVAILABLE" Disclaimer of Warranties</h2>
+    <p class="caps-block">
+      THE FURNACE SOFTWARE, SCRIPTS, VERDICTS, GATES, VERIFICATION REPORTS, AND WEBSITE ARE PROVIDED STRICTLY ON AN "AS IS" AND "AS AVAILABLE" BASIS. TO THE MAXIMUM EXTENT PERMITTED BY LAW, FURNACE EXPRESSLY DISCLAIMS ALL WARRANTIES OF ANY KIND, WHETHER EXPRESS, IMPLIED, STATUTORY, OR OTHERWISE, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, ACCURACY, AND NON-INFRINGEMENT.
+    </p>
+    <p>
+      We make no representation or warranty that: (a) the service will meet your specific business or technical requirements; (b) the operation of the CLI or reports will be uninterrupted, error-free, or entirely bug-free; or (c) that all security vulnerabilities, logic defects, or coding oversights in your application will be discovered or prevented.
+    </p>
+  </section>
+
+  <section id="authorization" class="legal-section">
+    <h2>6. Your Authority &amp; Acceptable Use</h2>
+    <p>
+      By submitting source code, repository links, or pointing the Furnace CLI at any directory, you represent, warrant, and covenant that:
+    </p>
+    <ul>
+      <li>You are the rightful owner of the source code, or you have obtained explicit written authorization from the owner to submit and test the software with Furnace;</li>
+      <li>You will not point Furnace at third-party software, cloud environments, or systems without proper authorization;</li>
+      <li>You will not use Furnace for any unlawful, harassing, or malicious purpose;</li>
+      <li>You understand that build scripts or test commands executed by local gates run with your machine's permissions, and you will only run checks on code you have inspected.</li>
+    </ul>
+    <p>
+      <strong>Indemnification:</strong> You agree to defend, indemnify, and hold harmless Furnace and Vishwas Mehta against any third-party claims, liabilities, damages, and reasonable legal fees arising out of your violation of these Terms, unauthorized scanning of third-party assets, or your application's actual operation in production.
+    </p>
+  </section>
+
+  <section id="refunds" class="legal-section">
+    <h2>7. Pricing, Audits &amp; Money-Back Policy</h2>
+    <p>
+      <strong>Founding Launch Audit ($99 founding price for first 10, then $299):</strong>
+      Paid one-time via Gumroad. Includes automated analysis plus manual review by the founder. 
+    </p>
+    <p>
+      <strong>Money-Back Guarantee on Audits:</strong> If our Founding Launch Audit report finds zero actionable security flaws, credential exposures, authorization gaps, or pre-launch blockers that require remediation before launch, you are entitled to a full 100% refund upon written request within 14 days of receiving your report.
+    </p>
+    <p>
+      <strong>Furnace Pro ($19/project/month):</strong>
+      Billed monthly via Gumroad. You can cancel your subscription at any time via Gumroad. If Furnace fails to run or execute checks on your supported codebase within 14 days of your initial purchase, you may request a full refund of your first monthly payment.
+    </p>
+  </section>
+
+  <section id="privacy" class="legal-section">
+    <h2>8. Code Privacy &amp; Zero Cloud Uploads</h2>
+    <p>
+      <strong>Local CLI Operation:</strong> The Furnace CLI tool is engineered to run locally on your machine. It does not transmit your source code, proprietary algorithms, or files to any external remote servers or third-party cloud systems.
+    </p>
+    <p>
+      <strong>Launch Audit Confidentiality:</strong> When you purchase a Launch Audit and provide code access (via private repository invitation or secure zip archive), we treat your intellectual property with strict confidentiality:
+    </p>
+    <ul>
+      <li>Your code is used exclusively to conduct your Launch Audit;</li>
+      <li>Your code is never shared, licensed, or sold to third parties;</li>
+      <li>Your code is never used to train public machine learning or AI models;</li>
+      <li>Copies of your source code on our local review machine are permanently deleted upon completion of your audit or immediately upon your written request.</li>
+    </ul>
+  </section>
+
+  <section id="governing-law" class="legal-section">
+    <h2>9. Governing Law &amp; Dispute Resolution</h2>
+    <p>
+      <strong>Informal Resolution:</strong> If you have any dispute, concern, or claim, you agree to contact us first at <a href="mailto:vyommehta197@gmail.com">vyommehta197@gmail.com</a> and attempt to resolve the issue informally and in good faith before initiating any formal proceedings.
+    </p>
+    <p>
+      <strong>Governing Law:</strong> These Terms shall be governed by and construed in accordance with the laws applicable to the founder's principal place of operation, without giving effect to any principles of conflicts of law.
+    </p>
+    <p>
+      <strong>Class Action Waiver:</strong> YOU AND FURNACE AGREE THAT ANY CLAIMS OR PROCEEDINGS SHALL BE BROUGHT ONLY IN AN INDIVIDUAL CAPACITY AND NOT AS A PLAINTIFF OR CLASS MEMBER IN ANY PURPORTED CLASS, CONSOLIDATED, OR REPRESENTATIVE PROCEEDING.
+    </p>
+  </section>
+
+  <section id="contact" class="legal-section">
+    <h2>10. Contact Information</h2>
+    <p>
+      If you have questions about these Terms of Service or need to request a refund under our money-back guarantee, please contact:
+    </p>
+    <p>
+      <strong>Furnace</strong><br>
+      Operator: Vishwas Mehta<br>
+      Email: <a href="mailto:vyommehta197@gmail.com">vyommehta197@gmail.com</a> / <a href="mailto:vyshwas.work@gmail.com">vyshwas.work@gmail.com</a><br>
+      Website: <a href="https://vyshwas.github.io/furnace-site/">https://vyshwas.github.io/furnace-site/</a>
+    </p>
+  </section>
+
+  <footer class="legal-footer">
+    <div>&copy; 2026 Furnace. All rights reserved.</div>
+    <div style="display: flex; gap: 20px;">
+      <a href="index.html">Home</a>
+      <a href="sample-report.html">Sample Report</a>
+      <a href="terms.html">Terms &amp; Liability</a>
+      <a href="mailto:vyommehta197@gmail.com">Contact</a>
+    </div>
+  </footer>
+
+</main>
+
+</body>
+</html>
