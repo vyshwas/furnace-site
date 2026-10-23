@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Terms of Service &amp; Limitation of Liability · Furnace</title>
-<meta name="description" content="Terms of Service, acceptable use, warranty disclaimer, and strict limitation of liability for Furnace and Furnace Launch Audits.">
+<meta name="description" content="Terms of Service, acceptable use, warranty disclaimers, remediation disclaimers, and strict limitation of liability for Furnace and Furnace Launch Audits.">
 <meta property="og:title" content="Terms of Service &amp; Limitation of Liability · Furnace">
-<meta property="og:description" content="Terms of Service, acceptable use, warranty disclaimer, and strict limitation of liability for Furnace and Furnace Launch Audits.">
+<meta property="og:description" content="Terms of Service, acceptable use, warranty disclaimers, remediation disclaimers, and strict limitation of liability for Furnace and Furnace Launch Audits.">
 <meta property="og:type" content="website">
 <link rel="canonical" href="https://vyshwas.github.io/furnace-site/terms.html">
 <meta name="theme-color" content="#F7F8F6">
@@ -45,7 +45,7 @@
     --font-ui: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
 
-    --max-w: 920px;
+    --max-w: 940px;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -231,7 +231,7 @@
   }
 
   .critical-clause-card h3 {
-    font-size: 1.05rem;
+    font-size: 1.02rem;
     font-weight: 700;
     margin-bottom: 10px;
     color: var(--status-warn);
@@ -385,7 +385,7 @@
   <div class="legal-summary-card">
     <h3>Plain-English Summary (Not a substitute for full text)</h3>
     <p>
-      Furnace is a pre-launch diagnostic tool and code review service created to help software developers spot common bugs, security oversights, and data exposure risks before shipping. Furnace is <strong>not</strong> an insurance policy, security guarantee, or regulatory certification. Because software security involves complex environments beyond any static analysis, <strong>our total legal liability to you is strictly capped at what you paid us</strong> (e.g. $99 for an audit, or your monthly subscription), and we are not liable for any business losses, data breaches, downtime, or lost revenue.
+      Furnace is a pre-launch diagnostic tool and code review service created to help software developers spot common bugs, security oversights, and data exposure risks before shipping. Furnace is <strong>not</strong> an insurance policy, security guarantee, or regulatory certification. Because software security involves complex environments beyond any static analysis, <strong>our total legal liability to you is strictly capped at what you paid us</strong> (e.g. $99 for an audit, or your monthly subscription), and we are not liable for any business losses, data breaches, downtime, or lost revenue. Furthermore, all suggested code patches and AI fix prompts are provided for guidance only and must be tested by you before production use.
     </p>
   </div>
 
@@ -393,41 +393,44 @@
     <div class="toc-title">Sections</div>
     <ul class="toc-list">
       <li><a href="#acceptance">1. Acceptance &amp; Parties</a></li>
-      <li><a href="#nature-of-service">2. Nature of Service (Diagnostic Aid)</a></li>
-      <li><a href="#liability-limitation">3. Strict Limitation of Liability (Cap)</a></li>
-      <li><a href="#damages-exclusion">4. Exclusion of Consequential Damages</a></li>
-      <li><a href="#warranty-disclaimer">5. "AS IS" Warranty Disclaimer</a></li>
-      <li><a href="#authorization">6. Your Authority &amp; Acceptable Use</a></li>
-      <li><a href="#refunds">7. Pricing, Audits &amp; Money-Back Policy</a></li>
-      <li><a href="#privacy">8. Code Privacy &amp; Zero Cloud Uploads</a></li>
-      <li><a href="#governing-law">9. Governing Law &amp; Dispute Resolution</a></li>
-      <li><a href="#contact">10. Contact Information</a></li>
+      <li><a href="#nature-of-service">2. Nature of Service &amp; Point-in-Time Scope</a></li>
+      <li><a href="#liability-limitation">3. Strict Limitation of Liability (Monetary Cap)</a></li>
+      <li><a href="#damages-exclusion">4. Complete Exclusion of Consequential Damages</a></li>
+      <li><a href="#remediation-disclaimer">5. Remediation Advice, Patches &amp; AI Prompts</a></li>
+      <li><a href="#warranty-disclaimer">6. "AS IS" Warranty Disclaimer</a></li>
+      <li><a href="#authorization">7. Customer Authority, Acceptable Use &amp; Indemnity</a></li>
+      <li><a href="#non-endorsement">8. Non-Endorsement &amp; Third-Party Non-Reliance</a></li>
+      <li><a href="#refunds">9. Pricing, Audits &amp; 14-Day Refund Policy</a></li>
+      <li><a href="#privacy">10. Code Privacy &amp; Zero Cloud Uploads</a></li>
+      <li><a href="#governing-law">11. Governing Law, Dispute Resolution &amp; 1-Year Window</a></li>
+      <li><a href="#merger">12. Entire Agreement &amp; Severability</a></li>
+      <li><a href="#contact">13. Contact Information</a></li>
     </ul>
   </nav>
 
   <section id="acceptance" class="legal-section">
     <h2>1. Acceptance &amp; Parties</h2>
     <p>
-      These Terms of Service ("Terms") constitute a legally binding agreement between you (whether an individual developer or an organization, referred to as "you" or "Customer") and Furnace ("Furnace", "we", "us", or "our", operated by Vishwas Mehta).
+      These Terms of Service ("Terms") constitute a legally binding contract between you (whether an individual software developer or an organization, referred to as "you" or "Customer") and Furnace ("Furnace", "we", "us", or "our", operated by Vishwas Mehta).
     </p>
     <p>
-      By accessing our website (<a href="https://vyshwas.github.io/furnace-site/">https://vyshwas.github.io/furnace-site/</a>), purchasing a Founding Launch Audit, downloading, installing, or running the Furnace command-line tool (CLI), or using any related audit reports or services, you agree to be bound by these Terms. If you do not agree to all terms and conditions, you must not access or use Furnace.
+      By accessing or using our website (<a href="https://vyshwas.github.io/furnace-site/">https://vyshwas.github.io/furnace-site/</a>), purchasing a Founding Launch Audit, downloading, installing, or executing the Furnace command-line tool (CLI), applying any suggested fix prompt, or using any associated audit reports or services, you agree to be bound by these Terms under applicable electronic contract laws (including the US Electronic Signatures in Global and National Commerce Act, Uniform Electronic Transactions Act, and the Indian Information Technology Act, 2000). If you do not agree to all terms and conditions herein, you must immediately cease all access and use of Furnace.
     </p>
   </section>
 
   <section id="nature-of-service" class="legal-section">
-    <h2>2. Nature of Service: Diagnostic Aid, Not a Guarantee</h2>
+    <h2>2. Nature of Service &amp; Point-in-Time Scope</h2>
     <p>
-      Furnace provides automated static code checks (via the Furnace CLI and Furnace Pro) and human spot-check reviews (via the Founding Launch Audit) targeting common security pitfalls, missing authentication or authorization gates, exposed keys, and launch hygiene issues.
+      Furnace provides automated static code checks (via the Furnace CLI and Furnace Pro) and human spot-check reviews (via the Founding Launch Audit) targeting common pre-launch pitfalls, including missing route authentication, absent authorization checks, exposed secrets, and database access rule omissions.
     </p>
     <p>
       <strong>What Furnace is NOT:</strong>
     </p>
     <ul>
-      <li><strong>Not a Guarantee of Security:</strong> Furnace does NOT guarantee, warrant, or promise that your codebase, application, infrastructure, or deployment is bug-free, safe, secure, impervious to hackers, unhackable, or free from flaws.</li>
-      <li><strong>Not a Security Certification or Audit Opinion:</strong> A Furnace report or "READY" verdict is not a formal ISO, SOC 2, HIPAA, PCI-DSS, or regulatory compliance certification, nor is it a substitute for comprehensive penetration testing or manual code audits.</li>
-      <li><strong>Limited to Defined Scope:</strong> Automated checks evaluate code solely against specific deterministic static patterns. They cannot detect architecture-level logic exploits, social engineering vulnerabilities, supply-chain attacks, third-party hosting breaches, or zero-day exploits.</li>
-      <li><strong>Point-in-Time Assessment:</strong> A report or verdict reflects only the specific files and git commit provided on that specific date. Any subsequent change to code or dependencies alters your risk profile.</li>
+      <li><strong>Not a Guarantee of Security:</strong> Furnace does NOT guarantee, warrant, or promise that your codebase, application, infrastructure, third-party libraries, or deployment environment is completely secure, bug-free, impervious to attacks, unhackable, or free from vulnerabilities.</li>
+      <li><strong>Not a Security Certification or Regulatory Opinion:</strong> A Furnace report or "READY" verdict is not a formal ISO 27001, SOC 2, HIPAA, PCI-DSS, or governmental compliance certification, nor does it constitute an audit opinion or formal penetration test.</li>
+      <li><strong>Limited Technical Scope:</strong> Automated checks evaluate code solely against specific deterministic static patterns. They cannot detect architecture-level logic exploits, zero-day vulnerabilities, social engineering, malicious dependencies, or runtime infrastructure misconfigurations.</li>
+      <li><strong>Point-in-Time Assessment:</strong> An audit report or CLI verdict reflects only the specific files, branch, and commit evaluated as of the specific date and time of review. Furnace assumes no obligation to monitor, re-evaluate, or update any report as new attack vectors or code revisions emerge.</li>
     </ul>
     <p>
       You acknowledge that you remain solely responsible for the architecture, security, deployment, and testing of your software.
@@ -443,11 +446,11 @@
     <div class="critical-clause-card">
       <h3>Maximum Aggregate Monetary Cap</h3>
       <p class="caps-block">
-        TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL FURNACE, ITS FOUNDER (VISHWAS MEHTA), OPERATORS, CONTRIBUTORS, CONTRACTORS, OR AGENTS BE LIABLE TO YOU OR ANY THIRD PARTY FOR ANY CLAIMS, LIABILITIES, LOSSES, COSTS, OR DAMAGES ARISING OUT OF OR IN CONNECTION WITH THE SERVICES, AUDIT REPORTS, CLI CHECKS, WEBSITE, OR THESE TERMS, UNDER ANY LEGAL THEORY (WHETHER CONTRACT, TORT INCLUDING NEGLIGENCE, STRICT LIABILITY, STATUTORY, OR OTHERWISE), IN AN AGGREGATE AMOUNT EXCEEDING:
+        TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL FURNACE, ITS FOUNDER (VISHWAS MEHTA), OPERATORS, CONTRIBUTORS, CONTRACTORS, OR AGENTS BE LIABLE TO YOU OR ANY THIRD PARTY FOR ANY CLAIMS, LIABILITIES, LOSSES, COSTS, OR DAMAGES ARISING OUT OF OR IN CONNECTION WITH THE SERVICES, AUDIT REPORTS, CLI CHECKS, WEBSITE, REMEDIATION GUIDANCE, OR THESE TERMS, UNDER ANY LEGAL THEORY (WHETHER IN CONTRACT, TORT INCLUDING NEGLIGENCE, STRICT LIABILITY, STATUTORY, OR OTHERWISE), IN AN AGGREGATE AMOUNT EXCEEDING:
       </p>
       <ul>
         <li><strong>FOR PAID AUDITS OR SUBSCRIPTIONS:</strong> THE EXACT AMOUNT OF FEES ACTUALLY PAID BY YOU TO FURNACE FOR THE SPECIFIC SERVICE GIVING RISE TO THE CLAIM DURING THE TWELVE (12) MONTHS PRECEDING THE CLAIM (FOR EXAMPLE, EXACTLY $99.00 USD FOR A FOUNDING LAUNCH AUDIT, OR THE SUM OF MONTHLY PRO PAYMENTS PAID WITHIN THE LAST YEAR); OR</li>
-        <li><strong>FOR FREE OR TRIAL USE:</strong> AN AGGREGATE TOTAL OF TEN DOLLARS ($10.00 USD).</li>
+        <li><strong>FOR FREE, ALPHA, OR TRIAL USE:</strong> AN AGGREGATE TOTAL OF TEN DOLLARS ($10.00 USD).</li>
       </ul>
       <p class="caps-block" style="margin-top: 12px;">
         THIS LIMITATION OF LIABILITY IS CUMULATIVE AND NOT PER-INCIDENT. MULTIPLE CLAIMS WILL NOT ENLARGE THIS LIMIT.
@@ -456,7 +459,7 @@
   </section>
 
   <section id="damages-exclusion" class="legal-section">
-    <h2>4. Complete Exclusion of Consequential &amp; Financial Losses</h2>
+    <h2>4. Complete Exclusion of Consequential &amp; Business Damages</h2>
     <div class="critical-clause-card">
       <h3>Exclusion of Lost Profits, Breaches, and Business Damages</h3>
       <p class="caps-block">
@@ -475,10 +478,26 @@
     </div>
   </section>
 
+  <section id="remediation-disclaimer" class="legal-section">
+    <h2>5. Remediation Advice, Code Patches &amp; AI Prompts Disclaimer</h2>
+    <p>
+      Furnace may provide remediation suggestions, code patches, configuration examples, and ready-to-use AI prompts (e.g. for Cursor, Claude Code, Lovable, or Bolt) to assist in fixing detected issues.
+    </p>
+    <div class="critical-clause-card">
+      <h3>Customer Responsibility for Code Implementation</h3>
+      <p class="caps-block">
+        ALL REMEDIATION GUIDANCE, CODE PATCHES, CODE SNIPPETS, AND AI FIX PROMPTS ARE PROVIDED STRICTLY ON AN "AS-IS" BASIS FOR GENERAL INFORMATIONAL AND EDUCATIONAL PURPOSES. FURNACE DOES NOT WARRANT OR GUARANTEE THAT ANY SUGGESTED PATCH OR PROMPT WILL FULLY RESOLVE THE ISSUE, WILL BE ERROR-FREE, OR WILL NOT INTRODUCE SOFTWARE REGRESSIONS, FUNCTIONAL DEFECTS, OR OPERATIONAL DOWNTIME IN YOUR ENVIRONMENT.
+      </p>
+      <p style="margin-top: 12px;">
+        Customer acknowledges that it is solely responsible for reviewing, testing, compiling, and validating all code before deploying it to production. Furnace shall have zero liability for any damages, errors, data corruption, or downtime resulting from Customer's adoption or implementation of any recommended fix or AI prompt.
+      </p>
+    </div>
+  </section>
+
   <section id="warranty-disclaimer" class="legal-section">
-    <h2>5. "AS IS" and "AS AVAILABLE" Disclaimer of Warranties</h2>
+    <h2>6. "AS IS" and "AS AVAILABLE" Disclaimer of Warranties</h2>
     <p class="caps-block">
-      THE FURNACE SOFTWARE, SCRIPTS, VERDICTS, GATES, VERIFICATION REPORTS, AND WEBSITE ARE PROVIDED STRICTLY ON AN "AS IS" AND "AS AVAILABLE" BASIS. TO THE MAXIMUM EXTENT PERMITTED BY LAW, FURNACE EXPRESSLY DISCLAIMS ALL WARRANTIES OF ANY KIND, WHETHER EXPRESS, IMPLIED, STATUTORY, OR OTHERWISE, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, ACCURACY, AND NON-INFRINGEMENT.
+      THE FURNACE SOFTWARE, CLI PACKS, SCRIPTS, VERDICTS, VERIFICATION GATES, AUDIT REPORTS, SAMPLE REPORTS, AND WEBSITE ARE PROVIDED STRICTLY ON AN "AS IS" AND "AS AVAILABLE" BASIS. TO THE MAXIMUM EXTENT PERMITTED BY LAW, FURNACE EXPRESSLY DISCLAIMS ALL WARRANTIES OF ANY KIND, WHETHER EXPRESS, IMPLIED, STATUTORY, OR OTHERWISE, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, ACCURACY, AND NON-INFRINGEMENT.
     </p>
     <p>
       We make no representation or warranty that: (a) the service will meet your specific business or technical requirements; (b) the operation of the CLI or reports will be uninterrupted, error-free, or entirely bug-free; or (c) that all security vulnerabilities, logic defects, or coding oversights in your application will be discovered or prevented.
@@ -486,23 +505,34 @@
   </section>
 
   <section id="authorization" class="legal-section">
-    <h2>6. Your Authority &amp; Acceptable Use</h2>
+    <h2>7. Customer Authority, Acceptable Use &amp; Indemnification</h2>
     <p>
-      By submitting source code, repository links, or pointing the Furnace CLI at any directory, you represent, warrant, and covenant that:
+      By submitting source code, repository links, or executing the Furnace CLI against any directory or endpoint, you represent, warrant, and covenant that:
     </p>
     <ul>
-      <li>You are the rightful owner of the source code, or you have obtained explicit written authorization from the owner to submit and test the software with Furnace;</li>
-      <li>You will not point Furnace at third-party software, cloud environments, or systems without proper authorization;</li>
+      <li>You are the rightful owner of the source code and infrastructure, or you have obtained explicit, written authorization from the owner to test and submit the software to Furnace;</li>
+      <li>You will not use Furnace to probe, scan, or attack third-party software, endpoints, or cloud environments without authorization, nor will you use Furnace in violation of the Computer Fraud and Abuse Act (CFAA), the Indian Information Technology Act, 2000, or any other applicable cybersecurity laws;</li>
       <li>You will not use Furnace for any unlawful, harassing, or malicious purpose;</li>
-      <li>You understand that build scripts or test commands executed by local gates run with your machine's permissions, and you will only run checks on code you have inspected.</li>
+      <li>You understand that build scripts or test commands executed by local verification gates run with your machine's permissions, and you will only run checks on code you have inspected.</li>
     </ul>
     <p>
-      <strong>Indemnification:</strong> You agree to defend, indemnify, and hold harmless Furnace and Vishwas Mehta against any third-party claims, liabilities, damages, and reasonable legal fees arising out of your violation of these Terms, unauthorized scanning of third-party assets, or your application's actual operation in production.
+      <strong>Indemnification:</strong> You agree to defend, indemnify, and hold harmless Furnace and Vishwas Mehta against any third-party claims, liabilities, damages, losses, costs, and reasonable legal fees arising out of: (a) your violation of these Terms; (b) your unauthorized scanning or submission of third-party assets; (c) your application's actual operation or distribution in production; or (d) any third-party claims brought by your users, clients, or investors.
     </p>
   </section>
 
+  <section id="non-endorsement" class="legal-section">
+    <h2>8. Non-Endorsement &amp; Third-Party Non-Reliance</h2>
+    <p>
+      A Furnace audit report, CLI pass verdict, or countersigned stamp represents an internal technical assessment between Furnace and the Customer.
+    </p>
+    <ul>
+      <li><strong>Not an Endorsement:</strong> A report or verdict does not constitute an endorsement, safety rating, commercial recommendation, or investment advice regarding any project, company, software, or digital token.</li>
+      <li><strong>No Third-Party Beneficiaries:</strong> Furnace reports are prepared exclusively for Customer's internal technical use. Third parties (including Customer's end users, business partners, insurers, and investors) may not rely upon any Furnace report or verdict as proof of safety, and Furnace disclaims all liability to any such third parties.</li>
+    </ul>
+  </section>
+
   <section id="refunds" class="legal-section">
-    <h2>7. Pricing, Audits &amp; Money-Back Policy</h2>
+    <h2>9. Pricing, Audits &amp; 14-Day Refund Policy</h2>
     <p>
       <strong>Founding Launch Audit ($99 founding price for first 10, then $299):</strong>
       Paid one-time via Gumroad. Includes automated analysis plus manual review by the founder. 
@@ -517,9 +547,9 @@
   </section>
 
   <section id="privacy" class="legal-section">
-    <h2>8. Code Privacy &amp; Zero Cloud Uploads</h2>
+    <h2>10. Code Privacy, Zero Cloud Uploads &amp; Intellectual Property</h2>
     <p>
-      <strong>Local CLI Operation:</strong> The Furnace CLI tool is engineered to run locally on your machine. It does not transmit your source code, proprietary algorithms, or files to any external remote servers or third-party cloud systems.
+      <strong>Zero Cloud Uploads:</strong> The Furnace CLI tool is engineered to run locally on your machine. It does not transmit your source code, proprietary algorithms, or repository files to any external remote servers or third-party cloud systems.
     </p>
     <p>
       <strong>Launch Audit Confidentiality:</strong> When you purchase a Launch Audit and provide code access (via private repository invitation or secure zip archive), we treat your intellectual property with strict confidentiality:
@@ -530,10 +560,13 @@
       <li>Your code is never used to train public machine learning or AI models;</li>
       <li>Copies of your source code on our local review machine are permanently deleted upon completion of your audit or immediately upon your written request.</li>
     </ul>
+    <p>
+      <strong>Intellectual Property Rights:</strong> Customer retains 100% ownership of its source code and applications. Furnace retains 100% ownership of its verification software, CLI engines, gate packs, test suites, and heuristics. Customer is granted a perpetual, non-exclusive license to use, display, and share the audit report for its legitimate business purposes.
+    </p>
   </section>
 
   <section id="governing-law" class="legal-section">
-    <h2>9. Governing Law &amp; Dispute Resolution</h2>
+    <h2>11. Governing Law, Dispute Resolution &amp; 1-Year Claim Window</h2>
     <p>
       <strong>Informal Resolution:</strong> If you have any dispute, concern, or claim, you agree to contact us first at <a href="mailto:vyommehta197@gmail.com">vyommehta197@gmail.com</a> and attempt to resolve the issue informally and in good faith before initiating any formal proceedings.
     </p>
@@ -541,12 +574,25 @@
       <strong>Governing Law:</strong> These Terms shall be governed by and construed in accordance with the laws applicable to the founder's principal place of operation, without giving effect to any principles of conflicts of law.
     </p>
     <p>
+      <strong>One-Year Claim Limitation Period:</strong> TO THE MAXIMUM EXTENT PERMITTED BY LAW, ANY CAUSE OF ACTION OR CLAIM ARISING OUT OF OR RELATING TO THESE TERMS, THE SERVICES, OR AN AUDIT REPORT MUST BE FILED WITHIN ONE (1) YEAR AFTER THE CAUSE OF ACTION AROSE, OR BE FOREVER BARRED.
+    </p>
+    <p>
       <strong>Class Action Waiver:</strong> YOU AND FURNACE AGREE THAT ANY CLAIMS OR PROCEEDINGS SHALL BE BROUGHT ONLY IN AN INDIVIDUAL CAPACITY AND NOT AS A PLAINTIFF OR CLASS MEMBER IN ANY PURPORTED CLASS, CONSOLIDATED, OR REPRESENTATIVE PROCEEDING.
     </p>
   </section>
 
+  <section id="merger" class="legal-section">
+    <h2>12. Entire Agreement &amp; Severability</h2>
+    <p>
+      <strong>Entire Agreement:</strong> These Terms constitute the entire agreement between you and Furnace regarding the subject matter hereof and supersede all prior or contemporaneous communications, sales pitches, website copy, marketing claims, sample reports, or agreements, whether oral or written. No marketing statement, badge, slogan, or informal communication shall be construed as an express warranty, guarantee, or modification of these Terms.
+    </p>
+    <p>
+      <strong>Severability:</strong> If any provision of these Terms is held to be invalid, illegal, or unenforceable by a court of competent jurisdiction, such provision shall be enforced to the maximum extent permissible, and the remaining provisions shall remain in full force and effect.
+    </p>
+  </section>
+
   <section id="contact" class="legal-section">
-    <h2>10. Contact Information</h2>
+    <h2>13. Contact Information</h2>
     <p>
       If you have questions about these Terms of Service or need to request a refund under our money-back guarantee, please contact:
     </p>
